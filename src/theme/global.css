@@ -11,6 +11,13 @@ body,
   height: 100%;
 }
 
+/* Scrollbars delgadas y del color del tema en toda la aplicación (las
+   dos propiedades se heredan; los tokens cambian con claro/oscuro). */
+:root {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gris-300) transparent;
+}
+
 body {
   margin: 0;
   font-family: var(--font-cuerpo);

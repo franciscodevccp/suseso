@@ -69,16 +69,16 @@ export function TablaActivos({ activos, cargando, hayFiltrosActivos }) {
               className={estilos.fila}
               onClick={(evento) => manejarClicFila(evento, activo.id)}
             >
-              <td>
+              <td data-etiqueta="Folio">
                 <Link to={`/activos-fijos/${activo.id}`} className={estilos.enlaceFolio}>
                   {activo.folio}
                 </Link>
               </td>
-              <td>{activo.nombre}</td>
-              <td>{activo.categoria}</td>
-              <td>{activo.ubicacion}</td>
-              <td>{activo.responsable}</td>
-              <td>
+              <td data-etiqueta="Nombre">{activo.nombre}</td>
+              <td data-etiqueta="Categoría">{activo.categoria}</td>
+              <td data-etiqueta="Ubicación">{activo.ubicacion}</td>
+              <td data-etiqueta="Responsable">{activo.responsable}</td>
+              <td data-etiqueta="Estado">
                 <BadgeEstado {...obtenerInfoEstado(activo.estado)} />
               </td>
             </tr>

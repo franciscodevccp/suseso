@@ -1,7 +1,13 @@
 import { useId } from 'react'
+import { Desplegable } from './Desplegable'
 import estilos from './TextField.module.css'
 
-/** Select con label/error, mismo contrato visual que TextField (reutiliza su CSS). */
+/**
+ * Select con label/error, mismo contrato visual que TextField (reutiliza
+ * su CSS). Desde el 2026-08-27 el control es `Desplegable` (lista con
+ * diseño propio) en vez del <select> nativo; la API no cambia: recibe
+ * <option> como hijos y entrega `{ target: { value } }` en onChange.
+ */
 export function SelectField({ label, error, hint, id, children, ...resto }) {
   const idGenerado = useId()
   const inputId = id ?? idGenerado
@@ -13,7 +19,7 @@ export function SelectField({ label, error, hint, id, children, ...resto }) {
       <label htmlFor={inputId} className={estilos.etiqueta}>
         {label}
       </label>
-      <select
+      <Desplegable
         id={inputId}
         className={`${estilos.input} ${error ? estilos.conError : ''}`}
         aria-invalid={Boolean(error)}
@@ -21,7 +27,7 @@ export function SelectField({ label, error, hint, id, children, ...resto }) {
         {...resto}
       >
         {children}
-      </select>
+      </Desplegable>
       {hint && (
         <p id={hintId} className={estilos.pista}>
           {hint}

@@ -56,18 +56,18 @@ export function TablaItems({ items, cargando }) {
         <tbody>
           {items.map((item) => (
             <tr key={item.id} className={estilos.fila} onClick={(evento) => manejarClicFila(evento, item.id)}>
-              <td>
+              <td data-etiqueta="Folio">
                 <Link to={`/almacen/${item.id}`} className={estilos.enlaceFolio}>
                   {item.folio}
                 </Link>
               </td>
-              <td>{item.nombre}</td>
-              <td>{item.categoria}</td>
-              <td>{formatearStock(item)}</td>
-              <td>
+              <td data-etiqueta="Nombre">{item.nombre}</td>
+              <td data-etiqueta="Categoría">{item.categoria}</td>
+              <td data-etiqueta="Stock">{formatearStock(item)}</td>
+              <td data-etiqueta="Stock mínimo">
                 {item.stockMinimo} {item.unidad}
               </td>
-              <td>
+              <td data-etiqueta="Estado">
                 <BadgeEstado {...obtenerInfoStock(item)} />
               </td>
             </tr>

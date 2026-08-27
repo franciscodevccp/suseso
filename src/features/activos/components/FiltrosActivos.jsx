@@ -1,4 +1,5 @@
 import { ESTADOS_ACTIVO } from '../utils/estadoActivo'
+import { Desplegable } from '../../../components/common/Desplegable'
 import estilos from './FiltrosActivos.module.css'
 
 /** Búsqueda avanzada del listado: texto libre + filtros por categoría/ubicación/estado. */
@@ -26,7 +27,7 @@ export function FiltrosActivos({
       />
 
       <div className={estilos.selects}>
-        <select
+        <Desplegable
           aria-label="Filtrar por categoría"
           value={filtros.categoria}
           onChange={(evento) => actualizarCampo('categoria', evento.target.value)}
@@ -38,9 +39,9 @@ export function FiltrosActivos({
               {categoria.nombre}
             </option>
           ))}
-        </select>
+        </Desplegable>
 
-        <select
+        <Desplegable
           aria-label="Filtrar por ubicación"
           value={filtros.ubicacion}
           onChange={(evento) => actualizarCampo('ubicacion', evento.target.value)}
@@ -52,9 +53,9 @@ export function FiltrosActivos({
               {ubicacion.nombre}
             </option>
           ))}
-        </select>
+        </Desplegable>
 
-        <select
+        <Desplegable
           aria-label="Filtrar por estado"
           value={filtros.estado}
           onChange={(evento) => actualizarCampo('estado', evento.target.value)}
@@ -66,7 +67,7 @@ export function FiltrosActivos({
               {estado.etiqueta}
             </option>
           ))}
-        </select>
+        </Desplegable>
 
         {hayFiltrosActivos && (
           <button type="button" className={estilos.limpiar} onClick={onLimpiarFiltros}>

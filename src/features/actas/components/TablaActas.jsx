@@ -56,17 +56,17 @@ export function TablaActas({ actas, cargando }) {
         <tbody>
           {actas.map((acta) => (
             <tr key={acta.id} className={estilos.fila} onClick={(e) => manejarClicFila(e, acta.id)}>
-              <td>
+              <td data-etiqueta="Folio">
                 <Link to={`/actas-y-firma/${acta.id}`} className={estilos.enlaceFolio}>
                   {acta.folio}
                 </Link>
               </td>
-              <td>{ETIQUETA_TIPO[acta.tipo] ?? acta.tipo}</td>
-              <td>
+              <td data-etiqueta="Tipo">{ETIQUETA_TIPO[acta.tipo] ?? acta.tipo}</td>
+              <td data-etiqueta="Activo asociado">
                 {acta.activoId ? `${acta.activoFolio} — ${acta.activoNombre}` : 'Sin activo asociado'}
               </td>
-              <td>{acta.responsable}</td>
-              <td>
+              <td data-etiqueta="Responsable">{acta.responsable}</td>
+              <td data-etiqueta="Estado">
                 <BadgeEstado {...obtenerInfoEstadoFirma(acta.estadoFirma)} />
               </td>
             </tr>

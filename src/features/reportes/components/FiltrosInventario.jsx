@@ -1,4 +1,5 @@
 import { ESTADOS_ACTIVO } from '../../activos/utils/estadoActivo'
+import { Desplegable } from '../../../components/common/Desplegable'
 import estilos from './Filtros.module.css'
 
 /** Filtros del reporte de Inventario: categoría, ubicación y estado (mismo patrón que FiltrosActivos). */
@@ -9,7 +10,7 @@ export function FiltrosInventario({ filtros, setFiltros, categorias, ubicaciones
 
   return (
     <div className={estilos.contenedor}>
-      <select
+      <Desplegable
         aria-label="Filtrar por categoría"
         value={filtros.categoria}
         onChange={(evento) => actualizarCampo('categoria', evento.target.value)}
@@ -21,9 +22,9 @@ export function FiltrosInventario({ filtros, setFiltros, categorias, ubicaciones
             {categoria.nombre}
           </option>
         ))}
-      </select>
+      </Desplegable>
 
-      <select
+      <Desplegable
         aria-label="Filtrar por ubicación"
         value={filtros.ubicacion}
         onChange={(evento) => actualizarCampo('ubicacion', evento.target.value)}
@@ -35,9 +36,9 @@ export function FiltrosInventario({ filtros, setFiltros, categorias, ubicaciones
             {ubicacion.nombre}
           </option>
         ))}
-      </select>
+      </Desplegable>
 
-      <select
+      <Desplegable
         aria-label="Filtrar por estado"
         value={filtros.estado}
         onChange={(evento) => actualizarCampo('estado', evento.target.value)}
@@ -49,7 +50,7 @@ export function FiltrosInventario({ filtros, setFiltros, categorias, ubicaciones
             {estado.etiqueta}
           </option>
         ))}
-      </select>
+      </Desplegable>
     </div>
   )
 }

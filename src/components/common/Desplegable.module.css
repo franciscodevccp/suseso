@@ -1,0 +1,114 @@
+/*
+ * Lista desplegable de diseño propio (reemplaza al popup nativo del
+ * <select>). El borde/fondo/padding del CONTROL los pone la clase que
+ * pasa cada consumidor (`.input` de TextField, `.select` de los filtros):
+ * este archivo solo aporta el layout interno, el foco y el popup.
+ */
+.desplegable {
+  position: relative;
+  cursor: pointer;
+}
+
+.desplegable:focus-within {
+  outline: 2px solid var(--borde-foco);
+  outline-offset: 1px;
+}
+
+.deshabilitado {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.boton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: inherit;
+}
+
+.boton:focus {
+  outline: none;
+}
+
+.valor {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.flecha {
+  flex-shrink: 0;
+  color: var(--gris-500);
+  transition: transform 0.15s ease;
+}
+
+.flechaAbierta {
+  transform: rotate(180deg);
+}
+
+.lista {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 60;
+  min-width: 100%;
+  max-width: min(420px, 92vw);
+  /* Alto para que las listas típicas (≤10 opciones) se vean completas,
+     sin scroll; solo listas realmente largas lo muestran, y delgado. */
+  max-height: min(24rem, 60vh);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gris-300) transparent;
+  margin: 0;
+  padding: var(--espacio-1);
+  list-style: none;
+  background: var(--gob-blanco);
+  border: 1px solid var(--gris-300);
+  border-radius: var(--radio-md);
+  box-shadow: var(--sombra-tarjeta);
+  animation: desplegar 0.12s ease;
+}
+
+@keyframes desplegar {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.opcion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  padding: var(--espacio-2) var(--espacio-3);
+  border-radius: var(--radio-sm);
+  color: var(--gris-900);
+  font-size: 0.9375rem;
+}
+
+.activa {
+  background: var(--gris-100);
+}
+
+.seleccionada {
+  color: var(--gob-azul-claro);
+  font-weight: 600;
+}
+
+.opcionDeshabilitada {
+  color: var(--gris-500);
+  cursor: default;
+}
