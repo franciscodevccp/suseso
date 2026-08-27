@@ -1,0 +1,15 @@
+# Fin de línea LF para todo el código (el despliegue es Linux); así Git
+# en Windows deja de convertir y de avisar en cada commit.
+* text=auto eol=lf
+
+# Binarios: nunca tocar.
+*.png -text
+*.jpg -text
+*.jpeg -text
+*.webp -text
+*.ico -text
+*.pdf -text
+*.xlsx -text
+*.dump -text
+*.woff -text
+*.woff2 -text
