@@ -1,0 +1,22 @@
+# Base de datos de DESARROLLO local (docs/02). En el VPS, PostgreSQL lo
+# instala Francisco al desplegar; la credencial real vive solo en .env.
+services:
+  db:
+    image: postgres:16
+    container_name: sisga-db
+    environment:
+      POSTGRES_USER: sisga
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sisga_dev}
+      POSTGRES_DB: sisga
+    ports:
+      - '5432:5432'
+    volumes:
+      - sisga_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U sisga -d sisga']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  sisga_pgdata:

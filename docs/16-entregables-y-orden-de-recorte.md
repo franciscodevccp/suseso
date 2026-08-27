@@ -1,7 +1,7 @@
 # 16 — Entregables, Definition of Done y orden de recorte
 
 ## Definition of Done — la demo está terminada cuando:
-- [ ] `pnpm install --frozen-lockfile && pnpm db:migrate && pnpm db:seed && pnpm build && pnpm start` levanta API + frontend en un solo proceso, con `/api/salud` en verde. (Dominio, TLS y monitoreo los pone Francisco; el VPS necesita pnpm — `corepack enable` basta.)
+- [ ] `pnpm install --frozen-lockfile && pnpm db:migrate && pnpm db:seed && pnpm build && pnpm start` levanta API + frontend en un solo proceso. (Dominio, TLS y monitoreo directo sobre la URL del sitio los pone Francisco; el VPS necesita pnpm — `corepack enable` basta.)
 - [ ] Las 4 cuentas demo entran desde las tarjetas del login sin instrucciones externas; banner visible en todas las pantallas.
 - [ ] **Tabla RQ-01…RQ-27 completada navegando la demo** (misma tabla de `docs/01`, con una columna "cómo se verificó" y la ruta exacta): alimenta la columna "hoja" de la propuesta técnica y el manual.
 - [ ] AD-01: `openapi.yaml` descargable y cada endpoint responde con la API key · AD-02: al menos una OC real cacheada y vinculada a un activo · AD-03: portal con solicitudes operativo y pantallazos exportados.

@@ -15,7 +15,7 @@ Estado en este repo: ✅ hecho · ⚠️ parcial · ❌ falta · 📄 se cumple 
 | RQ-07 | Permisos por roles y niveles | ⚠️ | 4 roles + matriz aplicada en servidor y UI (`docs/04`, `docs/14`) | P0 |
 | RQ-08 | Bitácora / auditoría de acciones | ❌ | `docs/05` | P0 |
 | RQ-09 | Multiusuario concurrente | ❌ | Servidor + BD (`docs/02`) | P0 |
-| RQ-10 | Disponibilidad ≥ 99 % mensual | ⚠️ | `/api/salud` (`docs/02`); compromiso 99,5 % en Anexo 2B | P0 |
+| RQ-10 | Disponibilidad ≥ 99 % mensual | ⚠️ | Monitoreo directo de la URL del sitio (un solo proceso, `docs/17`); compromiso 99,5 % en Anexo 2B | P0 |
 | RQ-11 | Respaldo automático diario | ❌ | Script `pg_dump` + copia de `storage/` (`docs/02`), documentado en el manual | P0 |
 | RQ-12 | Adjuntar fotos, PDF, OC, garantías | ❌ | `docs/06` | P0 |
 | RQ-13 | Búsqueda avanzada (código, descripción, ubicación, responsable, estado) | ⚠️ | Agregar filtro **responsable** a `FiltrosActivos` (el mock ya lo soporta) | P1 |

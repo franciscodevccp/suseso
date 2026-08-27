@@ -5,28 +5,52 @@
   "type": "module",
   "packageManager": "pnpm@11.18.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently -n vite,api -c auto \"vite\" \"node --watch server/index.js\"",
     "build": "vite build",
+    "start": "node server/index.js",
+    "db:migrate": "prisma migrate dev --schema server/prisma/schema.prisma",
+    "db:seed": "node server/prisma/seed.js",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@prisma/client": "^7.10.0",
+    "argon2": "^0.45.1",
+    "bwip-js": "^4.11.4",
+    "connect-pg-simple": "^10.0.0",
+    "cookie-parser": "^1.4.7",
     "exceljs": "^4.4.0",
+    "exifr": "^7.1.3",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.6.2",
+    "express-session": "^1.19.0",
+    "helmet": "^8.3.0",
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.8",
+    "multer": "^2.2.0",
+    "pg": "^8.23.0",
+    "pino": "^10.3.1",
+    "prisma": "7.10.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-router-dom": "^7.18.2"
+    "react-router-dom": "^7.18.2",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.62.1",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^6.1.0",
+    "concurrently": "^10.0.5",
     "eslint": "^10.9.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.4",
     "globals": "^17.11.0",
-    "vite": "^8.2.2"
+    "supertest": "^7.2.2",
+    "vite": "^8.2.2",
+    "vitest": "^4.1.11"
   }
 }

@@ -25,3 +25,4 @@
 (Anotar aquí toda idea fuera de alcance, bug conocido aceptado o desviación del plan, con fecha y motivo. Nada de decisiones silenciosas.)
 
 - **2026-08-26** — Eliminado del login el botón "Ingresar con Clave Única" (estaba deshabilitado con chip "Próximamente"). No figuraba en ningún documento ni en el rediseño del login de `docs/13`, y sugería una integración no comprometida en la oferta.
+- **2026-08-26** — Se descarta el endpoint `GET /api/salud` (decisión de Francisco): front y API corren en un solo proceso, así que el monitoreo de disponibilidad (RQ-10) se hace directo sobre la URL del sitio. Ajustados `docs/01`, `docs/02` y `docs/16`.

@@ -15,13 +15,15 @@
 
 ## Bloque A1 — Servidor, BD y primeros módulos conectados (no recortable)
 
-- [ ] Dependencias del servidor instaladas (`docs/02` §Arranque: express@5, prisma, zod, argon2, express-session, connect-pg-simple, multer, exifr, bwip-js, helmet, express-rate-limit, pino…)
-- [ ] Estructura `server/` según `docs/02`: `index.js`, `src/{config,db,http/errores}`, `middleware/`, `rutas/`, `dominio/`, más `shared/` y `storage/adjuntos/` (gitignored)
-- [ ] `.env` + `config.js` con zod que aborta si falta una variable (`docs/02`) — **necesita T-03 (CLAVE_DEMO, API_DEMO_KEY)**
-- [ ] PostgreSQL 16 disponible (local y VPS) y `schema.prisma` completo: 8 enums y modelos Usuario, TokenRecuperacion, Categoria, Ubicacion, Funcionario, Activo, MovimientoActivo, Adjunto, ItemAlmacen, MovimientoAlmacen, Acta, Solicitud, SolicitudItem, OrdenCompraMP, Auditoria, Configuracion, Secuencia (`docs/02`)
-- [ ] Migración inicial (`pnpm db:migrate`) y scripts de `package.json` (`dev` con concurrently, `start`, `db:migrate`, `db:seed`, `test`, `test:e2e`)
+- [x] Dependencias del servidor instaladas (`docs/02` §Arranque; prisma 7.10 CLI y cliente alineados, builds de argon2/prisma aprobados en `pnpm-workspace.yaml`)
+- [x] PostgreSQL 16 de desarrollo en Docker (`docker-compose.yml`, volumen persistente; en el VPS se instala al desplegar)
+- [x] `.env` + `config.js` con zod que aborta si falta una variable, más `.env.ejemplo` versionado — con valores provisionales de desarrollo; los reales son **T-03**
+- [x] Arranque `server/index.js`: helmet/CSP, sesión en PostgreSQL (cookie `sisga.sid` httpOnly, rolling 30 min), 404 de API en formato `{codigo, mensaje}`, estáticos de `dist/` con fallback SPA — verificado en 3001 directo y vía proxy de Vite
+- [x] Scripts de `package.json` (`dev` con concurrently, `start`, `db:migrate`, `db:seed`, `test`, `test:e2e`) + proxy `/api` en `vite.config.js` + ESLint con globals de Node para `server/`
+- [ ] Estructura `server/` completa: falta `src/db.js` (PrismaClient), que llega con el schema
+- [ ] `schema.prisma` completo: 8 enums y modelos Usuario, TokenRecuperacion, Categoria, Ubicacion, Funcionario, Activo, MovimientoActivo, Adjunto, ItemAlmacen, MovimientoAlmacen, Acta, Solicitud, SolicitudItem, OrdenCompraMP, Auditoria, Configuracion, Secuencia (`docs/02`) + migración inicial (`pnpm db:migrate`)
 - [ ] Folios correlativos atómicos `dominio/folios.js` (`INSERT … ON CONFLICT … RETURNING` en transacción) para AF/BOD/ACT/SOL (`docs/02`, RQ-14)
-- [ ] `GET /api/salud` → `{estado, version, baseDatos, fecha}` (RQ-10)
+- ~~`GET /api/salud`~~ — descartado el 2026-08-26: front y API viven en el mismo proceso, el monitoreo es directo sobre el sitio (registro en `docs/17`)
 - [ ] Sesión por cookie `httpOnly` (`express-session` + `connect-pg-simple`, TTL 8 h, inactividad 30 min), argon2, bloqueo a los 5 intentos, rate limit de login (`docs/14`)
 - [ ] Auth completa: los 8 endpoints de `authService` con mismos errores (`docs/03`) y `shared/passwordRules.js`
 - [ ] Seed mínimo: 4 cuentas demo `@demo.cl` endurecidas (`esCuentaDemo`), catálogos, los 3 activos y 4 ítems actuales (`docs/04`, `docs/12`)

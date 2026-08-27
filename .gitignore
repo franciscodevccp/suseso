@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Secretos y datos de runtime (docs/14: secretos solo en .env; nunca al repo)
+.env
+storage/
+backups/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

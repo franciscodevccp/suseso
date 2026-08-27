@@ -21,7 +21,7 @@ Se **conserva la SPA de Vite** y se agrega un servidor `server/` en el mismo rep
 ## Estructura
 ```
 server/
-  index.js                 # arranque: helmet, sesión, rutas, estáticos de dist/, /api/salud
+  index.js                 # arranque: helmet, sesión, rutas, estáticos de dist/
   prisma/schema.prisma
   prisma/seed.js           # docs/12
   src/
@@ -30,7 +30,7 @@ server/
     http/errores.js        # ErrorHttp(codigo, status); handler que responde { codigo, mensaje }
     middleware/{sesion,autorizar,auditoria,apiKey,rateLimit}.js
     rutas/{auth,usuarios,activos,adjuntos,almacen,actas,vidaUtil,dashboard,alertas,reportes,
-           solicitudes,importaciones,configuracion,auditoria,mercadoPublico,etiquetas,v1,salud}.js
+           solicitudes,importaciones,configuracion,auditoria,mercadoPublico,etiquetas,v1}.js
     dominio/{folios,depreciacion,kardex,alertas,mp}.js
 shared/
   depreciacion.js          # función pura, importada por front y servidor (docs/09)
@@ -221,8 +221,8 @@ model Secuencia     { nombre String @id; valor Int }   // AF-2026, BOD-2026, ACT
 ## Folios correlativos (RQ-14)
 `dominio/folios.js`: `siguienteFolio(tx, 'AF')` ejecuta `INSERT ... ON CONFLICT (nombre) DO UPDATE SET valor = valor + 1 RETURNING valor` con nombre `AF-<año>` **dentro de la transacción** que crea el registro. Formato `AF-2026-0001`, `BOD-2026-0001`, `ACT-2026-0001`, `SOL-2026-0001`. Test de concurrencia obligatorio (`docs/15`).
 
-## `/api/salud`
-`GET /api/salud` → `{ estado: "ok", version, baseDatos: "ok"|"error", fecha }`. Sin sesión. Es lo que Francisco monitorea (RQ-10).
+## Monitoreo (RQ-10)
+Sin endpoint de salud (decisión del 2026-08-26, `docs/17`): front y API viven en el mismo proceso, así que Francisco monitorea directamente la URL del sitio — si responde, el proceso completo está arriba.
 
 ## Respaldos (RQ-11)
 `scripts/respaldo.sh`: `pg_dump -Fc` a `backups/sisga-<fecha>.dump` + `tar` de `storage/adjuntos`, rotación de 14 días. Se documenta en el manual como "respaldo automático diario a las 03:00"; Francisco lo programa en cron al desplegar. Ensayar una restauración una vez antes de entregar.

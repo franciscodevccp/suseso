@@ -4,5 +4,9 @@ overrides:
   uuid: ^11.1.1
 
 # core-js solo imprime un banner en su postinstall; no necesita ejecutar scripts.
+# prisma/argon2 sí: descargan motores y compilan el módulo nativo.
 allowBuilds:
+  '@prisma/engines': true
+  argon2: true
   core-js: false
+  prisma: true
