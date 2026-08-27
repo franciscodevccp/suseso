@@ -91,8 +91,9 @@
 
 ## Bloque D — Cierre (no recortable)
 
+- [x] Base E2E montada y en verde: Playwright con matriz de dispositivos (360 px, iPhone con motor WebKit real, tablet, escritorio), **98 pruebas** — barrido responsive de todos los módulos sin desbordes ni errores de consola, humo funcional (desplegable, modales, fichas), shell de scroll fijo y portal del Funcionario con su restricción de acceso (RQ-02, RQ-05, `docs/13` §360px)
 - [ ] Suite unitaria (depreciación, folios concurrentes, kardex, permisos) y de API (matriz de autorización, stock insuficiente) en verde (`docs/15`)
-- [ ] E2E Playwright de la pasada principal (`docs/15`)
+- [ ] E2E Playwright de la pasada principal de 15 minutos (`docs/15`)
 - [ ] Pasada DEMO-01…07 de 15 minutos ensayada y cronometrada (`docs/16`)
 - [ ] Tabla RQ-01…RQ-27 verificada navegando la demo, con ruta exacta (`docs/16`)
 - [ ] Manual de uso del demo en PDF + `entregables/` completo (`docs/16`, RQ-27)

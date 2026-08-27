@@ -1,4 +1,5 @@
-import { Outlet } from 'react-router-dom'
+import { useEffect, useRef } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
 import { EncabezadoInstitucional } from './EncabezadoInstitucional'
 import { MenuPerfil } from './MenuPerfil'
 import { Sidebar } from './Sidebar'
@@ -14,13 +15,21 @@ import estilos from './AppLayout.module.css'
  */
 export function AppLayout() {
   const { mostrarAviso, continuarSesion, expirarSesion } = useSessionGuard()
+  const contenidoRef = useRef(null)
+  const { pathname } = useLocation()
+
+  // El scroll vive en <main> (no en la ventana): al cambiar de vista se
+  // vuelve arriba, como haría una navegación de página completa.
+  useEffect(() => {
+    contenidoRef.current?.scrollTo({ top: 0 })
+  }, [pathname])
 
   return (
     <div className={estilos.layout}>
       <EncabezadoInstitucional accionDerecha={<MenuPerfil />} />
       <div className={estilos.cuerpo}>
         <Sidebar />
-        <main className={estilos.contenido}>
+        <main ref={contenidoRef} className={estilos.contenido}>
           <Outlet />
         </main>
       </div>

@@ -1,7 +1,10 @@
+/* Shell de altura fija: encabezado y sidebar quedan quietos y SOLO el
+   contenido del módulo tiene scroll propio. */
 .layout {
-  min-height: 100svh;
+  height: 100svh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   background: var(--gris-50);
 }
 
@@ -15,6 +18,7 @@
   flex: 1;
   min-width: 0;
   padding: var(--espacio-5);
+  overflow-y: auto;
 }
 
 @media (max-width: 480px) {

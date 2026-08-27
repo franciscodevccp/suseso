@@ -17,6 +17,12 @@ dist-ssr
 storage/
 backups/
 
+# Artefactos de pruebas (Playwright)
+test-results/
+playwright-report/
+tests/e2e/.estado/
+tests/e2e/capturas/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
