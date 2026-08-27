@@ -8,7 +8,7 @@ import { Alert } from '../../../components/common/Alert'
 import { useAuth } from '../hooks/useAuth'
 import { usePasswordRules } from '../hooks/usePasswordRules'
 import { obtenerMensajeError } from '../constants/mensajes'
-import * as authService from '../mock/authService.mock'
+import * as authService from '../services/authService'
 
 /** Vista 4: se muestra cuando el usuario inició sesión con clave temporal o vencida. */
 export function ForcePasswordChangePage() {

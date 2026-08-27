@@ -9,7 +9,7 @@ import { useAuth } from '../../auth/hooks/useAuth'
 import { puedeGestionarAlmacen } from '../utils/permisosAlmacen'
 import { obtenerInfoStock } from '../utils/estadoStock'
 import { obtenerMensajeErrorAlmacen } from '../constants/mensajesAlmacen'
-import * as almacenService from '../mock/almacenService.mock'
+import * as almacenService from '../services/almacenService'
 import estilos from './FichaItemPage.module.css'
 
 /** Ficha de detalle de un ítem de bodega: stock actual + historial de movimientos. */

@@ -8,11 +8,6 @@ import { Alert } from '../../../components/common/Alert'
 import { useAuth } from '../hooks/useAuth'
 import { obtenerMensajeError } from '../constants/mensajes'
 import { obtenerRutaInicio } from '../utils/rutaInicio'
-import { reiniciarDatosDemo } from '../mock/authService.mock'
-import { reiniciarDatosDemo as reiniciarActivosDemo } from '../../activos/mock/activosService.mock'
-import { reiniciarDatosDemo as reiniciarActasDemo } from '../../actas/mock/actasService.mock'
-import { reiniciarDatosDemo as reiniciarAlmacenDemo } from '../../almacen/mock/almacenService.mock'
-import { reiniciarDatosDemo as reiniciarVidaUtilDemo } from '../../depreciacion/mock/vidaUtilService.mock'
 import estilos from './LoginPage.module.css'
 
 export function LoginPage() {
@@ -99,26 +94,18 @@ export function LoginPage() {
         </div>
       </form>
 
+      {/* Bloque provisorio: en B2 pasa a las tarjetas "Cuentas de
+          demostración" con la clave entregada por el servidor (docs/13).
+          El botón de reinicio se movió a la API: POST
+          /api/configuracion/reiniciar-demo, solo Administrador. */}
       <details className={estilos.demo}>
-        <summary>Cuentas de demostración (entorno mock)</summary>
+        <summary>Cuentas de demostración</summary>
         <ul>
-          <li>admin@suseso.gob.cl / Admin#2024 (Administrador)</li>
-          <li>funcionario@suseso.gob.cl / Funcionario#2024 (Funcionario)</li>
+          <li>admin@demo.cl (Administrador)</li>
+          <li>gestor@demo.cl (Gestor de Activos)</li>
+          <li>consulta@demo.cl (Consulta)</li>
+          <li>funcionario@demo.cl (Funcionario)</li>
         </ul>
-        <button
-          type="button"
-          className={estilos.reiniciar}
-          onClick={() => {
-            reiniciarDatosDemo()
-            reiniciarActivosDemo()
-            reiniciarActasDemo()
-            reiniciarAlmacenDemo()
-            reiniciarVidaUtilDemo()
-            window.location.reload()
-          }}
-        >
-          Reiniciar datos de prueba
-        </button>
       </details>
     </AuthLayout>
   )

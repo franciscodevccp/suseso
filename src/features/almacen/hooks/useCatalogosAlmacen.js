@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import * as almacenService from '../mock/almacenService.mock'
+import * as almacenService from '../services/almacenService'
 
 /** Catálogos de categorías, ubicaciones y unidades, para poblar los selects del formulario. */
 export function useCatalogosAlmacen() {

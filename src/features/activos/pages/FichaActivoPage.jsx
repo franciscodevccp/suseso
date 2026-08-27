@@ -13,7 +13,7 @@ import { puedeGestionarActivos } from '../utils/permisosActivos'
 import { obtenerInfoEstado } from '../utils/estadoActivo'
 import { obtenerMensajeErrorActivo } from '../constants/mensajesActivos'
 import { formatearMoneda } from '../../../utils/formatoMoneda'
-import * as activosService from '../mock/activosService.mock'
+import * as activosService from '../services/activosService'
 import estilos from './FichaActivoPage.module.css'
 
 const formatearFecha = (fecha) => (fecha ? new Date(fecha).toLocaleDateString('es-CL') : '—')

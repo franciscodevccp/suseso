@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import * as activosService from '../mock/activosService.mock'
+import * as activosService from '../services/activosService'
 
 /**
  * Trae un activo y su historial de movimientos por id, para la ficha (y

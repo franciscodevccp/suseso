@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import * as activosService from '../../activos/mock/activosService.mock'
+import * as activosService from '../../activos/services/activosService'
 import { useAuth } from '../../auth/hooks/useAuth'
 
 /** Activos cuyo responsable es el usuario en sesión ("Mis bienes"). */

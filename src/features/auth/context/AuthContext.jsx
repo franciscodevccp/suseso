@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import * as authService from '../mock/authService.mock'
+import { useNavigate } from 'react-router-dom'
+import * as authService from '../services/authService'
 import { AuthContext } from './authContextObject'
 
 /**
@@ -10,6 +11,19 @@ import { AuthContext } from './authContextObject'
 export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(null)
   const [cargando, setCargando] = useState(true)
+  const navigate = useNavigate()
+
+  // Un 401 fuera de /api/auth (detectado por http.js) significa que la
+  // sesión del servidor expiró o fue invalidada: se limpia el estado y se
+  // lleva al usuario a la página de sesión expirada (docs/03).
+  useEffect(() => {
+    function manejarSesionInvalida() {
+      setUsuario(null)
+      navigate('/sesion-expirada')
+    }
+    window.addEventListener('sesion-invalida', manejarSesionInvalida)
+    return () => window.removeEventListener('sesion-invalida', manejarSesionInvalida)
+  }, [navigate])
 
   const refrescarSesion = useCallback(async () => {
     const sesion = await authService.obtenerSesionActual()

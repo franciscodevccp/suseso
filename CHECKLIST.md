@@ -27,8 +27,8 @@
 - [x] Sesión por cookie `httpOnly` con TTL absoluto 8 h + inactividad 30 min (rolling), argon2id, bloqueo al 5º intento, rate limit login 10/15min y recuperación 5/h — todo verificado con pruebas reales contra la API (`docs/14`)
 - [x] Auth completa: los 8 endpoints del contrato del mock (mismos códigos y formas), `shared/passwordRules.js` compartido front/servidor, `autorizar(...roles)`, auditoría de acceso según `docs/05`, y `POST /api/configuracion/reiniciar-demo` (solo Administrador) que restaura el seed y desbloquea cuentas
 - [x] Seed mínimo reproducible (`pnpm db:seed` borra y recrea): 4 cuentas demo `@demo.cl` con `esCuentaDemo` y clave argon2id (`CLAVE_DEMO`), 8 categorías con vida útil SII, 8 ubicaciones, catálogos de almacén en `Configuracion`, los 3 activos y 4 ítems de los mocks, contadores de `Secuencia` alineados (`docs/04`, `docs/09`, `docs/12`)
-- [ ] Cliente `src/services/http.js` + evento `sesion-invalida` en `AuthContext` (`docs/03`)
-- [ ] `authService`, `activosService` y `almacenService` reales + cambio de importaciones listadas en `docs/00` (vistas y hooks intactos)
+- [x] Cliente `src/services/http.js` + evento `sesion-invalida` en `AuthContext` (`docs/03`)
+- [x] `authService`, `activosService` y `almacenService` reales con el contrato exacto de los mocks + las 22 importaciones cambiadas (vistas y hooks intactos); los 3 mocks reemplazados fueron eliminados (D-08). Verificado de punta a punta en el navegador: login real, activo creado desde la UI con folio atómico `AF-2026-0004` + movimiento + auditoría, y egreso de almacén con `STOCK_INSUFICIENTE` protegiendo stock (operado por la cuenta Gestor: D-11 en acción)
 - [ ] Un solo proceso: proxy `/api` en dev, `dist/` servido con fallback SPA en producción (`docs/02`, D-05)
 - [ ] `scripts/respaldo.sh` (`pg_dump` + tar de adjuntos, rotación 14 días) (`docs/02`, RQ-11)
 

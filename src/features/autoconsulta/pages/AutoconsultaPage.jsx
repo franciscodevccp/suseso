@@ -4,7 +4,7 @@ import { useMisBienes } from '../hooks/useMisBienes'
 import { FormularioBusquedaBien } from '../components/FormularioBusquedaBien'
 import { TarjetaConsultaBien } from '../components/TarjetaConsultaBien'
 import { MisBienesTabla } from '../components/MisBienesTabla'
-import * as activosService from '../../activos/mock/activosService.mock'
+import * as activosService from '../../activos/services/activosService'
 import estilos from './AutoconsultaPage.module.css'
 
 /**

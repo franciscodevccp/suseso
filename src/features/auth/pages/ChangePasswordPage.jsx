@@ -8,7 +8,7 @@ import { useAuth } from '../hooks/useAuth'
 import { usePasswordRules } from '../hooks/usePasswordRules'
 import { obtenerMensajeError } from '../constants/mensajes'
 import { obtenerRutaInicio } from '../utils/rutaInicio'
-import * as authService from '../mock/authService.mock'
+import * as authService from '../services/authService'
 import estilos from './ChangePasswordPage.module.css'
 
 const MS_ANTES_DE_REDIRIGIR = 2000

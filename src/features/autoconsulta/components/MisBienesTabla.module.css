@@ -70,3 +70,65 @@
   font-weight: 600;
   color: var(--gob-azul-claro);
 }
+
+/* --- Móvil: cada fila se convierte en una tarjeta apilada (RQ-05).
+   Las etiquetas de columna salen del atributo data-etiqueta de cada celda. --- */
+@media (max-width: 640px) {
+  .contenedorTabla {
+    background: none;
+    border: none;
+    overflow: visible;
+  }
+
+  .tabla,
+  .tabla tbody,
+  .fila,
+  .tabla td {
+    display: block;
+  }
+
+  .tabla {
+    white-space: normal;
+  }
+
+  .tabla thead {
+    display: none;
+  }
+
+  .fila {
+    background: var(--gob-blanco);
+    border: 1px solid var(--gris-200);
+    border-radius: var(--radio-lg);
+    padding: var(--espacio-2) var(--espacio-4);
+    margin-bottom: var(--espacio-3);
+  }
+
+  .fila:last-child {
+    margin-bottom: 0;
+  }
+
+  .tabla td {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--espacio-4);
+    padding: var(--espacio-2) 0;
+    border-bottom: 1px solid var(--gris-100);
+    text-align: right;
+  }
+
+  .fila td:last-child {
+    border-bottom: none;
+  }
+
+  .tabla td::before {
+    content: attr(data-etiqueta);
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--gris-500);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    text-align: left;
+  }
+}

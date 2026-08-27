@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import * as almacenService from '../mock/almacenService.mock'
+import * as almacenService from '../services/almacenService'
 
 /**
  * Trae un ítem y su historial de movimientos por id, para la ficha.

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import * as activosService from '../mock/activosService.mock'
+import * as activosService from '../services/activosService'
 
 const FILTROS_INICIALES = { texto: '', categoria: '', ubicacion: '', estado: '' }
 

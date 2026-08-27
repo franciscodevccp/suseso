@@ -4,7 +4,7 @@ import { AuthLayout } from '../../../components/layout/AuthLayout'
 import { TextField } from '../../../components/common/TextField'
 import { Button } from '../../../components/common/Button'
 import { Alert } from '../../../components/common/Alert'
-import * as authService from '../mock/authService.mock'
+import * as authService from '../services/authService'
 import estilos from './ForgotPasswordPage.module.css'
 
 export function ForgotPasswordPage() {

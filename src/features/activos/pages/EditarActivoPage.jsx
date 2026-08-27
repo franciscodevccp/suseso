@@ -6,7 +6,7 @@ import { useCatalogosActivos } from '../hooks/useCatalogosActivos'
 import { FormularioActivo } from '../components/FormularioActivo'
 import { puedeGestionarActivos } from '../utils/permisosActivos'
 import { obtenerMensajeErrorActivo } from '../constants/mensajesActivos'
-import * as activosService from '../mock/activosService.mock'
+import * as activosService from '../services/activosService'
 import estilos from './AltaActivoPage.module.css'
 
 /** Edición de un activo existente. No disponible si ya está dado de baja. */

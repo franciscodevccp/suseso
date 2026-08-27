@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import * as activosService from '../../activos/mock/activosService.mock'
+import * as activosService from '../../activos/services/activosService'
 
 /**
  * Activos elegibles para vincular a un acta (todos menos los dados de

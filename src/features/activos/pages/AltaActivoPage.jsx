@@ -5,7 +5,7 @@ import { useCatalogosActivos } from '../hooks/useCatalogosActivos'
 import { FormularioActivo } from '../components/FormularioActivo'
 import { puedeGestionarActivos } from '../utils/permisosActivos'
 import { obtenerMensajeErrorActivo } from '../constants/mensajesActivos'
-import * as activosService from '../mock/activosService.mock'
+import * as activosService from '../services/activosService'
 import estilos from './AltaActivoPage.module.css'
 
 /** Alta de un activo nuevo. El folio se genera solo en el mock. */

@@ -25,6 +25,13 @@ export function manejadorErrores(logger) {
       const detalle = err.issues.map((p) => p.path.join('.') || 'entrada').join(', ')
       return res.status(400).json({ codigo: 'VALIDACION', mensaje: `Datos inválidos: ${detalle}.` })
     }
+    // Violación de único en Prisma (p. ej. código de barras o RFID repetido).
+    if (err?.code === 'P2002') {
+      return res.status(409).json({
+        codigo: 'VALOR_DUPLICADO',
+        mensaje: 'Ya existe un registro con ese código de barras o RFID.',
+      })
+    }
     logger.error({ err, ruta: req.originalUrl }, 'error no controlado')
     return res.status(500).json({ codigo: 'ERROR_INTERNO', mensaje: 'Error interno del servidor.' })
   }

@@ -6,8 +6,8 @@
  * los 3 exportadores (CSV/Excel/PDF), con cada valor ya formateado tal
  * como debe verse.
  */
-import * as activosService from '../../activos/mock/activosService.mock'
-import * as almacenService from '../../almacen/mock/almacenService.mock'
+import * as activosService from '../../activos/services/activosService'
+import * as almacenService from '../../almacen/services/almacenService'
 import * as vidaUtilService from '../../depreciacion/mock/vidaUtilService.mock'
 import { calcularDepreciacion } from '../../depreciacion/utils/calculoDepreciacion'
 import { obtenerInfoEstado } from '../../activos/utils/estadoActivo'

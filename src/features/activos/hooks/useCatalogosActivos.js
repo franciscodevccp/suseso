@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import * as activosService from '../mock/activosService.mock'
+import * as activosService from '../services/activosService'
 
 /** Catálogos de categorías y ubicaciones, para poblar los filtros del listado. */
 export function useCatalogosActivos() {

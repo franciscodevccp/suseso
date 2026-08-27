@@ -6,7 +6,7 @@ import { PasswordRequirements } from '../../../components/common/PasswordRequire
 import { Button } from '../../../components/common/Button'
 import { Alert } from '../../../components/common/Alert'
 import { usePasswordRules } from '../hooks/usePasswordRules'
-import * as authService from '../mock/authService.mock'
+import * as authService from '../services/authService'
 import { obtenerMensajeError } from '../constants/mensajes'
 import estilos from './ResetPasswordPage.module.css'
 

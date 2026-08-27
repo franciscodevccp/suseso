@@ -41,16 +41,16 @@ export function MisBienesTabla({ activos, cargando }) {
         <tbody>
           {activos.map((activo) => (
             <tr key={activo.id} className={estilos.fila} onClick={(e) => manejarClicFila(e, activo.id)}>
-              <td>
+              <td data-etiqueta="Folio">
                 <Link to={`/autoconsulta/${activo.id}`} className={estilos.enlaceFolio}>
                   {activo.folio}
                 </Link>
               </td>
-              <td>{activo.nombre}</td>
-              <td>
+              <td data-etiqueta="Nombre">{activo.nombre}</td>
+              <td data-etiqueta="Estado">
                 <BadgeEstado {...obtenerInfoEstado(activo.estado)} />
               </td>
-              <td>{activo.ubicacion}</td>
+              <td data-etiqueta="Ubicación">{activo.ubicacion}</td>
             </tr>
           ))}
         </tbody>

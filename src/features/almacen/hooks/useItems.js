@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import * as almacenService from '../mock/almacenService.mock'
+import * as almacenService from '../services/almacenService'
 
 /** Listado completo de ítems de bodega (sin filtros). */
 export function useItems() {

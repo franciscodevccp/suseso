@@ -107,7 +107,9 @@ model Funcionario {
 model Activo {
   id                   String             @id @default(cuid())
   folio                String             @unique // AF-AAAA-NNNN (docs/02 §folios)
-  codigoBarras         String             @unique
+  // Opcional-único: el formulario permite crear sin código; el contrato del
+  // mock lo entrega como "" y el servidor normaliza "" ↔ null al borde.
+  codigoBarras         String?            @unique
   rfid                 String?            @unique
   nombre               String
   descripcion          String             @default("")
@@ -275,4 +277,15 @@ model Configuracion {
 model Secuencia {
   nombre String @id
   valor  Int
+}
+
+// Sesiones de express-session (connect-pg-simple). La escribe el
+// middleware, pero la tabla la posee la migración para evitar drift.
+model Session {
+  sid    String   @id
+  sess   Json
+  expire DateTime @db.Timestamp(6)
+
+  @@index([expire], map: "IDX_session_expire")
+  @@map("session")
 }

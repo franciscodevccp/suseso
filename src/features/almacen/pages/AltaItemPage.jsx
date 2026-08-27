@@ -5,7 +5,7 @@ import { useCatalogosAlmacen } from '../hooks/useCatalogosAlmacen'
 import { FormularioItem } from '../components/FormularioItem'
 import { puedeGestionarAlmacen } from '../utils/permisosAlmacen'
 import { obtenerMensajeErrorAlmacen } from '../constants/mensajesAlmacen'
-import * as almacenService from '../mock/almacenService.mock'
+import * as almacenService from '../services/almacenService'
 import estilos from './AltaItemPage.module.css'
 
 /** Alta de un ítem de bodega nuevo. El folio se genera solo en el mock. */

@@ -5,7 +5,7 @@
  * datos de ejemplo estáticos. `retraso()` se mantiene igual para
  * comportarse como una llamada real, aunque no haya nada que guardar.
  */
-import * as activosService from '../../activos/mock/activosService.mock'
+import * as activosService from '../../activos/services/activosService'
 import { obtenerInfoEstado } from '../../activos/utils/estadoActivo'
 
 function retraso(ms = 400) {
