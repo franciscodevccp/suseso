@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CampoFecha } from '../../../components/common/CampoFecha'
 import { TextField } from '../../../components/common/TextField'
 import { SelectField } from '../../../components/common/SelectField'
 import { Button } from '../../../components/common/Button'
 import { Alert } from '../../../components/common/Alert'
+import * as configuracionService from '../../configuracion/services/configuracionService'
 import estilos from './FormularioActivo.module.css'
 import camposTexto from '../../../components/common/TextField.module.css'
 
@@ -18,15 +19,23 @@ const VALORES_VACIOS = {
   rfid: '',
   proximaMantencion: '',
   finGarantia: '',
+  camposPersonalizados: {},
 }
 
-function validar(valores) {
+function validar(valores, definicionCampos) {
   const errores = {}
   if (!valores.nombre.trim()) errores.nombre = 'El nombre es obligatorio.'
   if (!valores.categoria) errores.categoria = 'Seleccione una categoría.'
   if (!valores.ubicacion) errores.ubicacion = 'Seleccione una ubicación.'
   if (valores.valor !== '' && (Number.isNaN(Number(valores.valor)) || Number(valores.valor) < 0)) {
     errores.valor = 'Ingrese un valor numérico válido (0 o más).'
+  }
+  for (const campo of definicionCampos) {
+    if (!campo.obligatorio) continue
+    const valor = valores.camposPersonalizados?.[campo.id]
+    if (valor === undefined || String(valor).trim() === '') {
+      errores[`campo:${campo.id}`] = `"${campo.nombre}" es obligatorio.`
+    }
   }
   return errores
 }
@@ -47,16 +56,37 @@ export function FormularioActivo({
   onEnviar,
   onCancelar,
 }) {
-  const [valores, setValores] = useState(valoresIniciales)
+  const [valores, setValores] = useState({ ...VALORES_VACIOS, ...valoresIniciales })
   const [errores, setErrores] = useState({})
+
+  // Campos personalizados definidos en Configuración (RQ-21, docs/08):
+  // se renderizan debajo de los estándar, solo los habilitados.
+  const [definicionCampos, setDefinicionCampos] = useState([])
+  useEffect(() => {
+    let vigente = true
+    configuracionService
+      .obtenerCamposPersonalizados()
+      .then((campos) => vigente && setDefinicionCampos(campos.filter((c) => c.habilitado)))
+      .catch(() => {})
+    return () => {
+      vigente = false
+    }
+  }, [])
 
   function actualizarCampo(campo, valor) {
     setValores((anterior) => ({ ...anterior, [campo]: valor }))
   }
 
+  function actualizarCampoPersonalizado(id, valor) {
+    setValores((anterior) => ({
+      ...anterior,
+      camposPersonalizados: { ...anterior.camposPersonalizados, [id]: valor },
+    }))
+  }
+
   function manejarEnvio(evento) {
     evento.preventDefault()
-    const erroresEncontrados = validar(valores)
+    const erroresEncontrados = validar(valores, definicionCampos)
     setErrores(erroresEncontrados)
     if (Object.keys(erroresEncontrados).length > 0) return
     onEnviar(valores)
@@ -177,6 +207,63 @@ export function FormularioActivo({
             className={camposTexto.input}
           />
         </div>
+
+        {/* Campos personalizados definidos en Configuración (RQ-21). */}
+        {definicionCampos.map((campo) => {
+          const valor = valores.camposPersonalizados?.[campo.id] ?? ''
+          const error = errores[`campo:${campo.id}`]
+          if (campo.tipo === 'lista') {
+            return (
+              <SelectField
+                key={campo.id}
+                label={campo.nombre}
+                required={campo.obligatorio}
+                value={valor}
+                onChange={(e) => actualizarCampoPersonalizado(campo.id, e.target.value)}
+                error={error}
+              >
+                <option value="">Seleccione una opción</option>
+                {(campo.opciones ?? []).map((opcion) => (
+                  <option key={opcion} value={opcion}>
+                    {opcion}
+                  </option>
+                ))}
+              </SelectField>
+            )
+          }
+          if (campo.tipo === 'fecha') {
+            return (
+              <div key={campo.id} className={camposTexto.campo}>
+                <label htmlFor={`campo-${campo.id}`} className={camposTexto.etiqueta}>
+                  {campo.nombre}
+                  {campo.obligatorio ? ' *' : ''}
+                </label>
+                <CampoFecha
+                  id={`campo-${campo.id}`}
+                  value={valor}
+                  onChange={(e) => actualizarCampoPersonalizado(campo.id, e.target.value)}
+                  className={camposTexto.input}
+                />
+                {error && (
+                  <p className={camposTexto.mensajeError} role="alert">
+                    {error}
+                  </p>
+                )}
+              </div>
+            )
+          }
+          return (
+            <TextField
+              key={campo.id}
+              label={campo.nombre}
+              required={campo.obligatorio}
+              type={campo.tipo === 'numero' ? 'number' : 'text'}
+              value={valor}
+              onChange={(e) => actualizarCampoPersonalizado(campo.id, e.target.value)}
+              error={error}
+            />
+          )
+        })}
       </div>
 
       <div className={estilos.acciones}>

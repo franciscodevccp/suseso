@@ -150,6 +150,27 @@ const CATALOGOS_ALMACEN = {
   unidades: ['unidad', 'caja', 'resma', 'litro', 'paquete'],
 }
 
+// Definición de campos personalizados (RQ-21, docs/08): texto + lista.
+const CENTROS_DE_COSTO = [
+  'Administración y Finanzas',
+  'Fiscalía',
+  'Tecnologías de la Información',
+  'Intendencia de Beneficios',
+  'Dirección',
+]
+
+const CAMPOS_PERSONALIZADOS = [
+  { id: 'numero_serie', nombre: 'Número de serie', tipo: 'texto', obligatorio: false, habilitado: true },
+  {
+    id: 'centro_costo',
+    nombre: 'Centro de costo',
+    tipo: 'lista',
+    opciones: CENTROS_DE_COSTO,
+    obligatorio: false,
+    habilitado: true,
+  },
+]
+
 const CUENTAS_CONTABLES = {
   Mobiliario: '141.01',
   'Equipos computacionales': '141.02',
@@ -248,11 +269,12 @@ function generarActivos({ rng, ean, ubicacionesOficina, funcionarios }) {
         ])
       }
 
-      // Serie/marca como campos personalizados (~300 activos, RQ-21).
+      // Campos personalizados con valores (~300 activos, RQ-21): claves =
+      // ids de la definición sembrada en Configuración (docs/08).
       if (tipo.serie && rng.probabilidad(0.85)) {
         activo.camposPersonalizados = {
-          'Número de serie': `SN-${anio}-${serieContador++}`,
-          Marca: nombre.split(' ')[1] ?? 'Institucional',
+          numero_serie: `SN-${anio}-${serieContador++}`,
+          centro_costo: rng.de(CENTROS_DE_COSTO),
         }
       }
 
@@ -563,6 +585,9 @@ async function sembrar(db) {
   // --- Configuración y secuencias ---------------------------------------
   await db.configuracion.create({ data: { clave: 'almacen_catalogos', valor: CATALOGOS_ALMACEN } })
   await db.configuracion.create({ data: { clave: 'cuentas_contables', valor: CUENTAS_CONTABLES } })
+  await db.configuracion.create({
+    data: { clave: 'campos_personalizados', valor: CAMPOS_PERSONALIZADOS },
+  })
 
   await db.secuencia.createMany({
     data: [

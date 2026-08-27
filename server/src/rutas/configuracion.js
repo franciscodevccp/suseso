@@ -30,6 +30,55 @@ rutasConfiguracion.get('/vida-util', autorizar(...PANEL), async (_req, res, next
   }
 })
 
+// Campos personalizados (RQ-21, docs/08): la definición vive en
+// Configuración; los ve todo el panel (el formulario de activos los
+// necesita) y los edita solo el Administrador (D-10).
+const esquemaCampos = z.array(
+  z.object({
+    id: z.string().min(1),
+    nombre: z.string().min(1),
+    tipo: z.enum(['texto', 'numero', 'fecha', 'lista']),
+    opciones: z.array(z.string().min(1)).optional(),
+    obligatorio: z.boolean().default(false),
+    habilitado: z.boolean().default(true),
+  }),
+)
+
+rutasConfiguracion.get('/campos-personalizados', autorizar(...PANEL), async (_req, res, next) => {
+  try {
+    const fila = await db.configuracion.findUnique({ where: { clave: 'campos_personalizados' } })
+    res.json(fila?.valor ?? [])
+  } catch (err) {
+    next(err)
+  }
+})
+
+rutasConfiguracion.put('/campos-personalizados', autorizar('Administrador'), async (req, res, next) => {
+  try {
+    const campos = esquemaCampos.parse(req.body)
+    const ids = new Set(campos.map((campo) => campo.id))
+    if (ids.size !== campos.length) throw new ErrorHttp('CAMPO_DUPLICADO', 400)
+    for (const campo of campos) {
+      if (campo.tipo === 'lista' && !(campo.opciones?.length > 0)) {
+        throw new ErrorHttp('OPCIONES_REQUERIDAS', 400)
+      }
+    }
+    await db.configuracion.upsert({
+      where: { clave: 'campos_personalizados' },
+      update: { valor: campos },
+      create: { clave: 'campos_personalizados', valor: campos },
+    })
+    await auditar(req, {
+      modulo: 'configuracion',
+      accion: 'campos_personalizados_actualizados',
+      detalle: `Definición de campos personalizados actualizada (${campos.length}).`,
+    })
+    res.json(campos)
+  } catch (err) {
+    next(err)
+  }
+})
+
 rutasConfiguracion.put('/vida-util', autorizar('Administrador'), async (req, res, next) => {
   try {
     const filas = z

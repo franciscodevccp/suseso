@@ -71,3 +71,23 @@ a {
   outline-offset: 2px;
   border-radius: var(--radio-sm);
 }
+
+/* Impresión de etiquetas (RQ-19, docs/08): con esta clase en <body> se
+   imprime solo el contenido de la vista; cada página de etiquetas define
+   su propio @page (50×25 mm individual, A4 para el pliego). */
+@media print {
+  body.imprimir-etiquetas header,
+  body.imprimir-etiquetas nav {
+    display: none !important;
+  }
+
+  body.imprimir-etiquetas [class*='layout'],
+  body.imprimir-etiquetas [class*='cuerpo'],
+  body.imprimir-etiquetas main {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}

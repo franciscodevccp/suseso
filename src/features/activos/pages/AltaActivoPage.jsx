@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../auth/hooks/useAuth'
 import { useCatalogosActivos } from '../hooks/useCatalogosActivos'
 import { FormularioActivo } from '../components/FormularioActivo'
@@ -15,6 +15,9 @@ export function AltaActivoPage() {
   const { categorias, ubicaciones } = useCatalogosActivos()
   const [enviando, setEnviando] = useState(false)
   const [error, setError] = useState(null)
+  // El escáner puede llegar con un código no registrado (RQ-20, docs/08).
+  const [parametros] = useSearchParams()
+  const codigoEscaneado = parametros.get('codigo') ?? ''
 
   if (!puedeGestionarActivos(usuario)) {
     return (
@@ -47,6 +50,7 @@ export function AltaActivoPage() {
 
       <div className={estilos.tarjeta}>
         <FormularioActivo
+          {...(codigoEscaneado ? { valoresIniciales: { codigoBarras: codigoEscaneado } } : {})}
           categorias={categorias}
           ubicaciones={ubicaciones}
           enviando={enviando}

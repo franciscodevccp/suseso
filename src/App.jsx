@@ -33,6 +33,10 @@ import { UsuariosPage } from './features/usuarios/pages/UsuariosPage'
 import { AuditoriaPage } from './features/auditoria/pages/AuditoriaPage'
 import { PerfilesPermisosPage } from './features/configuracion/pages/PerfilesPermisosPage'
 import { ReiniciarDemoPage } from './features/configuracion/pages/ReiniciarDemoPage'
+import { EtiquetaActivoPage } from './features/activos/pages/EtiquetaActivoPage'
+import { PliegoEtiquetasPage } from './features/activos/pages/PliegoEtiquetasPage'
+import { CamposPersonalizadosPage } from './features/configuracion/pages/CamposPersonalizadosPage'
+import { ImportarPlanillaPage } from './features/configuracion/pages/ImportarPlanillaPage'
 import { MisSolicitudesPage } from './features/solicitudes/pages/MisSolicitudesPage'
 import { NuevaSolicitudPage } from './features/solicitudes/pages/NuevaSolicitudPage'
 import { DetalleSolicitudPage } from './features/solicitudes/pages/DetalleSolicitudPage'
@@ -71,7 +75,9 @@ function App() {
             <Route path="/inicio" element={<InicioPage />} />
             <Route path="/activos-fijos" element={<ListadoActivosPage />} />
             <Route path="/activos-fijos/nuevo" element={<AltaActivoPage />} />
+            <Route path="/activos-fijos/etiquetas" element={<PliegoEtiquetasPage />} />
             <Route path="/activos-fijos/:id/editar" element={<EditarActivoPage />} />
+            <Route path="/activos-fijos/:id/etiqueta" element={<EtiquetaActivoPage />} />
             <Route path="/activos-fijos/:id" element={<FichaActivoPage />} />
             <Route path="/almacen" element={<ListadoAlmacenPage />} />
             <Route path="/almacen/nuevo" element={<AltaItemPage />} />
@@ -85,6 +91,8 @@ function App() {
             <Route path="/integraciones/sigfe" element={<IntegracionSigfePage />} />
             <Route path="/integraciones/mercadopublico" element={<IntegracionMercadoPublicoPage />} />
             <Route path="/configuracion/vida-util" element={<VidaUtilPage />} />
+            <Route path="/configuracion/campos-personalizados" element={<CamposPersonalizadosPage />} />
+            <Route path="/configuracion/importar" element={<ImportarPlanillaPage />} />
             <Route path="/configuracion/perfiles" element={<PerfilesPermisosPage />} />
             <Route path="/configuracion/reiniciar-demo" element={<ReiniciarDemoPage />} />
             <Route path="/reportes" element={<ReportesPage />} />

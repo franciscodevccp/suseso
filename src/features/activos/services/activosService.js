@@ -56,6 +56,22 @@ export async function obtenerActivoPorId(id) {
   }
 }
 
+/** Escáner (RQ-20): folio, código de barras o RFID exactos; null si no existe. */
+export async function obtenerActivoPorCodigo(codigo) {
+  try {
+    return await http('GET', `/api/activos/por-codigo/${encodeURIComponent(codigo)}`)
+  } catch (error) {
+    if (error instanceof ErrorApi && error.status === 404) return null
+    if (error instanceof ErrorApi) throw new ActivoError(error.codigo)
+    throw error
+  }
+}
+
+/** URL de la etiqueta Code128 (RQ-19); la sirve el servidor con sesión. */
+export function urlEtiqueta(id) {
+  return `/api/activos/${id}/etiqueta.svg`
+}
+
 export function obtenerMovimientosPorActivo(id) {
   return llamada(() => http('GET', `/api/activos/${id}/movimientos`))
 }

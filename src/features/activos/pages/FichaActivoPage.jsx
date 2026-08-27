@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Button } from '../../../components/common/Button'
 import { BadgeEstado } from '../../../components/common/BadgeEstado'
@@ -15,6 +15,7 @@ import { obtenerInfoEstado } from '../utils/estadoActivo'
 import { obtenerMensajeErrorActivo } from '../constants/mensajesActivos'
 import { formatearMoneda } from '../../../utils/formatoMoneda'
 import * as activosService from '../services/activosService'
+import * as configuracionService from '../../configuracion/services/configuracionService'
 import estilos from './FichaActivoPage.module.css'
 
 const formatearFecha = (fecha) => (fecha ? new Date(fecha).toLocaleDateString('es-CL') : '—')
@@ -30,6 +31,19 @@ export function FichaActivoPage() {
   const [modalAbierto, setModalAbierto] = useState(null) // null | 'baja' | 'traslado'
   const [enviandoAccion, setEnviandoAccion] = useState(false)
   const [errorAccion, setErrorAccion] = useState(null)
+
+  // Definición de campos personalizados (RQ-21) para rotular los valores.
+  const [definicionCampos, setDefinicionCampos] = useState([])
+  useEffect(() => {
+    let vigente = true
+    configuracionService
+      .obtenerCamposPersonalizados()
+      .then((campos) => vigente && setDefinicionCampos(campos))
+      .catch(() => {})
+    return () => {
+      vigente = false
+    }
+  }, [])
 
   if (cargando) {
     return <p className={estilos.cargando}>Cargando ficha…</p>
@@ -121,6 +135,13 @@ export function FichaActivoPage() {
           <Button variante="secundario" anchoCompleto={false} onClick={() => setModalAbierto('baja')}>
             Dar de baja
           </Button>
+          <Button
+            variante="secundario"
+            anchoCompleto={false}
+            onClick={() => navigate(`/activos-fijos/${activo.id}/etiqueta`)}
+          >
+            Imprimir etiqueta
+          </Button>
         </div>
       )}
 
@@ -160,6 +181,15 @@ export function FichaActivoPage() {
               <dt>Fin de la garantía</dt>
               <dd>{activo.finGarantia ? formatearFecha(activo.finGarantia) : '—'}</dd>
             </div>
+            {/* Campos personalizados con valor (RQ-21, docs/08). */}
+            {definicionCampos
+              .filter((campo) => activo.camposPersonalizados?.[campo.id] !== undefined)
+              .map((campo) => (
+                <div key={campo.id}>
+                  <dt>{campo.nombre}</dt>
+                  <dd>{String(activo.camposPersonalizados[campo.id])}</dd>
+                </div>
+              ))}
           </dl>
         </section>
 

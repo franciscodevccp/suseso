@@ -85,6 +85,7 @@ export function EditarActivoPage() {
             rfid: activo.rfid,
             proximaMantencion: activo.proximaMantencion?.slice(0, 10) ?? '',
             finGarantia: activo.finGarantia?.slice(0, 10) ?? '',
+            camposPersonalizados: activo.camposPersonalizados ?? {},
           }}
           categorias={categorias}
           ubicaciones={ubicaciones}

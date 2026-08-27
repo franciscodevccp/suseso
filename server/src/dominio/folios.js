@@ -24,3 +24,23 @@ export async function siguienteFolio(tx, prefijo) {
     RETURNING "valor"`
   return `${nombre}-${String(filas[0].valor).padStart(4, '0')}`
 }
+
+/**
+ * Reserva un bloque de folios correlativos en una sola operación atómica
+ * (importador, docs/12: lotes de hasta 3.530 filas sin quemar el contador
+ * de a uno). Devuelve los folios en orden.
+ */
+export async function reservarFolios(tx, prefijo, cantidad) {
+  if (!FORMATO.test(prefijo)) throw new Error(`Prefijo de folio inválido: ${prefijo}`)
+  if (!Number.isInteger(cantidad) || cantidad <= 0) return []
+  const nombre = `${prefijo}-${new Date().getFullYear()}`
+  const filas = await tx.$queryRaw`
+    INSERT INTO "Secuencia" ("nombre", "valor") VALUES (${nombre}, ${cantidad})
+    ON CONFLICT ("nombre") DO UPDATE SET "valor" = "Secuencia"."valor" + ${cantidad}
+    RETURNING "valor"`
+  const ultimo = Number(filas[0].valor)
+  return Array.from(
+    { length: cantidad },
+    (_, i) => `${nombre}-${String(ultimo - cantidad + 1 + i).padStart(4, '0')}`,
+  )
+}

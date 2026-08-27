@@ -1,0 +1,51 @@
+.cargando {
+  color: var(--gris-500);
+}
+
+.volver {
+  display: inline-block;
+  color: var(--gob-azul-claro);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: var(--espacio-3);
+}
+
+.controles {
+  margin-bottom: var(--espacio-5);
+}
+
+.titulo {
+  margin-bottom: var(--espacio-1);
+}
+
+.subtitulo {
+  color: var(--gris-500);
+  margin-bottom: var(--espacio-4);
+}
+
+.zonaEtiqueta {
+  display: inline-block;
+}
+
+@media print {
+  @page {
+    size: 50mm 25mm;
+    margin: 2mm;
+  }
+
+  .controles {
+    display: none;
+  }
+
+  .zonaEtiqueta {
+    display: block;
+  }
+
+  /* La etiqueta llena el área imprimible exacta. */
+  .zonaEtiqueta > div {
+    width: 46mm;
+    height: 21mm;
+    border: none;
+    padding: 1mm 1.5mm;
+  }
+}

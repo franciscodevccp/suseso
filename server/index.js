@@ -29,6 +29,7 @@ import { rutasAuth } from './src/rutas/auth.js'
 import { rutasCatalogos } from './src/rutas/catalogos.js'
 import { rutasConfiguracion } from './src/rutas/configuracion.js'
 import { rutasDashboard } from './src/rutas/dashboard.js'
+import { rutasImportaciones } from './src/rutas/importaciones.js'
 import { rutasIntegraciones } from './src/rutas/integraciones.js'
 import { rutasMercadoPublico } from './src/rutas/mercadoPublico.js'
 import { rutasReportes } from './src/rutas/reportes.js'
@@ -104,6 +105,7 @@ api.use('/reportes', rutasReportes)
 api.use('/solicitudes', rutasSolicitudes)
 api.use('/usuarios', rutasUsuarios)
 api.use('/configuracion', rutasConfiguracion)
+api.use('/importaciones', rutasImportaciones)
 api.use('/integraciones', rutasIntegraciones)
 api.use('/mercadopublico', rutasMercadoPublico)
 // API pública (AD-01): autenticación propia por X-API-Key, no por sesión.

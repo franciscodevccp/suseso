@@ -28,3 +28,8 @@
     margin-bottom: var(--espacio-4);
   }
 }
+
+.escaner {
+  margin-bottom: var(--espacio-4);
+  max-width: 560px;
+}

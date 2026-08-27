@@ -14,8 +14,19 @@ function IconoVacio() {
   )
 }
 
-/** Tabla del listado de activos, con sus dos estados vacíos (sin datos / sin resultados). */
-export function TablaActivos({ activos, cargando, hayFiltrosActivos }) {
+/**
+ * Tabla del listado de activos, con sus dos estados vacíos (sin datos /
+ * sin resultados). Con `seleccionables` agrega la columna de selección
+ * para imprimir etiquetas en pliego (RQ-19, docs/08).
+ */
+export function TablaActivos({
+  activos,
+  cargando,
+  hayFiltrosActivos,
+  seleccionables = false,
+  seleccionados = new Set(),
+  onAlternarSeleccion,
+}) {
   const navigate = useNavigate()
 
   if (cargando) {
@@ -46,7 +57,7 @@ export function TablaActivos({ activos, cargando, hayFiltrosActivos }) {
   // fila navega igual al hacer clic, como conveniencia para mouse — sin
   // duplicar la navegación cuando el clic ya vino del propio link.
   function manejarClicFila(evento, id) {
-    if (evento.target.closest('a')) return
+    if (evento.target.closest('a, input, label')) return
     navigate(`/activos-fijos/${id}`)
   }
 
@@ -55,6 +66,7 @@ export function TablaActivos({ activos, cargando, hayFiltrosActivos }) {
       <table className={estilos.tabla}>
         <thead>
           <tr>
+            {seleccionables && <th scope="col" aria-label="Seleccionar para etiquetas" />}
             <th scope="col">Folio</th>
             <th scope="col">Nombre</th>
             <th scope="col">Categoría</th>
@@ -70,6 +82,16 @@ export function TablaActivos({ activos, cargando, hayFiltrosActivos }) {
               className={estilos.fila}
               onClick={(evento) => manejarClicFila(evento, activo.id)}
             >
+              {seleccionables && (
+                <td data-etiqueta="Etiqueta" className={estilos.celdaSeleccion}>
+                  <input
+                    type="checkbox"
+                    checked={seleccionados.has(activo.id)}
+                    onChange={() => onAlternarSeleccion?.(activo.id)}
+                    aria-label={`Seleccionar ${activo.folio} para etiquetas`}
+                  />
+                </td>
+              )}
               <td data-etiqueta="Folio">
                 <Link to={`/activos-fijos/${activo.id}`} className={estilos.enlaceFolio}>
                   {activo.folio}

@@ -1,0 +1,54 @@
+.cargando {
+  color: var(--gris-500);
+}
+
+.volver {
+  display: inline-block;
+  color: var(--gob-azul-claro);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: var(--espacio-3);
+}
+
+.controles {
+  margin-bottom: var(--espacio-5);
+}
+
+.titulo {
+  margin-bottom: var(--espacio-1);
+}
+
+.subtitulo {
+  color: var(--gris-500);
+  margin-bottom: var(--espacio-4);
+}
+
+.pliego {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(264px, 1fr));
+  gap: var(--espacio-3);
+  justify-items: start;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 8mm;
+  }
+
+  .controles {
+    display: none;
+  }
+
+  /* 4 × 10 etiquetas de ~47×26 mm por hoja (docs/08). */
+  .pliego {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2mm;
+    justify-items: stretch;
+  }
+
+  .pliego > div {
+    width: auto;
+    height: 26mm;
+  }
+}

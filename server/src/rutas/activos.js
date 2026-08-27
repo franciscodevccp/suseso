@@ -10,6 +10,7 @@
  * Gestor de Activos.
  */
 import { Router } from 'express'
+import bwipjs from 'bwip-js'
 import { z } from 'zod'
 import { db } from '../db.js'
 import { ErrorHttp } from '../http/errores.js'
@@ -35,7 +36,23 @@ const esquemaDatos = z.object({
   // Mantención y garantía (RQ-17): fechas AAAA-MM-DD u omitidas.
   proximaMantencion: z.string().optional().default(''),
   finGarantia: z.string().optional().default(''),
+  // Campos personalizados (RQ-21): { idCampo: valor } según la definición
+  // de Configuración; el servidor guarda lo que la definición permita.
+  camposPersonalizados: z.record(z.string(), z.union([z.string(), z.number()])).optional(),
 })
+
+/** Deja solo los campos DEFINIDOS en Configuración y sin valores vacíos. */
+async function limpiarCamposPersonalizados(valores) {
+  if (!valores) return undefined
+  const definicion = await db.configuracion.findUnique({ where: { clave: 'campos_personalizados' } })
+  const permitidos = new Set((definicion?.valor ?? []).map((campo) => campo.id))
+  const limpios = Object.fromEntries(
+    Object.entries(valores).filter(
+      ([id, valor]) => permitidos.has(id) && String(valor).trim() !== '',
+    ),
+  )
+  return Object.keys(limpios).length > 0 ? limpios : null
+}
 
 const comoFecha = (valor) => (valor ? new Date(valor) : null)
 
@@ -61,6 +78,15 @@ rutasActivos.get('/', autorizar(), async (req, res, next) => {
       req.usuario.rol === 'Funcionario' ? req.usuario.nombre : (req.query.responsable ?? '')
 
     const filtroTexto = String(texto).trim()
+    // La búsqueda por texto también entra a los campos personalizados
+    // (RQ-21): un filtro JSON por cada campo definido en Configuración.
+    let filtrosCampos = []
+    if (filtroTexto) {
+      const definicion = await db.configuracion.findUnique({ where: { clave: 'campos_personalizados' } })
+      filtrosCampos = (definicion?.valor ?? []).map((campo) => ({
+        camposPersonalizados: { path: [campo.id], string_contains: filtroTexto },
+      }))
+    }
     const activos = await db.activo.findMany({
       where: {
         ...(categoria ? { categoria: String(categoria) } : {}),
@@ -75,6 +101,7 @@ rutasActivos.get('/', autorizar(), async (req, res, next) => {
                 { descripcion: { contains: filtroTexto, mode: 'insensitive' } },
                 { codigoBarras: { contains: filtroTexto, mode: 'insensitive' } },
                 { rfid: { contains: filtroTexto, mode: 'insensitive' } },
+                ...filtrosCampos,
               ],
             }
           : {}),
@@ -113,6 +140,26 @@ rutasActivos.get('/por-codigo/:codigo', autorizar(), async (req, res, next) => {
   }
 })
 
+// Etiqueta individual (RQ-19, docs/08): Code128 del código de barras (o
+// del folio si no tiene), con texto legible. Sesión requerida.
+rutasActivos.get('/:id/etiqueta.svg', autorizar(), async (req, res, next) => {
+  try {
+    const activo = await db.activo.findUnique({ where: { id: req.params.id } })
+    if (!activo) throw new ErrorHttp('ACTIVO_NO_ENCONTRADO', 404)
+    const svg = bwipjs.toSVG({
+      bcid: 'code128',
+      text: activo.codigoBarras ?? activo.folio,
+      height: 12,
+      includetext: true,
+      textxalign: 'center',
+      textsize: 10,
+    })
+    res.type('image/svg+xml').send(svg)
+  } catch (err) {
+    next(err)
+  }
+})
+
 rutasActivos.get('/:id', autorizar(), async (req, res, next) => {
   try {
     const activo = await db.activo.findUnique({
@@ -145,13 +192,18 @@ rutasActivos.post('/', autorizar(...GESTION), async (req, res, next) => {
     const datos = esquemaDatos.parse(req.body)
     validarNombre(datos)
 
+    const camposPersonalizados = await limpiarCamposPersonalizados(datos.camposPersonalizados)
     const creado = await db.$transaction(async (tx) => {
       const folio = await siguienteFolio(tx, 'AF')
       const activo = await tx.activo.create({
         data: {
           folio,
-          codigoBarras: normalizarCodigo(datos.codigoBarras),
+          // Obligatorio y único (docs/08): sin código, el folio es el código.
+          codigoBarras: normalizarCodigo(datos.codigoBarras) ?? folio,
           rfid: normalizarCodigo(datos.rfid),
+          ...(camposPersonalizados !== undefined && camposPersonalizados !== null
+            ? { camposPersonalizados }
+            : {}),
           nombre: datos.nombre.trim(),
           descripcion: datos.descripcion ?? '',
           categoria: datos.categoria,
@@ -199,6 +251,7 @@ rutasActivos.put('/:id', autorizar(...GESTION), async (req, res, next) => {
     const datos = esquemaDatos.parse(req.body)
     validarNombre(datos)
     const activo = await activoVigente(req.params.id)
+    const camposPersonalizados = await limpiarCamposPersonalizados(datos.camposPersonalizados)
 
     const actualizado = await db.$transaction(async (tx) => {
       const fila = await tx.activo.update({
@@ -210,10 +263,11 @@ rutasActivos.put('/:id', autorizar(...GESTION), async (req, res, next) => {
           ubicacion: datos.ubicacion,
           responsable: datos.responsable ?? '',
           valor: datos.valor,
-          codigoBarras: normalizarCodigo(datos.codigoBarras),
+          codigoBarras: normalizarCodigo(datos.codigoBarras) ?? activo.folio,
           rfid: normalizarCodigo(datos.rfid),
           proximaMantencion: comoFecha(datos.proximaMantencion),
           finGarantia: comoFecha(datos.finGarantia),
+          ...(camposPersonalizados !== undefined ? { camposPersonalizados } : {}),
         },
       })
       await tx.movimientoActivo.create({

@@ -84,6 +84,17 @@
   cursor: pointer;
 }
 
+.celdaSeleccion {
+  width: 36px;
+}
+
+.celdaSeleccion input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--gob-azul-claro);
+  cursor: pointer;
+}
+
 .enlaceFolio {
   font-weight: 600;
   color: var(--gob-azul-claro);

@@ -86,12 +86,12 @@
 - [x] `entregables/planilla-ejemplo-vista-general.xlsx` con **3.530 filas** generada por `pnpm db:seed` (prefijo EAN distinto del sembrado para la demo de importación en vivo) (`docs/12`)
 - [x] Solicitudes (AD-03, `docs/11`) completas: endpoints crear/mias/catalogo/aprobar/rechazar (observación obligatoria)/**entregar con egresos en la misma transacción** (`STOCK_INSUFICIENTE` revierte todo — verificado), bandeja del panel con pestañas y badge en el Sidebar, portal "Mis solicitudes"/"Nueva solicitud"/detalle para Funcionario, sección "Solicitudes" en la ficha del ítem, auditoría en cada paso, y **spec E2E del ciclo completo** (crear → aprobar → entregar → egreso visible en kardex)
 
-## Bloque C3 — Etiquetas, escáner, campos personalizados, importador
+## Bloque C3 — Etiquetas, escáner, campos personalizados, importador ✅
 
-- [ ] Etiqueta individual `GET /api/activos/:id/etiqueta.svg` (bwip-js Code128) + pliego de impresión (`docs/08`, RQ-19; hoja mural recortable #3)
-- [ ] Campo "Escanear código" con autofoco + `GET /api/activos/por-codigo/:codigo` (RQ-20; lectura con cámara = recorte #1, ni empezarla)
-- [ ] Campos personalizados: definición en `Configuracion`, editor y valores en ficha (`docs/08`, RQ-21; editor recortable #4)
-- [ ] Importador Excel: previsualizar + confirmar (en memoria, mapeo por encabezados), auditado (`docs/12`, RQ-24; mapeo manual recortable #7)
+- [x] Etiquetas (RQ-19, `docs/08`): `GET /api/activos/:id/etiqueta.svg` (bwip-js Code128 con texto legible; el folio es el código si no hay EAN — regla aplicada también al crear/editar), página de vista previa con impresión a **50×25 mm**, selección múltiple en el listado → **pliego 4×10 en A4**, botón "Imprimir etiqueta" en la ficha, y **hoja mural por ubicación en PDF** (jspdf, se genera al filtrar por ubicación — el recorte #3 no fue necesario)
+- [x] Escáner (RQ-20): `CampoEscaneo` con autofoco en Activos (folio/EAN/RFID → ficha; código nuevo → "Dar de alta con este código" precargado) y en Almacén (folio BOD → ficha) — verificado con **3 pruebas E2E con eventos de teclado reales** (la lectura con cámara quedó fuera, recorte #1 según lo previsto)
+- [x] Campos personalizados (RQ-21): definición en `Configuracion` (texto/número/fecha/lista, obligatorio, habilitado, orden), pantalla **Configuración → Campos personalizados** (edita Administrador), campos dinámicos en el formulario de activos con validación de obligatorios, valores en la ficha, y la **búsqueda por texto entra a los valores JSON** (filtro Prisma por campo definido, sin SQL crudo); seed con Número de serie + Centro de costo en ~300 activos
+- [x] Importador Excel (RQ-24, criterio B.3): previsualizar (multipart 20 MB, magic bytes, exceljs en memoria, mapeo sugerido por encabezados **editable por columna**, validación de duplicados/valores/fechas, TTL 30 min) + confirmar (catálogos faltantes, folios correlativos reservados en bloque, lotes de 500, movimiento de alta por activo, auditado) + **reporte Excel descargable**. La planilla real de **3.530 filas importó en 0,9 s** (exigencia: <60 s). Pantalla de 3 pasos en Configuración → Importar planilla + prueba E2E de la previsualización
 
 ## Bloque D — Cierre (no recortable)
 
