@@ -1,0 +1,131 @@
+.titulo {
+  margin-bottom: var(--espacio-1);
+}
+
+.subtitulo {
+  color: var(--gris-500);
+  margin-bottom: var(--espacio-5);
+}
+
+.contenedorTabla {
+  background: var(--gob-blanco);
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radio-lg);
+  overflow-x: auto;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.tabla th,
+.tabla td {
+  text-align: left;
+  padding: var(--espacio-3) var(--espacio-4);
+}
+
+.tabla th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gris-500);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid var(--gris-200);
+}
+
+.columnaRol {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.tabla td {
+  border-bottom: 1px solid var(--gris-100);
+  color: var(--gris-900);
+}
+
+.fila:last-child td {
+  border-bottom: none;
+}
+
+.recurso {
+  min-width: 240px;
+}
+
+.celdaPermiso {
+  text-align: center;
+}
+
+.permitido {
+  color: var(--color-exito);
+  font-weight: 700;
+}
+
+.denegado {
+  color: var(--gris-300);
+}
+
+.nota {
+  margin-top: var(--espacio-4);
+  color: var(--gris-500);
+  font-size: 0.8125rem;
+}
+
+/* --- Móvil: cada fila del recurso se convierte en tarjeta apilada. --- */
+@media (max-width: 640px) {
+  .contenedorTabla {
+    background: none;
+    border: none;
+    overflow: visible;
+  }
+
+  .tabla,
+  .tabla tbody,
+  .fila,
+  .tabla td {
+    display: block;
+  }
+
+  .tabla thead {
+    display: none;
+  }
+
+  .fila {
+    background: var(--gob-blanco);
+    border: 1px solid var(--gris-200);
+    border-radius: var(--radio-lg);
+    padding: var(--espacio-2) var(--espacio-4);
+    margin-bottom: var(--espacio-3);
+  }
+
+  .tabla td {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--espacio-4);
+    padding: var(--espacio-2) 0;
+    border-bottom: 1px solid var(--gris-100);
+    text-align: right;
+  }
+
+  .fila td:last-child {
+    border-bottom: none;
+  }
+
+  .tabla td::before {
+    content: attr(data-etiqueta);
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--gris-500);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    text-align: left;
+  }
+
+  .recurso {
+    min-width: 0;
+    font-weight: 600;
+  }
+}

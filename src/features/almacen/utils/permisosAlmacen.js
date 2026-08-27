@@ -1,5 +1,6 @@
-const ROLES_CON_GESTION = ['Administrador', 'Gestor de Activos']
+/** Gestión de almacén: delegado en el permisos.js central (docs/04, D-11). */
+import { puedeGestionar } from '../../auth/utils/permisos'
 
 export function puedeGestionarAlmacen(usuario) {
-  return ROLES_CON_GESTION.includes(usuario?.rol)
+  return puedeGestionar(usuario)
 }

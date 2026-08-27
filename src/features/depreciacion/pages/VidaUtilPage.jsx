@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { SubNavConfiguracion } from '../../configuracion/components/SubNavConfiguracion'
 import { TablaVidaUtil } from '../components/TablaVidaUtil'
 import { useTablaVidaUtil } from '../hooks/useTablaVidaUtil'
 import { useAuth } from '../../auth/hooks/useAuth'
@@ -30,6 +31,8 @@ export function VidaUtilPage() {
     <div>
       <h1 className={estilos.titulo}>Configuración</h1>
       <p className={estilos.subtitulo}>Vida útil por categoría, base del cálculo de depreciación.</p>
+
+      <SubNavConfiguracion />
 
       <div className={estilos.notaReferencial}>
         Estos valores son <strong>referenciales</strong>, no cifras oficiales verificadas. Ajústelos

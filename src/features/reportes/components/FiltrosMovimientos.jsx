@@ -1,3 +1,4 @@
+import { CampoFecha } from '../../../components/common/CampoFecha'
 import estilos from './Filtros.module.css'
 
 /** Filtro opcional por rango de fechas para el reporte de Movimientos. */
@@ -10,8 +11,8 @@ export function FiltrosMovimientos({ filtros, setFiltros }) {
     <div className={estilos.contenedor}>
       <label className={estilos.campoFecha}>
         <span>Desde</span>
-        <input
-          type="date"
+        <CampoFecha
+          aria-label="Desde"
           value={filtros.desde}
           onChange={(evento) => actualizarCampo('desde', evento.target.value)}
           className={estilos.inputFecha}
@@ -19,8 +20,8 @@ export function FiltrosMovimientos({ filtros, setFiltros }) {
       </label>
       <label className={estilos.campoFecha}>
         <span>Hasta</span>
-        <input
-          type="date"
+        <CampoFecha
+          aria-label="Hasta"
           value={filtros.hasta}
           onChange={(evento) => actualizarCampo('hasta', evento.target.value)}
           className={estilos.inputFecha}

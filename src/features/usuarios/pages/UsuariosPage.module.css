@@ -1,0 +1,30 @@
+.encabezado {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espacio-4);
+}
+
+.titulo {
+  margin-bottom: var(--espacio-1);
+}
+
+.subtitulo {
+  color: var(--gris-500);
+  margin-bottom: var(--espacio-5);
+}
+
+@media (max-width: 720px) {
+  .encabezado {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .encabezado > button {
+    width: 100%;
+  }
+
+  .subtitulo {
+    margin-bottom: var(--espacio-4);
+  }
+}

@@ -1,0 +1,192 @@
+/*
+ * Selector de fecha con calendario propio. Igual que Desplegable: el
+ * borde/fondo/padding del CONTROL los pone la clase del consumidor; aquí
+ * viven el layout interno, el foco y el popup del calendario.
+ */
+.campo {
+  position: relative;
+  cursor: pointer;
+}
+
+.campo:focus-within {
+  outline: 2px solid var(--borde-foco);
+  outline-offset: 1px;
+}
+
+.deshabilitado {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.boton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: inherit;
+}
+
+.boton:focus {
+  outline: none;
+}
+
+.valor {
+  white-space: nowrap;
+}
+
+.marcador {
+  color: var(--gris-500);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.icono {
+  flex-shrink: 0;
+  color: var(--gris-500);
+}
+
+/* --- Calendario --- */
+
+.calendario {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 60;
+  min-width: 248px;
+  padding: var(--espacio-3);
+  background: var(--gob-blanco);
+  border: 1px solid var(--gris-300);
+  border-radius: var(--radio-md);
+  box-shadow: var(--sombra-tarjeta);
+  animation: aparecerCalendario 0.12s ease;
+  cursor: default;
+}
+
+.alineadoDerecha {
+  left: auto;
+  right: 0;
+}
+
+@keyframes aparecerCalendario {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+  margin-bottom: var(--espacio-2);
+}
+
+.mes {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--gris-900);
+}
+
+.navegacion {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--gris-300);
+  border-radius: var(--radio-sm);
+  background: none;
+  color: var(--gris-700);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.navegacion:hover {
+  background: var(--gris-100);
+}
+
+.diasSemana,
+.cuadricula {
+  display: grid;
+  grid-template-columns: repeat(7, 32px);
+  justify-content: center;
+  gap: 2px;
+}
+
+.diasSemana span {
+  text-align: center;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--gris-500);
+  text-transform: uppercase;
+  padding: var(--espacio-1) 0;
+}
+
+.dia {
+  height: 32px;
+  border: none;
+  border-radius: var(--radio-sm);
+  background: none;
+  color: var(--gris-900);
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.dia:hover {
+  background: var(--gris-100);
+}
+
+.dia:focus-visible {
+  outline: 2px solid var(--borde-foco);
+  outline-offset: 1px;
+}
+
+.diaHoy {
+  border: 1px solid var(--gob-azul-claro);
+}
+
+.diaSeleccionado {
+  background: var(--gob-degradado-azul);
+  color: var(--marca-blanco);
+  font-weight: 600;
+}
+
+.diaSeleccionado:hover {
+  background: var(--gob-degradado-azul);
+}
+
+.pie {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  margin-top: var(--espacio-2);
+  padding-top: var(--espacio-2);
+  border-top: 1px solid var(--gris-100);
+}
+
+.atajo {
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--gob-azul-claro);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.atajo:hover {
+  text-decoration: underline;
+}

@@ -1,11 +1,10 @@
 /**
- * Roles que pueden crear y firmar actas. El resto (ej. Consulta) solo
- * puede ver el listado y la ficha. Archivo propio de esta feature (no
- * compartido con permisosActivos.js): aunque hoy la lista coincide,
- * podrían divergir más adelante.
+ * Roles que pueden crear y cerrar actas. El resto (ej. Consulta) solo
+ * puede ver el listado y la ficha. Delegado en el permisos.js central
+ * (docs/04).
  */
-const ROLES_CON_GESTION = ['Administrador', 'Gestor de Activos']
+import { puedeGestionar } from '../../auth/utils/permisos'
 
 export function puedeGestionarActas(usuario) {
-  return ROLES_CON_GESTION.includes(usuario?.rol)
+  return puedeGestionar(usuario)
 }

@@ -1,0 +1,5 @@
+.acciones {
+  display: flex;
+  gap: var(--espacio-3);
+  margin-top: var(--espacio-4);
+}

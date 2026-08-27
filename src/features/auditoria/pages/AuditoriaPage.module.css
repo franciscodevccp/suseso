@@ -1,0 +1,238 @@
+.encabezado {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espacio-4);
+}
+
+.titulo {
+  margin-bottom: var(--espacio-1);
+}
+
+.subtitulo {
+  color: var(--gris-500);
+  margin-bottom: var(--espacio-5);
+}
+
+/* --- Filtros (mismo lenguaje que FiltrosActivos) --- */
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-3);
+  align-items: end;
+  background: var(--gob-blanco);
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radio-lg);
+  padding: var(--espacio-4);
+  margin-bottom: var(--espacio-4);
+}
+
+.filtro {
+  flex: 1 1 180px;
+  min-width: 160px;
+  padding: var(--espacio-2) var(--espacio-3);
+  border: 1px solid var(--gris-300);
+  border-radius: var(--radio-md);
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: var(--gris-900);
+  background: var(--gob-blanco);
+}
+
+.filtro:focus-visible {
+  outline: 2px solid var(--borde-foco);
+  outline-offset: 1px;
+}
+
+.rangoFechas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-3);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.campoFecha {
+  flex: 1 1 150px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  font-size: 0.8125rem;
+  color: var(--gris-500);
+}
+
+/* El control de fecha, con el mismo aspecto que los demás filtros pero
+   sin flex propio (dentro de la columna del label estiraría en alto). */
+.entradaFecha {
+  padding: var(--espacio-2) var(--espacio-3);
+  border: 1px solid var(--gris-300);
+  border-radius: var(--radio-md);
+  font-size: 0.875rem;
+  color: var(--gris-900);
+  background: var(--gob-blanco);
+}
+
+.limpiar {
+  flex-shrink: 0;
+  border: none;
+  background: none;
+  color: var(--gob-azul-claro);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: var(--espacio-2) 0;
+}
+
+/* --- Tabla --- */
+
+.cargando {
+  color: var(--gris-500);
+  padding: var(--espacio-5) 0;
+}
+
+.vacio {
+  background: var(--gob-blanco);
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radio-lg);
+  padding: var(--espacio-7) var(--espacio-5);
+  text-align: center;
+}
+
+.mensajeVacio {
+  margin: 0;
+  font-weight: 600;
+  color: var(--gris-900);
+}
+
+.contenedorTabla {
+  background: var(--gob-blanco);
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radio-lg);
+  overflow-x: auto;
+  margin-top: var(--espacio-4);
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.tabla th,
+.tabla td {
+  text-align: left;
+  padding: var(--espacio-3) var(--espacio-4);
+}
+
+.tabla th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gris-500);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid var(--gris-200);
+}
+
+.tabla td {
+  border-bottom: 1px solid var(--gris-100);
+  color: var(--gris-900);
+}
+
+.fila:last-child td {
+  border-bottom: none;
+}
+
+.detalle {
+  white-space: normal;
+  min-width: 260px;
+}
+
+.enlaceFolio {
+  font-weight: 600;
+  color: var(--gob-azul-claro);
+}
+
+.paginacion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-4);
+  margin-top: var(--espacio-4);
+}
+
+.paginaActual {
+  color: var(--gris-500);
+  font-size: 0.875rem;
+}
+
+/* --- Móvil: cada fila se convierte en una tarjeta apilada (RQ-05). --- */
+@media (max-width: 640px) {
+  .contenedorTabla {
+    background: none;
+    border: none;
+    overflow: visible;
+  }
+
+  .tabla,
+  .tabla tbody,
+  .fila,
+  .tabla td {
+    display: block;
+  }
+
+  .tabla {
+    white-space: normal;
+  }
+
+  .tabla thead {
+    display: none;
+  }
+
+  .fila {
+    background: var(--gob-blanco);
+    border: 1px solid var(--gris-200);
+    border-radius: var(--radio-lg);
+    padding: var(--espacio-2) var(--espacio-4);
+    margin-bottom: var(--espacio-3);
+  }
+
+  .fila:last-child {
+    margin-bottom: 0;
+  }
+
+  .tabla td {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--espacio-4);
+    padding: var(--espacio-2) 0;
+    border-bottom: 1px solid var(--gris-100);
+    text-align: right;
+  }
+
+  .fila td:last-child {
+    border-bottom: none;
+  }
+
+  .tabla td::before {
+    content: attr(data-etiqueta);
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--gris-500);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    text-align: left;
+  }
+
+  .detalle {
+    min-width: 0;
+  }
+
+  .paginacion {
+    flex-wrap: wrap;
+  }
+}

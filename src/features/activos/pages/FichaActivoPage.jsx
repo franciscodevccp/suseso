@@ -190,6 +190,12 @@ export function FichaActivoPage() {
 
       <HistorialMovimientos movimientos={movimientos} />
 
+      {/* El historial es lo que le pasó al bien; la auditoría, quién hizo
+          qué en el sistema (docs/05): son dos cosas distintas. */}
+      <p>
+        <Link to={`/auditoria?folio=${activo.folio}`}>Ver este activo en la auditoría</Link>
+      </p>
+
       {modalAbierto === 'baja' && (
         <ModalBajaActivo
           activo={activo}

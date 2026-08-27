@@ -1,9 +1,10 @@
 /**
- * Roles que pueden crear, editar, dar de baja o trasladar activos. El resto
- * (ej. Consulta) solo puede ver el listado y la ficha.
+ * Roles que pueden crear, editar, dar de baja o trasladar activos. El
+ * resto (ej. Consulta) solo puede ver el listado y la ficha. Delegado en
+ * el permisos.js central (docs/04).
  */
-const ROLES_CON_GESTION = ['Administrador', 'Gestor de Activos']
+import { puedeGestionar } from '../../auth/utils/permisos'
 
 export function puedeGestionarActivos(usuario) {
-  return ROLES_CON_GESTION.includes(usuario?.rol)
+  return puedeGestionar(usuario)
 }

@@ -45,6 +45,7 @@ export function Desplegable({
   const seleccionada = indiceSeleccionado >= 0 ? opciones[indiceSeleccionado] : null
 
   const [abierto, setAbierto] = useState(false)
+  const [alineadoDerecha, setAlineadoDerecha] = useState(false)
   const [indiceActivo, setIndiceActivo] = useState(-1)
   const raizRef = useRef(null)
   const botonRef = useRef(null)
@@ -56,6 +57,10 @@ export function Desplegable({
       indiceInicial ??
       (indiceSeleccionado >= 0 ? indiceSeleccionado : opciones.findIndex((op) => !op.deshabilitada))
     setIndiceActivo(inicial)
+    // Si una lista ancha no cabe hacia la derecha, se ancla al borde
+    // derecho del control para no cortarse contra la ventana.
+    const caja = raizRef.current?.getBoundingClientRect()
+    setAlineadoDerecha(Boolean(caja && caja.left + Math.min(420, window.innerWidth * 0.92) > window.innerWidth && caja.right - 420 > 0))
     setAbierto(true)
   }
 
@@ -200,7 +205,13 @@ export function Desplegable({
       </button>
 
       {abierto && (
-        <ul ref={listaRef} id={idLista} className={estilos.lista} role="listbox" aria-label={ariaLabel}>
+        <ul
+          ref={listaRef}
+          id={idLista}
+          className={`${estilos.lista} ${alineadoDerecha ? estilos.alineadaDerecha : ''}`}
+          role="listbox"
+          aria-label={ariaLabel}
+        >
           {opciones.map((opcion, indice) => (
             <li
               key={`${opcion.valor}-${indice}`}

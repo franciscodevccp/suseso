@@ -105,6 +105,17 @@ function IconUsuarios() {
   )
 }
 
+function IconAuditoria() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <path d="M8 4h11v16H8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M11.5 9h4M11.5 12.5h4M11.5 16h4" strokeLinecap="round" />
+      <circle cx="6" cy="12" r="2.6" />
+      <path d="M6 10.8v1.4l1 .7" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
 // `ocultoPara`: ítems administrativos que el rol Funcionario no ve (su
 // sidebar queda reducido a Autoconsulta). `rolRequerido`: lo opuesto,
 // visible solo para ese rol puntual (hoy solo Usuarios).
@@ -131,6 +142,7 @@ const ITEMS = [
     ocultoPara: ['Funcionario'],
   },
   { to: '/reportes', etiqueta: 'Reportes', Icono: IconReportes, ocultoPara: ['Funcionario'] },
+  { to: '/auditoria', etiqueta: 'Auditoría', Icono: IconAuditoria, ocultoPara: ['Funcionario'] },
   { to: '/autoconsulta', etiqueta: 'Autoconsulta', Icono: IconAutoconsulta },
   {
     to: '/configuracion/vida-util',

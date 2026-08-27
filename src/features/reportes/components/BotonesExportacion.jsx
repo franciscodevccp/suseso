@@ -6,15 +6,20 @@ import { descargarPdf } from '../utils/exportarPdf'
 import { generarNombreArchivo } from '../utils/nombreArchivo'
 import estilos from './BotonesExportacion.module.css'
 
-/** Botones de descarga PDF/Excel/CSV para el reporte actualmente en pantalla. */
-export function BotonesExportacion({ titulo, prefijoArchivo, columnas, filas, deshabilitado }) {
+/**
+ * Botones de descarga PDF/Excel/CSV para el reporte actualmente en
+ * pantalla. Si se entrega `obtenerReporte` (async), los datos se piden al
+ * momento de exportar — lo usa Auditoría para bajar el filtro completo
+ * (hasta 5.000 filas) aunque la tabla esté paginada.
+ */
+export function BotonesExportacion({ titulo, prefijoArchivo, columnas, filas, deshabilitado, obtenerReporte }) {
   const [exportando, setExportando] = useState(false)
-  const reporte = { titulo, columnas, filas }
 
   async function exportar(formato, accion) {
     setExportando(true)
     try {
-      await accion(generarNombreArchivo(prefijoArchivo, formato), reporte)
+      const reporte = obtenerReporte ? await obtenerReporte() : { titulo, columnas, filas }
+      await accion(generarNombreArchivo(prefijoArchivo, formato), { titulo, ...reporte })
     } finally {
       setExportando(false)
     }

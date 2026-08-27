@@ -29,6 +29,9 @@ import { IntegracionSigfePage } from './features/integraciones/pages/Integracion
 import { IntegracionMercadoPublicoPage } from './features/integraciones/pages/IntegracionMercadoPublicoPage'
 import { VidaUtilPage } from './features/depreciacion/pages/VidaUtilPage'
 import { ReportesPage } from './features/reportes/pages/ReportesPage'
+import { UsuariosPage } from './features/usuarios/pages/UsuariosPage'
+import { AuditoriaPage } from './features/auditoria/pages/AuditoriaPage'
+import { PerfilesPermisosPage } from './features/configuracion/pages/PerfilesPermisosPage'
 
 function App() {
   return (
@@ -73,8 +76,10 @@ function App() {
             <Route path="/integraciones/sigfe" element={<IntegracionSigfePage />} />
             <Route path="/integraciones/mercadopublico" element={<IntegracionMercadoPublicoPage />} />
             <Route path="/configuracion/vida-util" element={<VidaUtilPage />} />
+            <Route path="/configuracion/perfiles" element={<PerfilesPermisosPage />} />
             <Route path="/reportes" element={<ReportesPage />} />
-            <Route path="/usuarios" element={<ModuloEnConstruccion titulo="Usuarios" />} />
+            <Route path="/auditoria" element={<AuditoriaPage />} />
+            <Route path="/usuarios" element={<UsuariosPage />} />
           </Route>
         </Route>
 

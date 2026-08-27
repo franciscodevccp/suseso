@@ -21,9 +21,11 @@ const RUTAS = [
   { ruta: '/integraciones/mercadopublico', espera: 'Mercado Público' },
   { ruta: '/reportes', espera: 'Reportes' },
   { ruta: '/configuracion/vida-util', espera: 'Configuración' },
+  { ruta: '/configuracion/perfiles', espera: 'Perfiles y permisos' },
+  { ruta: '/auditoria', espera: 'Bitácora' },
   { ruta: '/autoconsulta', espera: 'Autoconsulta' },
   { ruta: '/alertas', espera: 'Alertas' },
-  { ruta: '/usuarios', espera: 'Usuarios' },
+  { ruta: '/usuarios', espera: 'Nuevo usuario' },
   { ruta: '/perfil/cambiar-clave', espera: 'contraseña' },
 ]
 

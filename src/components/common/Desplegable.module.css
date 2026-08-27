@@ -77,6 +77,11 @@
   animation: desplegar 0.12s ease;
 }
 
+.alineadaDerecha {
+  left: auto;
+  right: 0;
+}
+
 @keyframes desplegar {
   from {
     opacity: 0;

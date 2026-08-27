@@ -43,13 +43,14 @@
 - [x] Filtro **responsable** en `FiltrosActivos` + catálogo `GET /api/catalogos/funcionarios` (RQ-13)
 - [ ] `integracionesService` real (SIGFE desde `/api/v1/contabilidad/activos`) — se conecta en C1 junto con la API pública (`docs/10`); mientras tanto su mock compone sobre datos reales
 
-## Bloque B1 — Usuarios, auditoría y roles (no recortable)
+## Bloque B1 — Usuarios, auditoría y roles (no recortable) ✅
 
-- [ ] `permisos.js` centralizado en el front; los 4 archivos `permisos*.js` delegan en él (`docs/04`)
-- [ ] `autorizar(...roles)` en **todas** las rutas según la matriz de `docs/04` (Consulta sin mutaciones: test obligatorio)
-- [ ] Módulo Usuarios `/usuarios`: listado, crear (clave temporal una sola vez), editar, activar/desactivar, desbloquear, restablecer — solo Administrador; errores `CORREO_EN_USO`, `CUENTA_DEMO`, `ULTIMO_ADMINISTRADOR` (`docs/04`, RQ-06/07, DEMO-07)
-- [ ] Auditoría (RQ-08): middleware `auditar(...)` en toda mutación + login/logout, pantalla con filtros y paginación, export reutilizando `exportar*.js` (`docs/05`)
-- [ ] Pantalla solo lectura **Configuración → Perfiles y permisos** generada desde `permisos.js` (`docs/04`; recortable #5)
+- [x] `permisos.js` centralizado en el front (con la matriz D-10 como dato exportado); los 4 archivos `permisos*.js` delegan en él y `RutaAdministrativa` usa `puedeVerPanel` (`docs/04`)
+- [x] `autorizar(...roles)` en **todas** las rutas según la matriz — verificado con pruebas reales: Consulta recibe 403 en mutaciones y en `/api/usuarios`, 200 en lecturas del panel
+- [x] Módulo Usuarios `/usuarios` completo: listado con marca "Demo", crear (clave temporal mostrada UNA vez con copiar), editar, activar/desactivar, desbloquear, restablecer clave; `CORREO_EN_USO`, `CUENTA_DEMO` y `ULTIMO_ADMINISTRADOR` verificados. Ciclo DEMO-07 probado de punta a punta: crear → login con temporal → cambio obligatorio → login con clave nueva (`docs/04`, RQ-06/07)
+- [x] Auditoría (RQ-08): pantalla `/auditoria` con filtros (usuario, módulo, acción, folio, rango de fechas con calendario propio), paginación de 50, export PDF/Excel/CSV del filtro completo (hasta 5.000), enlace desde la ficha del activo, y entrada en el Sidebar (`docs/05`; la IP se registra pero no se muestra, decisión en docs/17)
+- [x] Pantalla solo lectura **Configuración → Perfiles y permisos** generada desde `permisos.js`, con subnavegación de Configuración (`docs/04`)
+- [x] Extra de UI de esta pasada: `CampoFecha` (calendario propio es-CL, reutilizable en B2), popups con alineación automática contra el borde, campos numéricos sin flechas nativas
 
 ## Bloque B2 — Alertas, textos y depreciación mensual (no recortable)
 
