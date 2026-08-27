@@ -1,53 +1,83 @@
-# SISGA — Sistema de Gestión de Activos y Almacén
+# SISGA — Sistema Integral de Gestión de Activos Fijos y Almacén
 
-Frontend del proyecto **SISGA** para la demo de la licitación SUSESO **1607-11-LE26** (gestión de activos fijos y almacén). Construido con **React 19 + Vite 8**, JavaScript y CSS Modules.
+Demostración completa para la licitación SUSESO **1607-11-LE26** (SaaS de gestión de activos fijos y almacén). Oferente: **Aeroconce Servicios SpA**.
 
-El estado actual es un frontend completo con servicios **simulados en `localStorage`** (archivos `*.mock.js`). La fase siguiente —servidor, base de datos y funcionalidades faltantes del checklist— está especificada en [`docs/`](docs/). La guía de trabajo obligatoria está en [`CLAUDE.md`](CLAUDE.md).
+> **Demo en línea: https://inventario.aeroconce.cl**
+> Las cuatro cuentas de demostración están en la propia pantalla de acceso (un clic en cada tarjeta completa el formulario). Todos los datos son ficticios.
 
-## Requisitos
+## Qué incluye
 
-- Node.js 20 o superior
-- pnpm 11 (`corepack enable` lo activa usando el campo `packageManager` de `package.json`)
+- **Activos fijos**: fichas completas con historial, traslados y bajas; búsqueda combinada (texto, categoría, ubicación, responsable, estado y campos personalizados); folios correlativos atómicos.
+- **Etiquetas y escáner**: etiqueta Code128 imprimible a 50×25 mm, pliego 4×10 en A4, hoja mural por ubicación en PDF; campo de escaneo compatible con lectores USB de código de barras y RFID (demostrable tipeando).
+- **Adjuntos georreferenciados**: fotos y documentos por activo con validación real por contenido; el GPS de las fotografías de teléfono se extrae automáticamente ("Ver en mapa").
+- **Almacén**: kardex por ítem, stock mínimo, bloqueo de egresos sin stock.
+- **Depreciación**: lineal mensual con valor residual $1 y tabla de vida útil SII editable; el mismo cálculo alimenta ficha, panel y reportes.
+- **Actas** de recepción y entrega con sello de integridad verificable.
+- **Alertas**: mantenciones, garantías, stock y solicitudes, con badge en vivo.
+- **Reportes** de inventario, depreciación y movimientos en PDF, Excel y CSV.
+- **Usuarios y roles** (Administrador, Gestor de Activos, Consulta, Funcionario) con clave temporal y cambio obligatorio; **auditoría** completa de acciones.
+- **Portal de autoconsulta** para funcionarios: "Mis bienes" y solicitudes de insumos con aprobación y entrega que descuenta stock.
+- **API pública** (`/api/v1`) documentada con OpenAPI 3.1 descargable y botón "Probar" en pantalla; exportación contable para SIGFE y webhook de confirmación.
+- **Mercado Público**: consulta de órdenes de compra **reales** de mercadopublico.cl con caché local y vinculación a activos.
+- **Importador Excel**: la planilla "Vista General" de 3.530 filas se previsualiza, valida e importa en menos de un segundo.
 
-## Comandos
+## Stack
 
-| Comando | Descripción |
+React 19 + Vite (SPA, CSS Modules) · Express 5 · PostgreSQL 16 + Prisma · sesiones por cookie `httpOnly`. En producción **un solo proceso Node** sirve la API y el frontend compilado.
+
+## Desarrollo local
+
+Requisitos: Node.js 20.12+, pnpm 11, Docker (para la base de datos).
+
+```bash
+cp .env.ejemplo .env        # completar valores (ver comentarios del archivo)
+docker compose up -d        # PostgreSQL de desarrollo (puerto 55432)
+pnpm install                # postinstall genera el cliente de Prisma
+pnpm db:migrate
+pnpm db:seed                # datos de demostración deterministas (~529 activos)
+pnpm dev                    # Vite (5173) + API (3001) con proxy /api
+```
+
+## Pruebas
+
+| Comando | Qué corre |
 |---|---|
-| `pnpm install` | Instala las dependencias |
-| `pnpm dev` | Servidor de desarrollo con recarga en caliente |
-| `pnpm build` | Build de producción en `dist/` |
-| `pnpm preview` | Sirve el build de producción localmente |
-| `pnpm lint` | Revisa el código con ESLint |
+| `pnpm test` | Unitarias (depreciación, importador, generadores, reglas de clave) |
+| `pnpm test:api` | Suite de API contra el dev server: matriz de autorización, `/api/v1`, adjuntos, stock, folios concurrentes. **Escribe datos de prueba**: solo en desarrollo y `pnpm db:seed` después |
+| `pnpm test:e2e` | Playwright en 4 perfiles (360 px, iPhone/WebKit, tablet, escritorio): responsive, flujos completos y la pasada principal de la demo |
+| `pnpm lint` | ESLint |
 
-## Estructura del proyecto
+## Producción
 
-```
-├── CLAUDE.md          # Guía maestra: contexto de la licitación, reglas y orden de lectura
-├── docs/              # Especificación por tema (00 a 17): backend, API, seguridad, pruebas…
-├── public/            # Estáticos (favicon, sprite de íconos)
-├── src/
-│   ├── components/    # Componentes transversales (common/ y layout/)
-│   ├── features/      # Un dominio por carpeta: actas, activos, almacen, auth,
-│   │                  # autoconsulta, dashboard, depreciacion, integraciones,
-│   │                  # reportes, theme
-│   │   └── <dominio>/ # {pages, components, hooks, mock, utils, constants}
-│   ├── theme/         # Tokens de diseño, tipografías y estilos globales
-│   └── utils/         # Utilidades compartidas
-├── index.html
-└── vite.config.js
+```bash
+pnpm install --frozen-lockfile
+pnpm db:deploy && pnpm db:seed
+pnpm build
+pnpm start                  # un proceso: API + dist/ con fallback SPA
 ```
 
-Cada dominio en `src/features/` incluye un `*.mock.js` que actúa como única "base de datos" (sobre `localStorage`) y expone funciones `async` con el contrato que consumirá el backend real (`docs/03`).
+El detalle del despliegue publicado (systemd, nginx + TLS, respaldo diario) está registrado en [`docs/17`](docs/17-decisiones-y-pendientes.md).
+
+## Estructura del repositorio
+
+```
+├── server/            # API Express: rutas, dominio, middleware, Prisma (schema, migraciones, seed)
+├── src/               # SPA React: components/ (común y layout) + features/ (un dominio por carpeta)
+├── shared/            # Lógica compartida front/servidor (depreciación, reglas de clave, moneda)
+├── tests/             # unitarias/ (vitest) · api/ (vitest contra el server) · e2e/ (Playwright)
+├── scripts/           # respaldo, manual PDF, pantallazos, generadores de entregables
+├── entregables/       # Manual del demo, tabla de verificación RQ, pantallazos, planilla de 3.530 filas
+├── docs/              # Especificación por tema (00–17); CLAUDE.md es el punto de entrada
+└── CHECKLIST.md       # Tracker del proyecto: bloques A1→D completos, pendientes vivos
+```
 
 ## Documentación
 
-El avance del proyecto se lleva en [`CHECKLIST.md`](CHECKLIST.md): qué está hecho y qué falta, por bloques de trabajo.
+- [`CHECKLIST.md`](CHECKLIST.md) — estado real del proyecto por bloques, con lo verificado y lo pendiente.
+- [`entregables/tabla-verificacion-rq.md`](entregables/tabla-verificacion-rq.md) — cada requisito RQ/AD/DEMO del Anexo 2A con **cómo se verifica navegando la demo** y su ruta exacta.
+- [`entregables/manual-demo-sisga.pdf`](entregables/manual-demo-sisga.pdf) — manual de uso del demo con la ruta de revisión de 15 minutos.
+- [`docs/00–17`](docs/) — la especificación completa; [`CLAUDE.md`](CLAUDE.md) trae el orden de lectura y las reglas del proyecto.
 
-El punto de entrada es [`CLAUDE.md`](CLAUDE.md). Orden de lectura inicial:
+---
 
-1. [`docs/00-estado-actual-del-repo.md`](docs/00-estado-actual-del-repo.md) — qué existe y qué falta
-2. [`docs/01-requisitos-trazables-y-brechas.md`](docs/01-requisitos-trazables-y-brechas.md) — requisitos RQ / AD / DEMO
-3. [`docs/02-backend-y-base-de-datos.md`](docs/02-backend-y-base-de-datos.md) — servidor y schema
-4. [`docs/03-contrato-api-y-reemplazo-de-mocks.md`](docs/03-contrato-api-y-reemplazo-de-mocks.md) — reemplazo de mocks
-
-El resto de los documentos (04–17) se consultan según la tarea; la tabla de correspondencia está en `CLAUDE.md`.
+*Entorno de demostración con datos 100 % ficticios: los nombres, correos y bienes no corresponden a personas ni registros reales.*
