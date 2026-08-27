@@ -1,2 +1,33 @@
-/* Tipografía institucional: Roboto (cuerpo) y Roboto Slab (títulos). */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400&family=Roboto+Slab:wght@500;700&display=swap');
+/*
+ * Tipografía institucional: Roboto (cuerpo) y Roboto Slab (títulos),
+ * AUTOALOJADAS en /public/fonts (woff2 variables, subset latin — cubre
+ * tildes y eñe). Antes venían de Google Fonts vía @import, que la CSP de
+ * producción (style-src 'self', docs/14) bloqueaba: en el VPS las
+ * fuentes caían a las del sistema. Autoalojarlas mantiene la CSP
+ * estricta y quita la dependencia externa (disponibilidad continua de la
+ * demo, sin llamadas a terceros).
+ */
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/roboto-variable.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/roboto-italic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Roboto Slab';
+  font-style: normal;
+  font-weight: 500 700;
+  font-display: swap;
+  src: url('/fonts/roboto-slab-variable.woff2') format('woff2');
+}
