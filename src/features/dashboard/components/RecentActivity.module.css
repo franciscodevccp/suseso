@@ -1,0 +1,51 @@
+.tarjeta {
+  background: var(--gob-blanco);
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radio-lg);
+  padding: var(--espacio-5);
+}
+
+.titulo {
+  font-size: 1rem;
+  margin: 0 0 var(--espacio-4);
+}
+
+.vacio {
+  text-align: center;
+  padding: var(--espacio-6) var(--espacio-3);
+  color: var(--gris-500);
+}
+
+.mensaje {
+  margin: 0 0 var(--espacio-1);
+  font-weight: 500;
+  color: var(--gris-700);
+}
+
+.detalle {
+  margin: 0;
+  font-size: 0.8125rem;
+}
+
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  padding: var(--espacio-2) 0;
+  border-bottom: 1px solid var(--gris-100);
+  font-size: 0.875rem;
+}
+
+.fecha {
+  color: var(--gris-500);
+  flex-shrink: 0;
+}

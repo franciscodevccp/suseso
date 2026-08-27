@@ -1,0 +1,122 @@
+.cargando {
+  color: var(--gris-500);
+}
+
+.botonVolver {
+  margin-bottom: var(--espacio-4);
+}
+
+.encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-4);
+  margin-bottom: var(--espacio-5);
+}
+
+.folio {
+  margin: 0 0 2px;
+  font-size: 0.875rem;
+  color: var(--gris-500);
+}
+
+.nombre {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.tarjeta,
+.tarjetaFirma {
+  background: var(--gob-blanco);
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radio-lg);
+  padding: var(--espacio-5);
+  margin-bottom: var(--espacio-5);
+}
+
+.tituloSeccion {
+  font-size: 1rem;
+  margin: 0 0 var(--espacio-3);
+}
+
+.tituloSeccion:not(:first-child) {
+  margin-top: var(--espacio-5);
+}
+
+.listaDatos {
+  margin: 0;
+  display: grid;
+  gap: var(--espacio-2);
+}
+
+.listaDatos > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  padding-bottom: var(--espacio-2);
+  border-bottom: 1px solid var(--gris-100);
+  font-size: 0.875rem;
+}
+
+.listaDatos dt {
+  margin: 0;
+  color: var(--gris-500);
+}
+
+.listaDatos dd {
+  margin: 0;
+  color: var(--gris-900);
+  font-weight: 500;
+  text-align: right;
+}
+
+.contenido {
+  margin: 0;
+  color: var(--gris-700);
+  font-size: 0.9375rem;
+  white-space: pre-wrap;
+}
+
+.vacioChico {
+  margin: 0 0 var(--espacio-4);
+  color: var(--gris-500);
+  font-size: 0.875rem;
+}
+
+.etiquetaSello {
+  margin: 0 0 var(--espacio-1);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gris-500);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.sello {
+  margin: 0 0 var(--espacio-4);
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.8125rem;
+  color: var(--gris-900);
+  background: var(--gris-50);
+  border-radius: var(--radio-md);
+  padding: var(--espacio-3);
+  word-break: break-all;
+}
+
+.notaLey {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--gris-500);
+  border-top: 1px dashed var(--gris-200);
+  padding-top: var(--espacio-3);
+}
+
+.noEncontrada {
+  text-align: center;
+  padding: var(--espacio-7) var(--espacio-4);
+}
+
+.noEncontrada p {
+  color: var(--gris-500);
+  margin-bottom: var(--espacio-4);
+}

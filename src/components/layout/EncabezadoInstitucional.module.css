@@ -1,0 +1,148 @@
+.encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-4);
+  padding: 0 var(--espacio-5);
+  /* Identidad institucional fija: usa los tokens --marca-*, que no
+     cambian con el tema claro/oscuro/automático de la aplicación. */
+  background: radial-gradient(
+    circle at center,
+    var(--marca-azul-radial-centro) 0%,
+    var(--marca-azul-oscuro) 100%
+  );
+}
+
+/* --- Zona izquierda: recuadro institucional --- */
+
+.zonaIzquierda {
+  display: inline-flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  padding-top: var(--espacio-2);
+}
+
+.franjaBicolor {
+  display: flex;
+  width: 100%;
+  height: 4px;
+}
+
+.mitadAzul,
+.mitadRoja {
+  flex: 1 1 0;
+}
+
+.mitadAzul {
+  background: var(--marca-azul-claro);
+}
+
+.mitadRoja {
+  background: var(--marca-rojo-bandera);
+}
+
+.cajaInstitucion {
+  background: var(--marca-blanco);
+  color: var(--marca-gris-texto);
+  display: flex;
+  flex-direction: column;
+  padding: var(--espacio-2) var(--espacio-4);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* --- Zona central: marca --- */
+
+.zonaCentro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--marca-blanco);
+  min-width: 0;
+}
+
+.filaGuiones {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  margin-bottom: var(--espacio-1);
+}
+
+.guiones {
+  width: 64px;
+  height: 2px;
+  background-image: repeating-linear-gradient(
+    to right,
+    currentColor 0 4px,
+    transparent 4px 9px
+  );
+  opacity: 0.85;
+}
+
+.estrella {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.trabajando {
+  margin: 0;
+  font-size: 0.9375rem;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+}
+
+.lineaRoja {
+  width: 36px;
+  height: 2px;
+  background: var(--marca-rojo-bandera);
+  margin: var(--espacio-1) 0;
+}
+
+.gobierno {
+  margin: 0;
+  font-family: var(--font-titulos);
+  font-size: 1.0625rem;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* --- Zona derecha: contenido inyectado por el layout (ej. MenuPerfil) --- */
+
+.zonaDerecha {
+  flex-shrink: 0;
+}
+
+/* --- Responsive: la zona central se reduce y luego se oculta --- */
+
+@media (max-width: 900px) {
+  .guiones {
+    width: 36px;
+  }
+
+  .trabajando {
+    font-size: 0.8125rem;
+    letter-spacing: 0.1em;
+  }
+
+  .gobierno {
+    font-size: 0.9375rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .encabezado {
+    padding: 0 var(--espacio-3);
+  }
+
+  .zonaCentro {
+    display: none;
+  }
+
+  .cajaInstitucion {
+    font-size: 0.75rem;
+    padding: var(--espacio-2) var(--espacio-3);
+  }
+}

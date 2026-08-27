@@ -1,0 +1,31 @@
+.fondo {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 33, 77, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espacio-4);
+  z-index: 100;
+}
+
+.dialogo {
+  width: 100%;
+  max-width: 440px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--gob-blanco);
+  border-radius: var(--radio-lg);
+  padding: var(--espacio-5);
+  box-shadow: var(--sombra-tarjeta);
+}
+
+.dialogo:focus-visible {
+  outline: 2px solid var(--borde-foco);
+  outline-offset: 2px;
+}
+
+.titulo {
+  font-size: 1.25rem;
+  margin-bottom: var(--espacio-4);
+}

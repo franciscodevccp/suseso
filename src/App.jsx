@@ -1,0 +1,87 @@
+import { Navigate, Route, Routes } from 'react-router-dom'
+import { AuthProvider } from './features/auth/context/AuthContext'
+import { ProtectedRoute } from './features/auth/ProtectedRoute'
+import { RutaAdministrativa } from './features/auth/RutaAdministrativa'
+import { LoginPage } from './features/auth/pages/LoginPage'
+import { ForgotPasswordPage } from './features/auth/pages/ForgotPasswordPage'
+import { ResetPasswordPage } from './features/auth/pages/ResetPasswordPage'
+import { ForcePasswordChangePage } from './features/auth/pages/ForcePasswordChangePage'
+import { AccountLockedPage } from './features/auth/pages/AccountLockedPage'
+import { SessionExpiredPage } from './features/auth/pages/SessionExpiredPage'
+import { ChangePasswordPage } from './features/auth/pages/ChangePasswordPage'
+import { AppLayout } from './components/layout/AppLayout'
+import { ModuloEnConstruccion } from './components/layout/ModuloEnConstruccion'
+import { InicioPage } from './features/dashboard/pages/InicioPage'
+import { ListadoActivosPage } from './features/activos/pages/ListadoActivosPage'
+import { FichaActivoPage } from './features/activos/pages/FichaActivoPage'
+import { AltaActivoPage } from './features/activos/pages/AltaActivoPage'
+import { EditarActivoPage } from './features/activos/pages/EditarActivoPage'
+import { ListadoActasPage } from './features/actas/pages/ListadoActasPage'
+import { CrearActaPage } from './features/actas/pages/CrearActaPage'
+import { FichaActaPage } from './features/actas/pages/FichaActaPage'
+import { AutoconsultaPage } from './features/autoconsulta/pages/AutoconsultaPage'
+import { ConsultaActivoPage } from './features/autoconsulta/pages/ConsultaActivoPage'
+import { ListadoAlmacenPage } from './features/almacen/pages/ListadoAlmacenPage'
+import { AltaItemPage } from './features/almacen/pages/AltaItemPage'
+import { FichaItemPage } from './features/almacen/pages/FichaItemPage'
+import { DocumentacionApiPage } from './features/integraciones/pages/DocumentacionApiPage'
+import { IntegracionSigfePage } from './features/integraciones/pages/IntegracionSigfePage'
+import { IntegracionMercadoPublicoPage } from './features/integraciones/pages/IntegracionMercadoPublicoPage'
+import { VidaUtilPage } from './features/depreciacion/pages/VidaUtilPage'
+import { ReportesPage } from './features/reportes/pages/ReportesPage'
+
+function App() {
+  return (
+    <AuthProvider>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/recuperar-clave" element={<ForgotPasswordPage />} />
+        <Route path="/restablecer-clave" element={<ResetPasswordPage />} />
+        <Route path="/cambio-clave-obligatorio" element={<ForcePasswordChangePage />} />
+        <Route path="/cuenta-bloqueada" element={<AccountLockedPage />} />
+        <Route path="/sesion-expirada" element={<SessionExpiredPage />} />
+
+        {/* Área autenticada: shell con sidebar compartido por todas estas vistas. */}
+        <Route
+          element={
+            <ProtectedRoute>
+              <AppLayout />
+            </ProtectedRoute>
+          }
+        >
+          {/* Accesible para cualquier rol autenticado, incluido Funcionario. */}
+          <Route path="/autoconsulta" element={<AutoconsultaPage />} />
+          <Route path="/autoconsulta/:id" element={<ConsultaActivoPage />} />
+          <Route path="/perfil/cambiar-clave" element={<ChangePasswordPage />} />
+
+          {/* Módulos administrativos: el rol Funcionario no entra ni por URL directa. */}
+          <Route element={<RutaAdministrativa />}>
+            <Route path="/inicio" element={<InicioPage />} />
+            <Route path="/activos-fijos" element={<ListadoActivosPage />} />
+            <Route path="/activos-fijos/nuevo" element={<AltaActivoPage />} />
+            <Route path="/activos-fijos/:id/editar" element={<EditarActivoPage />} />
+            <Route path="/activos-fijos/:id" element={<FichaActivoPage />} />
+            <Route path="/almacen" element={<ListadoAlmacenPage />} />
+            <Route path="/almacen/nuevo" element={<AltaItemPage />} />
+            <Route path="/almacen/:id" element={<FichaItemPage />} />
+            <Route path="/alertas" element={<ModuloEnConstruccion titulo="Alertas" />} />
+            <Route path="/actas-y-firma" element={<ListadoActasPage />} />
+            <Route path="/actas-y-firma/nueva" element={<CrearActaPage />} />
+            <Route path="/actas-y-firma/:id" element={<FichaActaPage />} />
+            <Route path="/integraciones" element={<DocumentacionApiPage />} />
+            <Route path="/integraciones/sigfe" element={<IntegracionSigfePage />} />
+            <Route path="/integraciones/mercadopublico" element={<IntegracionMercadoPublicoPage />} />
+            <Route path="/configuracion/vida-util" element={<VidaUtilPage />} />
+            <Route path="/reportes" element={<ReportesPage />} />
+            <Route path="/usuarios" element={<ModuloEnConstruccion titulo="Usuarios" />} />
+          </Route>
+        </Route>
+
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </AuthProvider>
+  )
+}
+
+export default App

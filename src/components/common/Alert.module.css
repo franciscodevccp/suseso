@@ -1,0 +1,25 @@
+.alerta {
+  padding: var(--espacio-3) var(--espacio-4);
+  border-radius: var(--radio-md);
+  font-size: 0.875rem;
+  margin-bottom: var(--espacio-4);
+  border: 1px solid transparent;
+}
+
+.error {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+  border-color: rgba(228, 0, 43, 0.25);
+}
+
+.exito {
+  background: var(--color-exito-bg);
+  color: var(--color-exito);
+  border-color: rgba(26, 127, 55, 0.25);
+}
+
+.advertencia {
+  background: var(--color-advertencia-bg);
+  color: var(--color-advertencia);
+  border-color: rgba(161, 92, 0, 0.25);
+}

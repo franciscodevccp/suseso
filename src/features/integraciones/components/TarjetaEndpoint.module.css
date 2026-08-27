@@ -1,0 +1,57 @@
+.tarjeta {
+  background: var(--gob-blanco);
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radio-lg);
+  padding: var(--espacio-5);
+  margin-bottom: var(--espacio-4);
+  scroll-margin-top: var(--espacio-4);
+}
+
+.encabezado {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  margin-bottom: var(--espacio-3);
+  flex-wrap: wrap;
+}
+
+.ruta {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--gris-900);
+  overflow-wrap: anywhere;
+}
+
+.descripcion {
+  margin: 0 0 var(--espacio-4);
+  color: var(--gris-700);
+  font-size: 0.9375rem;
+}
+
+.formato {
+  margin: 0 0 var(--espacio-4);
+  display: grid;
+  gap: var(--espacio-2);
+}
+
+.formato > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  padding-bottom: var(--espacio-2);
+  border-bottom: 1px solid var(--gris-100);
+  font-size: 0.875rem;
+}
+
+.formato dt {
+  margin: 0;
+  color: var(--gris-500);
+  flex-shrink: 0;
+}
+
+.formato dd {
+  margin: 0;
+  color: var(--gris-900);
+  text-align: right;
+}

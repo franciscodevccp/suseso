@@ -1,0 +1,47 @@
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  text-align: left;
+  margin-bottom: var(--espacio-4);
+}
+
+.etiqueta {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--gris-900);
+}
+
+.input {
+  width: 100%;
+  padding: var(--espacio-3);
+  border: 1px solid var(--gris-300);
+  border-radius: var(--radio-md);
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--gris-950);
+  background: var(--gob-blanco);
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--borde-foco);
+  outline-offset: 1px;
+  border-color: var(--gob-azul-claro);
+}
+
+.conError {
+  border-color: var(--color-error);
+}
+
+.pista {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--gris-500);
+}
+
+.mensajeError {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--color-error);
+  font-weight: 500;
+}

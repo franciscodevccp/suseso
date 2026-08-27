@@ -1,0 +1,45 @@
+.enlaceOlvido {
+  text-align: right;
+  margin: -8px 0 var(--espacio-5);
+  font-size: 0.875rem;
+}
+
+.acciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+.demo {
+  margin-top: var(--espacio-6);
+  padding-top: var(--espacio-4);
+  border-top: 1px dashed var(--gris-200);
+  font-size: 0.75rem;
+  color: var(--gris-500);
+}
+
+.demo summary {
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.demo ul {
+  margin: var(--espacio-2) 0 0;
+  padding-left: var(--espacio-4);
+}
+
+.reiniciar {
+  margin-top: var(--espacio-3);
+  border: 1px solid var(--gris-300);
+  background: var(--gob-blanco);
+  color: var(--gob-azul-claro);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: var(--espacio-1) var(--espacio-3);
+  border-radius: var(--radio-sm);
+  cursor: pointer;
+}
+
+.reiniciar:hover {
+  border-color: var(--gob-azul-claro);
+}

@@ -1,0 +1,22 @@
+.contenedor {
+  background: var(--gob-blanco);
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radio-lg);
+  padding: var(--espacio-7) var(--espacio-5);
+  text-align: center;
+}
+
+.titulo {
+  margin-bottom: var(--espacio-2);
+}
+
+.mensaje {
+  font-weight: 600;
+  color: var(--gob-azul-claro);
+  margin-bottom: var(--espacio-2);
+}
+
+.detalle {
+  color: var(--gris-500);
+  margin: 0;
+}

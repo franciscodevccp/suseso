@@ -1,0 +1,57 @@
+.tarjeta {
+  background: var(--gob-blanco);
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radio-lg);
+  padding: var(--espacio-5);
+}
+
+.encabezado {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espacio-4);
+  margin-bottom: var(--espacio-4);
+}
+
+.folio {
+  margin: 0 0 2px;
+  font-size: 0.875rem;
+  color: var(--gris-500);
+}
+
+.nombre {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.listaDatos {
+  margin: 0;
+  display: grid;
+  gap: var(--espacio-2);
+}
+
+.listaDatos > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  padding-bottom: var(--espacio-2);
+  border-bottom: 1px solid var(--gris-100);
+  font-size: 0.875rem;
+}
+
+.listaDatos > div:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.listaDatos dt {
+  margin: 0;
+  color: var(--gris-500);
+}
+
+.listaDatos dd {
+  margin: 0;
+  color: var(--gris-900);
+  font-weight: 500;
+  text-align: right;
+}

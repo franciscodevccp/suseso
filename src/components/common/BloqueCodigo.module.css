@@ -1,0 +1,33 @@
+.contenedor {
+  margin-bottom: var(--espacio-4);
+}
+
+.contenedor:last-child {
+  margin-bottom: 0;
+}
+
+.etiqueta {
+  margin: 0 0 var(--espacio-1);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gris-500);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.bloque {
+  margin: 0;
+  overflow-x: auto;
+  background: var(--gris-50);
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radio-md);
+  padding: var(--espacio-3);
+}
+
+.bloque code {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--gris-900);
+  white-space: pre;
+}

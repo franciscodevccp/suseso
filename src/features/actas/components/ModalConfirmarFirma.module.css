@@ -1,0 +1,19 @@
+.descripcion {
+  color: var(--gris-700);
+  font-size: 0.9375rem;
+  margin-bottom: var(--espacio-3);
+}
+
+.nota {
+  font-size: 0.8125rem;
+  color: var(--gris-500);
+  background: var(--gris-50);
+  border-radius: var(--radio-md);
+  padding: var(--espacio-3);
+  margin-bottom: var(--espacio-4);
+}
+
+.acciones {
+  display: flex;
+  gap: var(--espacio-3);
+}

@@ -1,0 +1,21 @@
+.titulo {
+  margin-bottom: var(--espacio-1);
+}
+
+.subtitulo {
+  color: var(--gris-500);
+  margin-bottom: var(--espacio-5);
+}
+
+.notaReferencial {
+  background: var(--color-advertencia-bg);
+  color: var(--color-advertencia);
+  border-radius: var(--radio-md);
+  padding: var(--espacio-4);
+  margin-bottom: var(--espacio-5);
+  font-size: 0.875rem;
+}
+
+.cargando {
+  color: var(--gris-500);
+}

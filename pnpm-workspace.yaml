@@ -1,0 +1,8 @@
+# Configuración de pnpm (desde pnpm 10, este archivo reemplaza al campo "pnpm" de package.json).
+# La sobrescritura de uuid viene del package-lock original de npm: exceljs arrastra uuid@8 (deprecado).
+overrides:
+  uuid: ^11.1.1
+
+# core-js solo imprime un banner en su postinstall; no necesita ejecutar scripts.
+allowBuilds:
+  core-js: false

@@ -1,0 +1,11 @@
+.descripcion {
+  color: var(--gris-500);
+  font-size: 0.875rem;
+  margin-bottom: var(--espacio-4);
+}
+
+.acciones {
+  display: flex;
+  gap: var(--espacio-3);
+  margin-top: var(--espacio-2);
+}

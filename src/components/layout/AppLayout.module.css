@@ -1,0 +1,24 @@
+.layout {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  background: var(--gris-50);
+}
+
+.cuerpo {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.contenido {
+  flex: 1;
+  min-width: 0;
+  padding: var(--espacio-5);
+}
+
+@media (max-width: 480px) {
+  .contenido {
+    padding: var(--espacio-3);
+  }
+}

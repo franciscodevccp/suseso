@@ -1,0 +1,142 @@
+.tarjeta {
+  background: var(--gob-blanco);
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radio-lg);
+  padding: var(--espacio-5);
+  margin-bottom: var(--espacio-5);
+}
+
+.tituloSeccion {
+  font-size: 1rem;
+  margin: 0 0 var(--espacio-3);
+}
+
+.mensaje {
+  margin: 0;
+  color: var(--gris-500);
+  font-size: 0.9375rem;
+}
+
+.notaBaja {
+  margin: 0 0 var(--espacio-4);
+  padding: var(--espacio-3);
+  background: var(--color-advertencia-bg);
+  color: var(--color-advertencia);
+  border-radius: var(--radio-md);
+  font-size: 0.875rem;
+}
+
+.resumen {
+  margin: 0 0 var(--espacio-4);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0 var(--espacio-5);
+}
+
+.resumen > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  padding: var(--espacio-2) 0;
+  border-bottom: 1px solid var(--gris-100);
+  font-size: 0.875rem;
+}
+
+.resumen dt {
+  margin: 0;
+  color: var(--gris-500);
+}
+
+.resumen dd {
+  margin: 0;
+  color: var(--gris-900);
+  font-weight: 500;
+  text-align: right;
+}
+
+.valorLibroDestacado {
+  background: var(--gris-50);
+  border-radius: var(--radio-md);
+  padding: var(--espacio-4);
+  margin-bottom: var(--espacio-5);
+  text-align: center;
+}
+
+.etiquetaValorLibro {
+  margin: 0 0 var(--espacio-1);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gris-500);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.valorLibro {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--gob-azul-claro);
+}
+
+.tituloEvolucion {
+  font-size: 0.9375rem;
+  margin: 0 0 var(--espacio-3);
+}
+
+.contenedorTabla {
+  overflow-x: auto;
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radio-md);
+  margin-bottom: var(--espacio-4);
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+.tabla th,
+.tabla td {
+  text-align: left;
+  padding: var(--espacio-2) var(--espacio-3);
+}
+
+.tabla th {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--gris-500);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid var(--gris-200);
+  background: var(--gris-50);
+}
+
+.tabla td {
+  border-bottom: 1px solid var(--gris-100);
+  color: var(--gris-900);
+}
+
+.tabla tr:last-child td {
+  border-bottom: none;
+}
+
+.filaActual td {
+  background: var(--color-exito-bg);
+  font-weight: 600;
+}
+
+.notaReferencial {
+  margin: 0;
+  color: var(--gris-500);
+  font-size: 0.8125rem;
+  border-top: 1px dashed var(--gris-200);
+  padding-top: var(--espacio-3);
+}
+
+@media (max-width: 560px) {
+  .resumen {
+    grid-template-columns: 1fr;
+  }
+}
