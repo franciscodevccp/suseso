@@ -215,16 +215,17 @@ model Acta {
 
 // AD-03 (docs/11)
 model Solicitud {
-  id                String          @id @default(cuid())
-  folio             String          @unique // SOL-AAAA-NNNN
-  solicitanteId     String
-  solicitanteNombre String
-  estado            EstadoSolicitud @default(pendiente)
-  observacion       String          @default("")
-  resueltaPor       String?
-  fechaResolucion   DateTime?
-  items             SolicitudItem[]
-  fecha             DateTime        @default(now())
+  id                    String          @id @default(cuid())
+  folio                 String          @unique // SOL-AAAA-NNNN
+  solicitanteId         String
+  solicitanteNombre     String
+  estado                EstadoSolicitud @default(pendiente)
+  observacion           String          @default("") // del solicitante
+  observacionResolucion String          @default("") // del resolutor (docs/11)
+  resueltaPor           String?
+  fechaResolucion       DateTime?
+  items                 SolicitudItem[]
+  fecha                 DateTime        @default(now())
 }
 
 model SolicitudItem {

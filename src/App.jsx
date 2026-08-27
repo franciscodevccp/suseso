@@ -33,6 +33,10 @@ import { UsuariosPage } from './features/usuarios/pages/UsuariosPage'
 import { AuditoriaPage } from './features/auditoria/pages/AuditoriaPage'
 import { PerfilesPermisosPage } from './features/configuracion/pages/PerfilesPermisosPage'
 import { ReiniciarDemoPage } from './features/configuracion/pages/ReiniciarDemoPage'
+import { MisSolicitudesPage } from './features/solicitudes/pages/MisSolicitudesPage'
+import { NuevaSolicitudPage } from './features/solicitudes/pages/NuevaSolicitudPage'
+import { DetalleSolicitudPage } from './features/solicitudes/pages/DetalleSolicitudPage'
+import { BandejaSolicitudesPage } from './features/solicitudes/pages/BandejaSolicitudesPage'
 
 function App() {
   return (
@@ -56,6 +60,9 @@ function App() {
         >
           {/* Accesible para cualquier rol autenticado, incluido Funcionario. */}
           <Route path="/autoconsulta" element={<AutoconsultaPage />} />
+          <Route path="/autoconsulta/solicitudes" element={<MisSolicitudesPage />} />
+          <Route path="/autoconsulta/solicitudes/nueva" element={<NuevaSolicitudPage />} />
+          <Route path="/autoconsulta/solicitudes/:id" element={<DetalleSolicitudPage />} />
           <Route path="/autoconsulta/:id" element={<ConsultaActivoPage />} />
           <Route path="/perfil/cambiar-clave" element={<ChangePasswordPage />} />
 
@@ -69,6 +76,7 @@ function App() {
             <Route path="/almacen" element={<ListadoAlmacenPage />} />
             <Route path="/almacen/nuevo" element={<AltaItemPage />} />
             <Route path="/almacen/:id" element={<FichaItemPage />} />
+            <Route path="/solicitudes" element={<BandejaSolicitudesPage />} />
             <Route path="/alertas" element={<AlertasPage />} />
             <Route path="/actas" element={<ListadoActasPage />} />
             <Route path="/actas/nueva" element={<CrearActaPage />} />

@@ -29,11 +29,16 @@
 
 .etiqueta {
   color: var(--gris-900);
+  /* Categorías largas ("Equipos de aire y refrigeración") envuelven en
+     vez de empujar la tarjeta más allá de la ventana en móvil. */
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .cantidad {
   color: var(--gris-500);
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .pista {

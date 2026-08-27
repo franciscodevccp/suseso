@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../../auth/hooks/useAuth'
 import { useMisBienes } from '../hooks/useMisBienes'
 import { FormularioBusquedaBien } from '../components/FormularioBusquedaBien'
@@ -35,7 +36,13 @@ export function AutoconsultaPage() {
   return (
     <div>
       <h1 className={estilos.titulo}>Autoconsulta</h1>
-      <p className={estilos.subtitulo}>Hola, {usuario.nombre}. Consulte la información de un bien.</p>
+      <p className={estilos.subtitulo}>
+        Hola, {usuario.nombre}. Consulte la información de un bien o revise{' '}
+        <Link to="/autoconsulta/solicitudes" className={estilos.enlaceSolicitudes}>
+          sus solicitudes de insumos
+        </Link>
+        .
+      </p>
 
       <section className={estilos.tarjeta}>
         <h2 className={estilos.tituloSeccion}>Buscar un bien</h2>

@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom'
 import { useAuth } from '../../features/auth/hooks/useAuth'
 import { puedeVerPanel } from '../../features/auth/utils/permisos'
 import { useResumenAlertas } from '../../features/alertas/hooks/useResumenAlertas'
+import { useResumenSolicitudes } from '../../features/solicitudes/hooks/useResumenSolicitudes'
 import estilos from './Sidebar.module.css'
 
 /* Iconos de línea, minimalistas e inline (sin librería externa). */
@@ -118,6 +119,27 @@ function IconAuditoria() {
   )
 }
 
+function IconSolicitudes() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <path d="M8 5h11v16H8z" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8 5H5v16h3" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M11 10l1.8 1.8L16.5 8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M11 16h5" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function IconNuevaSolicitud() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <path d="M6 3h9l3 3v15H6z" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M15 3v3h3" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12 10v6M9 13h6" strokeLinecap="round" />
+    </svg>
+  )
+}
+
 // `ocultoPara`: ítems administrativos que el rol Funcionario no ve (su
 // sidebar queda reducido a Autoconsulta). `rolRequerido`: lo opuesto,
 // visible solo para ese rol puntual (hoy solo Usuarios).
@@ -130,6 +152,12 @@ const ITEMS = [
     ocultoPara: ['Funcionario'],
   },
   { to: '/almacen', etiqueta: 'Almacén', Icono: IconAlmacen, ocultoPara: ['Funcionario'] },
+  {
+    to: '/solicitudes',
+    etiqueta: 'Solicitudes',
+    Icono: IconSolicitudes,
+    ocultoPara: ['Funcionario'],
+  },
   { to: '/alertas', etiqueta: 'Alertas', Icono: IconAlertas, ocultoPara: ['Funcionario'] },
   {
     to: '/actas',
@@ -145,7 +173,20 @@ const ITEMS = [
   },
   { to: '/reportes', etiqueta: 'Reportes', Icono: IconReportes, ocultoPara: ['Funcionario'] },
   { to: '/auditoria', etiqueta: 'Auditoría', Icono: IconAuditoria, ocultoPara: ['Funcionario'] },
-  { to: '/autoconsulta', etiqueta: 'Autoconsulta', Icono: IconAutoconsulta },
+  { to: '/autoconsulta', etiqueta: 'Autoconsulta', Icono: IconAutoconsulta, fin: true },
+  {
+    to: '/autoconsulta/solicitudes',
+    etiqueta: 'Mis solicitudes',
+    Icono: IconSolicitudes,
+    rolRequerido: 'Funcionario',
+    fin: true,
+  },
+  {
+    to: '/autoconsulta/solicitudes/nueva',
+    etiqueta: 'Nueva solicitud',
+    Icono: IconNuevaSolicitud,
+    rolRequerido: 'Funcionario',
+  },
   {
     to: '/configuracion/vida-util',
     etiqueta: 'Configuración',
@@ -158,40 +199,46 @@ const ITEMS = [
 /** Navegación institucional lateral. Colapsa a iconos en pantallas chicas (solo CSS). */
 export function Sidebar() {
   const { usuario } = useAuth()
-  // Badge de alertas vigentes, refrescado cada 60 s (docs/07).
+  // Badges refrescados cada 60 s: alertas vigentes (docs/07) y
+  // solicitudes pendientes (docs/11).
   const { total: totalAlertas } = useResumenAlertas(puedeVerPanel(usuario))
+  const { pendientes: totalSolicitudes } = useResumenSolicitudes(puedeVerPanel(usuario))
   const items = ITEMS.filter((item) => {
     if (item.rolRequerido) return item.rolRequerido === usuario.rol
     if (item.ocultoPara) return !item.ocultoPara.includes(usuario.rol)
     return true
   })
 
+  function badgeDe(to) {
+    if (to === '/alertas') return totalAlertas
+    if (to === '/solicitudes') return totalSolicitudes
+    return 0
+  }
+
   return (
     <nav className={estilos.sidebar} aria-label="Navegación principal">
       <ul className={estilos.lista}>
-        {items.map(({ to, etiqueta, Icono }) => (
-          <li key={to}>
-            <NavLink
-              to={to}
-              className={({ isActive }) =>
-                isActive ? `${estilos.item} ${estilos.activo}` : estilos.item
-              }
-              aria-label={
-                to === '/alertas' && totalAlertas > 0
-                  ? `${etiqueta} (${totalAlertas} vigentes)`
-                  : etiqueta
-              }
-            >
-              <span className={estilos.icono}>
-                <Icono />
-              </span>
-              <span className={estilos.etiqueta}>{etiqueta}</span>
-              {to === '/alertas' && totalAlertas > 0 && (
-                <span className={estilos.badgeAlertas}>{totalAlertas}</span>
-              )}
-            </NavLink>
-          </li>
-        ))}
+        {items.map(({ to, etiqueta, Icono, fin }) => {
+          const badge = badgeDe(to)
+          return (
+            <li key={to}>
+              <NavLink
+                to={to}
+                end={fin}
+                className={({ isActive }) =>
+                  isActive ? `${estilos.item} ${estilos.activo}` : estilos.item
+                }
+                aria-label={badge > 0 ? `${etiqueta} (${badge})` : etiqueta}
+              >
+                <span className={estilos.icono}>
+                  <Icono />
+                </span>
+                <span className={estilos.etiqueta}>{etiqueta}</span>
+                {badge > 0 && <span className={estilos.badgeAlertas}>{badge}</span>}
+              </NavLink>
+            </li>
+          )
+        })}
       </ul>
     </nav>
   )

@@ -10,6 +10,7 @@ import { puedeGestionarAlmacen } from '../utils/permisosAlmacen'
 import { obtenerInfoStock } from '../utils/estadoStock'
 import { obtenerMensajeErrorAlmacen } from '../constants/mensajesAlmacen'
 import * as almacenService from '../services/almacenService'
+import { SolicitudesDelItem } from '../components/SolicitudesDelItem'
 import estilos from './FichaItemPage.module.css'
 
 /** Ficha de detalle de un ítem de bodega: stock actual + historial de movimientos. */
@@ -124,6 +125,9 @@ export function FichaItemPage() {
       </div>
 
       <HistorialMovimientosAlmacen movimientos={movimientos} unidad={item.unidad} />
+
+      {/* Solicitudes del portal que incluyen este ítem (docs/11). */}
+      <SolicitudesDelItem itemId={id} />
 
       {modalAbierto && (
         <ModalMovimiento

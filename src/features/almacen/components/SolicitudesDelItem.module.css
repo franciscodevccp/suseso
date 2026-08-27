@@ -1,0 +1,52 @@
+.tarjeta {
+  background: var(--gob-blanco);
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radio-lg);
+  padding: var(--espacio-5);
+  margin-top: var(--espacio-5);
+}
+
+.tituloSeccion {
+  font-size: 1rem;
+  margin: 0 0 var(--espacio-3);
+}
+
+.vacio {
+  margin: 0;
+  color: var(--gris-500);
+  font-size: 0.875rem;
+}
+
+.lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--espacio-2);
+}
+
+.filaSolicitud {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  flex-wrap: wrap;
+  padding-bottom: var(--espacio-2);
+  border-bottom: 1px solid var(--gris-100);
+  font-size: 0.875rem;
+}
+
+.filaSolicitud:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.folio {
+  font-weight: 600;
+  color: var(--gob-azul-claro);
+}
+
+.detalle {
+  flex: 1;
+  min-width: 0;
+  color: var(--gris-700);
+}

@@ -32,6 +32,7 @@ import { rutasDashboard } from './src/rutas/dashboard.js'
 import { rutasIntegraciones } from './src/rutas/integraciones.js'
 import { rutasMercadoPublico } from './src/rutas/mercadoPublico.js'
 import { rutasReportes } from './src/rutas/reportes.js'
+import { rutasSolicitudes } from './src/rutas/solicitudes.js'
 import { rutasUsuarios } from './src/rutas/usuarios.js'
 import { rutasV1 } from './src/rutas/v1.js'
 
@@ -100,6 +101,7 @@ api.use('/alertas', rutasAlertas)
 api.use('/auditoria', rutasAuditoria)
 api.use('/dashboard', rutasDashboard)
 api.use('/reportes', rutasReportes)
+api.use('/solicitudes', rutasSolicitudes)
 api.use('/usuarios', rutasUsuarios)
 api.use('/configuracion', rutasConfiguracion)
 api.use('/integraciones', rutasIntegraciones)

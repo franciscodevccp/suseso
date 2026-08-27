@@ -1,0 +1,164 @@
+.volver {
+  display: inline-block;
+  color: var(--gob-azul-claro);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: var(--espacio-3);
+}
+
+.titulo {
+  margin-bottom: var(--espacio-1);
+}
+
+.subtitulo {
+  color: var(--gris-500);
+  margin-bottom: var(--espacio-5);
+}
+
+.cargando {
+  color: var(--gris-500);
+}
+
+.tarjeta {
+  background: var(--gob-blanco);
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radio-lg);
+  padding: var(--espacio-5);
+  margin-bottom: var(--espacio-4);
+}
+
+.tituloSeccion {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gris-900);
+  margin: 0 0 var(--espacio-3);
+}
+
+.contenedorTabla {
+  overflow-x: auto;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.tabla th,
+.tabla td {
+  text-align: left;
+  padding: var(--espacio-2) var(--espacio-3);
+}
+
+.tabla th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gris-500);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid var(--gris-200);
+}
+
+.tabla td {
+  border-bottom: 1px solid var(--gris-100);
+  color: var(--gris-900);
+}
+
+.fila:last-child td {
+  border-bottom: none;
+}
+
+.sinStock {
+  color: var(--rojo-600, #c0392b);
+  font-weight: 600;
+}
+
+.cantidad {
+  width: 110px;
+  padding: var(--espacio-2) var(--espacio-3);
+  border: 1px solid var(--gris-300);
+  border-radius: var(--radio-md);
+  font-size: 0.9375rem;
+  font-family: inherit;
+  color: var(--gris-950);
+  background: var(--gob-blanco);
+}
+
+.cantidad:focus-visible {
+  outline: 2px solid var(--borde-foco);
+  outline-offset: 1px;
+  border-color: var(--gob-azul-claro);
+}
+
+.campoObservacion {
+  display: grid;
+  gap: var(--espacio-1);
+}
+
+.campoObservacion textarea {
+  padding: var(--espacio-2) var(--espacio-3);
+  border: 1px solid var(--gris-300);
+  border-radius: var(--radio-md);
+  font-size: 0.9375rem;
+  font-family: inherit;
+  color: var(--gris-950);
+  background: var(--gob-blanco);
+  resize: vertical;
+}
+
+.campoObservacion textarea:focus-visible {
+  outline: 2px solid var(--borde-foco);
+  outline-offset: 1px;
+  border-color: var(--gob-azul-claro);
+}
+
+.acciones {
+  margin-bottom: var(--espacio-5);
+}
+
+/* --- Móvil: filas del catálogo como tarjetas (RQ-05). --- */
+@media (max-width: 640px) {
+  .tabla,
+  .tabla tbody,
+  .fila,
+  .tabla td {
+    display: block;
+  }
+
+  .tabla thead {
+    display: none;
+  }
+
+  .fila {
+    border: 1px solid var(--gris-200);
+    border-radius: var(--radio-lg);
+    padding: var(--espacio-2) var(--espacio-4);
+    margin-bottom: var(--espacio-3);
+  }
+
+  .tabla td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--espacio-4);
+    padding: var(--espacio-2) 0;
+    border-bottom: 1px solid var(--gris-100);
+    text-align: right;
+  }
+
+  .fila td:last-child {
+    border-bottom: none;
+  }
+
+  .tabla td::before {
+    content: attr(data-etiqueta);
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--gris-500);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    text-align: left;
+  }
+}

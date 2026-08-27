@@ -80,11 +80,11 @@
 - [x] SIGFE real en pantalla: exportación generada desde la BD + tabla de **cuentas contables por categoría editable por Administrador** (T-05: plan genérico referencial 141.01–141.08)
 - [x] 5 OC reales cacheadas (obras/computación/notebooks/mobiliario/impresoras) y `1057062-336-AG26` ("07 Notebook 15,6″") **vinculada a AF-2026-0001**, visible en la ficha (T-02b)
 
-## Bloque C2 — Seed completo y solicitudes (seed no recortable; solicitudes P1)
+## Bloque C2 — Seed completo y solicitudes (seed no recortable; solicitudes P1) ✅
 
-- [ ] Seed de ~500 activos con distribución realista (fechas 2019–2026, estados, EAN-13 válidos, RFID 30 %, mantenciones/garantías) + usuarios extra + tabla de vida útil de 8 categorías (`docs/12`, RQ-24)
-- [ ] `entregables/planilla-ejemplo-vista-general.xlsx` con 3.530 filas generada por el seed (`docs/12`)
-- [ ] Solicitudes del portal: modelo + endpoints + crear/aprobar/rechazar/entregar (entrega genera egreso de almacén), "Mis solicitudes" para Funcionario (`docs/11`, AD-03; recortable #6)
+- [x] Seed completo y **determinista** (PRNG con semilla fija): 529 activos con distribución realista por 17 tipos (fechas 2019–2026 con casos en $1, 8 % reparación / 4 % baja / 1 % extraviado, EAN-13 **válidos**, RFID 30 %, serie/marca en ~300, mantenciones y garantías con los 4 casos exactos de alerta), 16 usuarios (2 no activos), 21 ubicaciones Huérfanos 1376, 40 funcionarios, 30 ítems de almacén (3 bajo mínimo, 1 sin stock) con kardex de 154 movimientos **consistente**, 8 actas (5 cerradas con sello válido — verificado por `/verificar`), 120 traslados/ediciones históricos, auditoría con 40 ingresos; la OC real vinculada se restaura sola si está en caché. Los 3 activos históricos del mock se conservan intactos (`docs/12`, RQ-24). Corre en ~11 s
+- [x] `entregables/planilla-ejemplo-vista-general.xlsx` con **3.530 filas** generada por `pnpm db:seed` (prefijo EAN distinto del sembrado para la demo de importación en vivo) (`docs/12`)
+- [x] Solicitudes (AD-03, `docs/11`) completas: endpoints crear/mias/catalogo/aprobar/rechazar (observación obligatoria)/**entregar con egresos en la misma transacción** (`STOCK_INSUFICIENTE` revierte todo — verificado), bandeja del panel con pestañas y badge en el Sidebar, portal "Mis solicitudes"/"Nueva solicitud"/detalle para Funcionario, sección "Solicitudes" en la ficha del ítem, auditoría en cada paso, y **spec E2E del ciclo completo** (crear → aprobar → entregar → egreso visible en kardex)
 
 ## Bloque C3 — Etiquetas, escáner, campos personalizados, importador
 
