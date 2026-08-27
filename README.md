@@ -41,6 +41,8 @@ Cada dominio en `src/features/` incluye un `*.mock.js` que actúa como única "b
 
 ## Documentación
 
+El avance del proyecto se lleva en [`CHECKLIST.md`](CHECKLIST.md): qué está hecho y qué falta, por bloques de trabajo.
+
 El punto de entrada es [`CLAUDE.md`](CLAUDE.md). Orden de lectura inicial:
 
 1. [`docs/00-estado-actual-del-repo.md`](docs/00-estado-actual-del-repo.md) — qué existe y qué falta
