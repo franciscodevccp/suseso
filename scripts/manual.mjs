@@ -26,7 +26,9 @@ const valorDe = (bandera, porDefecto) => {
 const URL_DEMO = valorDe('--url', '⟨URL-DE-LA-DEMO — completar al publicar⟩')
 const CLAVE = valorDe('--clave', process.env.CLAVE_DEMO)
 const API_KEY = valorDe('--api-key', process.env.API_DEMO_KEY)
-const ORIGEN = 'http://localhost:5173'
+// Con --origen las capturas salen de esa instancia (p. ej. la demo
+// publicada); sin él, del entorno de desarrollo local.
+const ORIGEN = valorDe('--origen', 'http://localhost:5173')
 
 const destino = path.join(raiz, 'entregables')
 const carpetaCapturas = path.join(destino, 'capturas-manual')

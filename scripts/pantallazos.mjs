@@ -13,7 +13,9 @@ import { chromium } from '@playwright/test'
 
 const raiz = path.join(path.dirname(fileURLToPath(import.meta.url)), '..')
 const destino = path.join(raiz, 'entregables', 'pantallazos-portal')
-const ORIGEN = 'http://localhost:5173'
+// --origen para capturar desde otra instancia (p. ej. la demo publicada).
+const indiceOrigen = process.argv.indexOf('--origen')
+const ORIGEN = indiceOrigen >= 0 ? process.argv[indiceOrigen + 1] : 'http://localhost:5173'
 
 process.loadEnvFile(path.join(raiz, '.env'))
 const CLAVE = process.env.CLAVE_DEMO
