@@ -15,10 +15,14 @@ const db = new PrismaClient()
 try {
   const resumen = await sembrarDemo(db)
   console.log('Seed completado:', JSON.stringify(resumen))
-  const planilla = await generarPlanilla(
-    path.join(raiz, 'entregables', 'planilla-ejemplo-vista-general.xlsx'),
-  )
-  console.log(`Planilla escrita: ${planilla.archivo} (${planilla.filas} filas)`)
+  // La planilla es un ENTREGABLE: se genera solo en desarrollo (en el
+  // VPS ensuciaría el árbol de git en cada reseed).
+  if (process.env.NODE_ENV !== 'production') {
+    const planilla = await generarPlanilla(
+      path.join(raiz, 'entregables', 'planilla-ejemplo-vista-general.xlsx'),
+    )
+    console.log(`Planilla escrita: ${planilla.archivo} (${planilla.filas} filas)`)
+  }
 } finally {
   await db.$disconnect()
 }
