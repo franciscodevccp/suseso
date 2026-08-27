@@ -24,8 +24,8 @@
 - [x] `schema.prisma` completo: 8 enums y los 17 modelos de `docs/02` (Prisma 6, alineado al doc) + migración inicial aplicada; BD de dev en puerto **55432** (5432–5434 los ocupa un PostgreSQL nativo de la máquina)
 - [x] Folios correlativos atómicos `dominio/folios.js` — verificado con transacciones en paralelo sin colisión (`docs/02`, RQ-14)
 - ~~`GET /api/salud`~~ — descartado el 2026-08-26: front y API viven en el mismo proceso, el monitoreo es directo sobre el sitio (registro en `docs/17`)
-- [ ] Sesión por cookie `httpOnly` (`express-session` + `connect-pg-simple`, TTL 8 h, inactividad 30 min), argon2, bloqueo a los 5 intentos, rate limit de login (`docs/14`)
-- [ ] Auth completa: los 8 endpoints de `authService` con mismos errores (`docs/03`) y `shared/passwordRules.js`
+- [x] Sesión por cookie `httpOnly` con TTL absoluto 8 h + inactividad 30 min (rolling), argon2id, bloqueo al 5º intento, rate limit login 10/15min y recuperación 5/h — todo verificado con pruebas reales contra la API (`docs/14`)
+- [x] Auth completa: los 8 endpoints del contrato del mock (mismos códigos y formas), `shared/passwordRules.js` compartido front/servidor, `autorizar(...roles)`, auditoría de acceso según `docs/05`, y `POST /api/configuracion/reiniciar-demo` (solo Administrador) que restaura el seed y desbloquea cuentas
 - [x] Seed mínimo reproducible (`pnpm db:seed` borra y recrea): 4 cuentas demo `@demo.cl` con `esCuentaDemo` y clave argon2id (`CLAVE_DEMO`), 8 categorías con vida útil SII, 8 ubicaciones, catálogos de almacén en `Configuracion`, los 3 activos y 4 ítems de los mocks, contadores de `Secuencia` alineados (`docs/04`, `docs/09`, `docs/12`)
 - [ ] Cliente `src/services/http.js` + evento `sesion-invalida` en `AuthContext` (`docs/03`)
 - [ ] `authService`, `activosService` y `almacenService` reales + cambio de importaciones listadas en `docs/00` (vistas y hooks intactos)

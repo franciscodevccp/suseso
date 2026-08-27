@@ -26,3 +26,4 @@
 
 - **2026-08-26** — Eliminado del login el botón "Ingresar con Clave Única" (estaba deshabilitado con chip "Próximamente"). No figuraba en ningún documento ni en el rediseño del login de `docs/13`, y sugería una integración no comprometida en la oferta.
 - **2026-08-26** — Se descarta el endpoint `GET /api/salud` (decisión de Francisco): front y API corren en un solo proceso, así que el monitoreo de disponibilidad (RQ-10) se hace directo sobre la URL del sitio. Ajustados `docs/01`, `docs/02` y `docs/16`.
+- **2026-08-27** — En auth, donde `docs/03` difería del mock, ganó el mock (regla 3): recuperación responde `{ ok, tokenDemo }` (no `{ mensaje, enlaceDemostracion }`), el código de clave débil es `CLAVE_NO_CUMPLE_REQUISITOS` (no `CLAVE_DEBIL`), y los cambios de clave devuelven `{ usuario }` (no 204). Además existen `CLAVE_IGUAL_A_ACTUAL` y `USUARIO_NO_ENCONTRADO`, que docs/03 omitía.

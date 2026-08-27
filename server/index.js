@@ -18,6 +18,9 @@ import pg from 'pg'
 import { pino } from 'pino'
 import { config, esProduccion } from './src/config.js'
 import { manejadorErrores } from './src/http/errores.js'
+import { cargarUsuario } from './src/middleware/sesion.js'
+import { rutasAuth } from './src/rutas/auth.js'
+import { rutasConfiguracion } from './src/rutas/configuracion.js'
 
 const logger = pino({ level: esProduccion ? 'info' : 'debug' })
 const app = express()
@@ -71,6 +74,9 @@ app.use(
 
 // Las rutas de la API se montan aquí a medida que se construyen (docs/03).
 const api = express.Router()
+api.use(cargarUsuario)
+api.use('/auth', rutasAuth)
+api.use('/configuracion', rutasConfiguracion)
 app.use('/api', api)
 
 // Cualquier ruta /api no registrada responde en el formato { codigo, mensaje }.
