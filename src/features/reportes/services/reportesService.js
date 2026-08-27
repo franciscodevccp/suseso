@@ -18,8 +18,8 @@ export function generarReporteInventario({ categoria = '', ubicacion = '', estad
   return http('GET', `/api/reportes/inventario${consulta({ categoria, ubicacion, estado })}`)
 }
 
-export function generarReporteDepreciacion() {
-  return http('GET', '/api/reportes/depreciacion')
+export function generarReporteDepreciacion({ categoria = '', fechaCorte = '' } = {}) {
+  return http('GET', `/api/reportes/depreciacion${consulta({ categoria, fechaCorte })}`)
 }
 
 export function generarReporteMovimientos({ desde = '', hasta = '' } = {}) {

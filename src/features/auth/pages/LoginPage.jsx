@@ -8,6 +8,7 @@ import { Alert } from '../../../components/common/Alert'
 import { useAuth } from '../hooks/useAuth'
 import { obtenerMensajeError } from '../constants/mensajes'
 import { obtenerRutaInicio } from '../utils/rutaInicio'
+import { obtenerCuentasDemo } from '../services/authService'
 import estilos from './LoginPage.module.css'
 
 export function LoginPage() {
@@ -23,12 +24,23 @@ export function LoginPage() {
   // en intentos de login posteriores en esta misma vista, ni si el usuario
   // navega hacia atrás/adelante y vuelve a montar esta página.
   const [mensajeExito, setMensajeExito] = useState(location.state?.mensaje ?? null)
+  const [cuentasDemo, setCuentasDemo] = useState(null)
 
   useEffect(() => {
     if (location.state?.mensaje) {
       navigate(location.pathname, { replace: true, state: {} })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    let vigente = true
+    obtenerCuentasDemo().then((resultado) => {
+      if (vigente) setCuentasDemo(resultado)
+    })
+    return () => {
+      vigente = false
+    }
   }, [])
 
   async function manejarEnvio(evento) {
@@ -94,19 +106,34 @@ export function LoginPage() {
         </div>
       </form>
 
-      {/* Bloque provisorio: en B2 pasa a las tarjetas "Cuentas de
-          demostración" con la clave entregada por el servidor (docs/13).
-          El botón de reinicio se movió a la API: POST
-          /api/configuracion/reiniciar-demo, solo Administrador. */}
-      <details className={estilos.demo}>
-        <summary>Cuentas de demostración</summary>
-        <ul>
-          <li>admin@demo.cl (Administrador)</li>
-          <li>gestor@demo.cl (Gestor de Activos)</li>
-          <li>consulta@demo.cl (Consulta)</li>
-          <li>funcionario@demo.cl (Funcionario)</li>
-        </ul>
-      </details>
+      {/* Tarjetas de acceso rápido (docs/13): la clave la entrega el
+          servidor solo si MOSTRAR_CUENTAS_DEMO está activo. */}
+      {cuentasDemo && (
+        <div className={estilos.cuentasDemo}>
+          <p className={estilos.tituloCuentas}>Cuentas de demostración</p>
+          <div className={estilos.tarjetasCuentas}>
+            {cuentasDemo.cuentas.map((cuenta) => (
+              <button
+                key={cuenta.email}
+                type="button"
+                className={estilos.tarjetaCuenta}
+                onClick={() => {
+                  setEmail(cuenta.email)
+                  setPassword(cuentasDemo.claveDemo)
+                  setError(null)
+                }}
+              >
+                <span className={estilos.rolCuenta}>{cuenta.rol}</span>
+                <span className={estilos.correoCuenta}>{cuenta.email}</span>
+              </button>
+            ))}
+          </div>
+          <p className={estilos.claveCuentas}>
+            Clave única: <strong>{cuentasDemo.claveDemo}</strong> — al elegir una tarjeta, el
+            formulario se completa solo.
+          </p>
+        </div>
+      )}
     </AuthLayout>
   )
 }

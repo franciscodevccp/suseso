@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { SelectorTipoReporte } from '../components/SelectorTipoReporte'
+import { FiltrosDepreciacion } from '../components/FiltrosDepreciacion'
 import { FiltrosInventario } from '../components/FiltrosInventario'
 import { FiltrosMovimientos } from '../components/FiltrosMovimientos'
 import { TablaVistaPrevia } from '../components/TablaVistaPrevia'
@@ -10,12 +11,14 @@ import * as reportesService from '../services/reportesService'
 import estilos from './ReportesPage.module.css'
 
 const FILTROS_INVENTARIO_INICIALES = { categoria: '', ubicacion: '', estado: '' }
+const FILTROS_DEPRECIACION_INICIALES = { categoria: '', fechaCorte: '' }
 const FILTROS_MOVIMIENTOS_INICIALES = { desde: '', hasta: '' }
 
 /** Reportes con vista previa y descarga en PDF, Excel y CSV. */
 export function ReportesPage() {
   const [tipoSeleccionado, setTipoSeleccionado] = useState('inventario')
   const [filtrosInventario, setFiltrosInventario] = useState(FILTROS_INVENTARIO_INICIALES)
+  const [filtrosDepreciacion, setFiltrosDepreciacion] = useState(FILTROS_DEPRECIACION_INICIALES)
   const [filtrosMovimientos, setFiltrosMovimientos] = useState(FILTROS_MOVIMIENTOS_INICIALES)
   const [reporte, setReporte] = useState({ columnas: [], filas: [] })
   const [cargando, setCargando] = useState(true)
@@ -34,7 +37,7 @@ export function ReportesPage() {
           return reportesService.generarReporteInventario(filtrosInventario)
         }
         if (tipoSeleccionado === 'depreciacion') {
-          return reportesService.generarReporteDepreciacion()
+          return reportesService.generarReporteDepreciacion(filtrosDepreciacion)
         }
         return reportesService.generarReporteMovimientos(filtrosMovimientos)
       })
@@ -47,7 +50,7 @@ export function ReportesPage() {
     return () => {
       vigente = false
     }
-  }, [tipoSeleccionado, filtrosInventario, filtrosMovimientos])
+  }, [tipoSeleccionado, filtrosInventario, filtrosDepreciacion, filtrosMovimientos])
 
   const tituloReporte = TIPOS_REPORTE.find((tipo) => tipo.id === tipoSeleccionado).etiqueta
 
@@ -64,6 +67,13 @@ export function ReportesPage() {
           setFiltros={setFiltrosInventario}
           categorias={categorias}
           ubicaciones={ubicaciones}
+        />
+      )}
+      {tipoSeleccionado === 'depreciacion' && (
+        <FiltrosDepreciacion
+          filtros={filtrosDepreciacion}
+          setFiltros={setFiltrosDepreciacion}
+          categorias={categorias}
         />
       )}
       {tipoSeleccionado === 'movimientos' && (

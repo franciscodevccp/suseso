@@ -62,7 +62,7 @@ export function BloqueDepreciacion({ activo, movimientos }) {
 
   return (
     <section className={estilos.tarjeta}>
-      <h2 className={estilos.tituloSeccion}>Depreciación (método lineal)</h2>
+      <h2 className={estilos.tituloSeccion}>Depreciación (método lineal mensual)</h2>
 
       {activo.estado === 'dado_de_baja' && movimientoBaja && (
         <p className={estilos.notaBaja}>
@@ -81,8 +81,14 @@ export function BloqueDepreciacion({ activo, movimientos }) {
           <dd>{vidaUtilAnios} años</dd>
         </div>
         <div>
-          <dt>Depreciación anual</dt>
-          <dd>{formatearMoneda(resultado.depreciacionAnual)}</dd>
+          <dt>Meses transcurridos</dt>
+          <dd>
+            {resultado.mesesTranscurridos} de {vidaUtilAnios * 12}
+          </dd>
+        </div>
+        <div>
+          <dt>Cuota mensual</dt>
+          <dd>{formatearMoneda(resultado.cuotaMensual)}</dd>
         </div>
         <div>
           <dt>Depreciación acumulada</dt>

@@ -36,7 +36,7 @@ function comoFilaExport(fila) {
 /** Enlace a la ficha correspondiente cuando la entidad lo permite. */
 function EnlaceEntidad({ fila }) {
   if (!fila.entidadFolio) return <span>—</span>
-  const rutas = { activo: '/activos-fijos', itemAlmacen: '/almacen', acta: '/actas-y-firma' }
+  const rutas = { activo: '/activos-fijos', itemAlmacen: '/almacen', acta: '/actas' }
   const base = rutas[fila.entidad]
   if (!base || !fila.entidadId) return <span>{fila.entidadFolio}</span>
   return (

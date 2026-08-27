@@ -157,6 +157,14 @@ export function FichaActivoPage() {
               <dt>Fecha de alta</dt>
               <dd>{formatearFecha(activo.fechaAlta)}</dd>
             </div>
+            <div>
+              <dt>Próxima mantención</dt>
+              <dd>{activo.proximaMantencion ? formatearFecha(activo.proximaMantencion) : '—'}</dd>
+            </div>
+            <div>
+              <dt>Fin de la garantía</dt>
+              <dd>{activo.finGarantia ? formatearFecha(activo.finGarantia) : '—'}</dd>
+            </div>
           </dl>
         </section>
 

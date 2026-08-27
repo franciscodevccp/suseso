@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { CampoFecha } from '../../../components/common/CampoFecha'
 import { TextField } from '../../../components/common/TextField'
 import { SelectField } from '../../../components/common/SelectField'
 import { Button } from '../../../components/common/Button'
@@ -15,6 +16,8 @@ const VALORES_VACIOS = {
   valor: '',
   codigoBarras: '',
   rfid: '',
+  proximaMantencion: '',
+  finGarantia: '',
 }
 
 function validar(valores) {
@@ -147,6 +150,33 @@ export function FormularioActivo({
           value={valores.rfid}
           onChange={(e) => actualizarCampo('rfid', e.target.value)}
         />
+
+        {/* Mantención y garantía (RQ-17, docs/07): alimentan las alertas. */}
+        <div className={camposTexto.campo}>
+          <label htmlFor="proxima-mantencion" className={camposTexto.etiqueta}>
+            Próxima mantención (opcional)
+          </label>
+          <CampoFecha
+            id="proxima-mantencion"
+            placeholder="Sin mantención programada"
+            value={valores.proximaMantencion}
+            onChange={(e) => actualizarCampo('proximaMantencion', e.target.value)}
+            className={camposTexto.input}
+          />
+        </div>
+
+        <div className={camposTexto.campo}>
+          <label htmlFor="fin-garantia" className={camposTexto.etiqueta}>
+            Fin de la garantía (opcional)
+          </label>
+          <CampoFecha
+            id="fin-garantia"
+            placeholder="Sin garantía registrada"
+            value={valores.finGarantia}
+            onChange={(e) => actualizarCampo('finGarantia', e.target.value)}
+            className={camposTexto.input}
+          />
+        </div>
       </div>
 
       <div className={estilos.acciones}>

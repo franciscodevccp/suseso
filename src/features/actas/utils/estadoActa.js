@@ -1,13 +1,13 @@
 /**
- * Estados de firma de un acta y cómo se representan (etiqueta + tono),
- * mismo patrón que estadoActivo.js. Fuente única para el badge de la
- * tabla y de la ficha.
+ * Estados de un acta y cómo se representan (etiqueta + tono), mismo
+ * patrón que estadoActivo.js. Fuente única para el badge de la tabla y
+ * de la ficha.
  */
-export const ESTADOS_FIRMA = [
+export const ESTADOS_ACTA = [
   { valor: 'pendiente', etiqueta: 'Pendiente', tono: 'advertencia' },
-  { valor: 'firmada', etiqueta: 'Firmada', tono: 'exito' },
+  { valor: 'cerrada', etiqueta: 'Cerrada', tono: 'exito' },
 ]
 
-export function obtenerInfoEstadoFirma(valor) {
-  return ESTADOS_FIRMA.find((estado) => estado.valor === valor) ?? ESTADOS_FIRMA[0]
+export function obtenerInfoEstadoActa(valor) {
+  return ESTADOS_ACTA.find((estado) => estado.valor === valor) ?? ESTADOS_ACTA[0]
 }

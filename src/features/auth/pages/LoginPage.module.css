@@ -43,3 +43,75 @@
 .reiniciar:hover {
   border-color: var(--gob-azul-claro);
 }
+
+/* --- Tarjetas de cuentas de demostración (docs/13) --- */
+
+.cuentasDemo {
+  margin-top: var(--espacio-5);
+  padding-top: var(--espacio-4);
+  border-top: 1px solid var(--gris-200);
+}
+
+.tituloCuentas {
+  margin: 0 0 var(--espacio-3);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--gris-500);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.tarjetasCuentas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--espacio-2);
+}
+
+.tarjetaCuenta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--espacio-2) var(--espacio-3);
+  border: 1px solid var(--gris-300);
+  border-radius: var(--radio-md);
+  background: var(--gris-50);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.tarjetaCuenta:hover {
+  border-color: var(--gob-azul-claro);
+  background: var(--gris-100);
+}
+
+.tarjetaCuenta:focus-visible {
+  outline: 2px solid var(--borde-foco);
+  outline-offset: 1px;
+}
+
+.rolCuenta {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--gob-azul-claro);
+}
+
+.correoCuenta {
+  font-size: 0.75rem;
+  color: var(--gris-500);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.claveCuentas {
+  margin: var(--espacio-3) 0 0;
+  font-size: 0.8125rem;
+  color: var(--gris-500);
+}
+
+@media (max-width: 420px) {
+  .tarjetasCuentas {
+    grid-template-columns: 1fr;
+  }
+}

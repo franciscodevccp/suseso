@@ -1,5 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../../features/auth/hooks/useAuth'
+import { puedeVerPanel } from '../../features/auth/utils/permisos'
+import { useResumenAlertas } from '../../features/alertas/hooks/useResumenAlertas'
 import estilos from './Sidebar.module.css'
 
 /* Iconos de línea, minimalistas e inline (sin librería externa). */
@@ -130,8 +132,8 @@ const ITEMS = [
   { to: '/almacen', etiqueta: 'Almacén', Icono: IconAlmacen, ocultoPara: ['Funcionario'] },
   { to: '/alertas', etiqueta: 'Alertas', Icono: IconAlertas, ocultoPara: ['Funcionario'] },
   {
-    to: '/actas-y-firma',
-    etiqueta: 'Actas y firma',
+    to: '/actas',
+    etiqueta: 'Actas',
     Icono: IconActas,
     ocultoPara: ['Funcionario'],
   },
@@ -156,6 +158,8 @@ const ITEMS = [
 /** Navegación institucional lateral. Colapsa a iconos en pantallas chicas (solo CSS). */
 export function Sidebar() {
   const { usuario } = useAuth()
+  // Badge de alertas vigentes, refrescado cada 60 s (docs/07).
+  const { total: totalAlertas } = useResumenAlertas(puedeVerPanel(usuario))
   const items = ITEMS.filter((item) => {
     if (item.rolRequerido) return item.rolRequerido === usuario.rol
     if (item.ocultoPara) return !item.ocultoPara.includes(usuario.rol)
@@ -172,12 +176,19 @@ export function Sidebar() {
               className={({ isActive }) =>
                 isActive ? `${estilos.item} ${estilos.activo}` : estilos.item
               }
-              aria-label={etiqueta}
+              aria-label={
+                to === '/alertas' && totalAlertas > 0
+                  ? `${etiqueta} (${totalAlertas} vigentes)`
+                  : etiqueta
+              }
             >
               <span className={estilos.icono}>
                 <Icono />
               </span>
               <span className={estilos.etiqueta}>{etiqueta}</span>
+              {to === '/alertas' && totalAlertas > 0 && (
+                <span className={estilos.badgeAlertas}>{totalAlertas}</span>
+              )}
             </NavLink>
           </li>
         ))}

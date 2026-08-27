@@ -11,4 +11,8 @@ export default defineConfig({
       '/api': 'http://localhost:3001',
     },
   },
+  // Vitest (unitarias): separado de tests/e2e, que es de Playwright.
+  test: {
+    include: ['tests/unitarias/**/*.test.js'],
+  },
 })

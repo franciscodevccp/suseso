@@ -15,7 +15,7 @@
 - **D-12 No se toca por estética:** nombres de claves de `localStorage` (desaparecen con D-07), `auth/constants/mensajes.js`, la ubicación de `ProtectedRoute.jsx` y `RutaAdministrativa.jsx`. Cero puntos, riesgo de churn. Los comentarios desactualizados de los mocks se corrigen al reemplazar cada mock.
 
 ## Pendientes de Francisco
-- **T-01** Nombre definitivo del producto: `SISGA` (código y título actuales) o `ActivosCloud` (documentación previa). Afecta `src/config/producto.js`, `index.html`, manual, `openapi.yaml` y la propuesta.
+- **T-01** ~~Nombre definitivo del producto~~ **Resuelto el 2026-08-27: SISGA** (decisión de Francisco). Aplicado en `src/config/producto.js`, `index.html` y el pie del login; falta usarlo en manual y `openapi.yaml` cuando existan (C1/D).
 - **T-02** ~~Entregar `MP_API_TICKET`~~ **Ticket entregado y validado contra la API el 2026-08-26** (listado por fecha y detalle por código funcionan; el valor vive solo en `.env`, nunca en el repo). Pendiente: elegir 3–5 códigos de OC públicas de mobiliario/computación para el seed — se pueden obtener del propio listado por fecha al construir C1.
 - **T-03** Definir `CLAVE_DEMO` y `API_DEMO_KEY` (van al manual y a la oferta; se rotan tras la adjudicación).
 - **T-04** Confirmar el compromiso de disponibilidad del Anexo 2B (99,5 %) para que el manual y `/api/salud` hablen el mismo idioma.

@@ -83,6 +83,8 @@ export function EditarActivoPage() {
             valor: String(activo.valor ?? ''),
             codigoBarras: activo.codigoBarras,
             rfid: activo.rfid,
+            proximaMantencion: activo.proximaMantencion?.slice(0, 10) ?? '',
+            finGarantia: activo.finGarantia?.slice(0, 10) ?? '',
           }}
           categorias={categorias}
           ubicaciones={ubicaciones}

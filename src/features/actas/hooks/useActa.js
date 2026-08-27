@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import * as actasService from '../services/actasService'
 
-/** Trae un acta por id, para la ficha. Expone recargar() (usado tras firmar). */
+/** Trae un acta por id, para la ficha. Expone recargar() (usado tras el cierre). */
 export function useActa(id) {
   const [acta, setActa] = useState(null)
   const [cargando, setCargando] = useState(true)

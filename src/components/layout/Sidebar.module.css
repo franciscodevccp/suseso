@@ -76,3 +76,29 @@
     white-space: nowrap;
   }
 }
+
+/* Badge numérico de alertas vigentes (docs/07). */
+.badgeAlertas {
+  margin-left: auto;
+  min-width: 20px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--gob-rojo-bandera);
+  color: var(--marca-blanco);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .badgeAlertas {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    margin-left: 0;
+  }
+}
+
+.item {
+  position: relative;
+}

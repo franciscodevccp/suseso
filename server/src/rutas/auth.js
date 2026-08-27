@@ -10,6 +10,7 @@ import { Router } from 'express'
 import argon2 from 'argon2'
 import { z } from 'zod'
 import { evaluarClave } from '../../../shared/passwordRules.js'
+import { config } from '../config.js'
 import { db } from '../db.js'
 import { ErrorHttp } from '../http/errores.js'
 import { usuarioPublico } from '../dominio/roles.js'
@@ -118,6 +119,26 @@ rutasAuth.post('/login', limitadorLogin, async (req, res, next) => {
     req.session.creadaEn = Date.now()
 
     res.json({ usuario: usuarioPublico(usuario), requiereCambioClave: usuario.claveTemporal })
+  } catch (err) {
+    next(err)
+  }
+})
+
+// Tarjetas del login (docs/13): las 4 cuentas demo con su clave visible.
+// Activo solo si MOSTRAR_CUENTAS_DEMO=true; se apaga tras la adjudicación.
+rutasAuth.get('/cuentas-demo', async (_req, res, next) => {
+  try {
+    if (config.MOSTRAR_CUENTAS_DEMO !== 'true') {
+      throw new ErrorHttp('NO_ENCONTRADO', 404)
+    }
+    const cuentas = await db.usuario.findMany({
+      where: { esCuentaDemo: true },
+      orderBy: { rol: 'asc' },
+    })
+    res.json({
+      claveDemo: config.CLAVE_DEMO,
+      cuentas: cuentas.map((u) => usuarioPublico(u)).map(({ nombre, email, rol }) => ({ nombre, email, rol })),
+    })
   } catch (err) {
     next(err)
   }

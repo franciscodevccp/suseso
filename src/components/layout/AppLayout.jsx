@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
+import { BannerDemostracion } from './BannerDemostracion'
 import { EncabezadoInstitucional } from './EncabezadoInstitucional'
 import { MenuPerfil } from './MenuPerfil'
 import { Sidebar } from './Sidebar'
@@ -26,6 +27,7 @@ export function AppLayout() {
 
   return (
     <div className={estilos.layout}>
+      <BannerDemostracion />
       <EncabezadoInstitucional accionDerecha={<MenuPerfil />} />
       <div className={estilos.cuerpo}>
         <Sidebar />

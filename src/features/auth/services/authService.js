@@ -26,6 +26,18 @@ export function login({ email, password }) {
   return llamada(() => http('POST', '/api/auth/login', { cuerpo: { email, password } }))
 }
 
+/**
+ * Tarjetas del login (docs/13). Devuelve null si el servidor las tiene
+ * apagadas (MOSTRAR_CUENTAS_DEMO=false): el login simplemente no las pinta.
+ */
+export async function obtenerCuentasDemo() {
+  try {
+    return await http('GET', '/api/auth/cuentas-demo')
+  } catch {
+    return null
+  }
+}
+
 export function obtenerSesionActual() {
   return llamada(() => http('GET', '/api/auth/sesion'))
 }

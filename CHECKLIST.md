@@ -52,17 +52,17 @@
 - [x] Pantalla solo lectura **Configuración → Perfiles y permisos** generada desde `permisos.js`, con subnavegación de Configuración (`docs/04`)
 - [x] Extra de UI de esta pasada: `CampoFecha` (calendario propio es-CL, reutilizable en B2), popups con alineación automática contra el borde, campos numéricos sin flechas nativas
 
-## Bloque B2 — Alertas, textos y depreciación mensual (no recortable)
+## Bloque B2 — Alertas, textos y depreciación mensual (no recortable) ✅
 
-- [ ] Campos `proximaMantencion` / `finGarantia` en formulario y ficha de activo (RQ-17)
-- [ ] Alertas: `GET /api/alertas` + `resumen`, pantalla `/alertas` con badge en sidebar (`docs/07`)
-- [ ] `BannerDemostracion` fijo en todas las pantallas, incluido login (`docs/13`)
-- [ ] Login según `docs/13`: tarjetas "Cuentas de demostración" clicables (vía `GET /api/auth/cuentas-demo`), sin "entorno mock", sin botón de reinicio, cuentas `@demo.cl`
-- [ ] Reinicio de demo movido a **Configuración → Reiniciar demo** (solo Administrador) (`docs/13`, `docs/14`)
-- [ ] Renombre Actas (D-03): ruta `/actas`, "Actas de asignación", `cerrarActa`, campos `estado/cerradaPor/fechaCierre/selloIntegridad`, cero menciones a firma/Ley 19.799 (`grep -rni "firma" src/features/actas` = 0) (`docs/13`)
-- [ ] Depreciación **lineal mensual** en `shared/depreciacion.js` (residual $1, tabla anual, vida acelerada, `vidaUtilRestanteMeses`) usada por front y servidor (`docs/09`, DEMO-05, D-06)
-- [ ] Tabla de vida útil con columna "Acelerada", texto de referencia SII y validación (`docs/09`)
-- [ ] Nombre del producto desde `src/config/producto.js` + título de `index.html` — **necesita T-01**
+- [x] Campos `proximaMantencion` / `finGarantia` con calendario propio en formulario y ficha de activo (RQ-17)
+- [x] Alertas: pantalla `/alertas` con filtros por tipo/severidad, export y estado vacío + **badge numérico en el Sidebar** refrescado cada 60 s (`docs/07`); los endpoints venían de A2
+- [x] `BannerDemostracion` ámbar fijo en TODAS las pantallas, login incluido; oculto solo al imprimir (`docs/13`)
+- [x] Login según `docs/13`: 4 tarjetas clicables que completan el formulario, clave entregada por `GET /api/auth/cuentas-demo` (activo solo con `MOSTRAR_CUENTAS_DEMO=true`), sin "entorno mock" ni botón de reinicio
+- [x] **Configuración → Reiniciar demo** (solo Administrador, con confirmación): restaura el seed, cierra las sesiones y vuelve al login con aviso (`docs/13`, `docs/14`)
+- [x] Renombre Actas (D-03) ejecutado completo: ruta `/actas`, "Actas de asignación y entrega", `cerrarActa`, campos definitivos sin traducciones, **cero menciones a firma/Ley 19.799**, y botón **"Verificar integridad"** que recalcula el sello en el servidor y compara (verificado en verde en pantalla)
+- [x] Depreciación **lineal mensual** en `shared/depreciacion.js` (residual $1, cuota mensual, meses transcurridos, tabla anual, vida acelerada, `vidaUtilRestanteMeses`) usada por ficha, panel y reportes — con **7 pruebas unitarias en verde** (los casos exactos de `docs/09` §Tests); el reporte ganó fecha de alta, meses, columna acelerada y filtros de categoría/fecha de corte
+- [x] Nombre del producto desde `src/config/producto.js` (**T-01 resuelto: SISGA**) + título `SISGA · Gestión de activos fijos y almacén`
+- [ ] Tabla de vida útil con columna "Acelerada" visible y texto de referencia SII en la pantalla (`docs/09`) — los datos ya existen en BD y el reporte ya la usa; falta solo exponer la columna en Configuración → Vida útil
 
 ## Bloque B3 — Adjuntos con georreferencia (no recortable)
 

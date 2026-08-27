@@ -38,7 +38,7 @@ export function CrearActaPage() {
         activoFolio: activoSeleccionado?.folio ?? null,
         activoNombre: activoSeleccionado?.nombre ?? null,
       })
-      navigate('/actas-y-firma')
+      navigate('/actas')
     } catch (err) {
       setError(obtenerMensajeErrorActa(err.code))
     } finally {
@@ -57,7 +57,7 @@ export function CrearActaPage() {
           enviando={enviando}
           error={error}
           onEnviar={manejarEnvio}
-          onCancelar={() => navigate('/actas-y-firma')}
+          onCancelar={() => navigate('/actas')}
         />
       </div>
     </div>

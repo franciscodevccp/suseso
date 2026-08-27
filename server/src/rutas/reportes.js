@@ -70,25 +70,40 @@ rutasReportes.get('/inventario', autorizar(...PANEL), async (req, res, next) => 
 rutasReportes.get('/depreciacion', autorizar(...PANEL), async (req, res, next) => {
   try {
     const fechaCorteParam = req.query.fechaCorte ? new Date(String(req.query.fechaCorte)) : undefined
+    const filtroCategoria = String(req.query.categoria ?? '')
     const [activos, categorias, bajas] = await Promise.all([
-      db.activo.findMany({ where: { valor: { gt: 0 } }, orderBy: { folio: 'asc' } }),
+      db.activo.findMany({
+        where: { valor: { gt: 0 }, ...(filtroCategoria ? { categoria: filtroCategoria } : {}) },
+        orderBy: { folio: 'asc' },
+      }),
       db.categoria.findMany(),
       db.movimientoActivo.findMany({ where: { tipo: 'baja' }, orderBy: { fecha: 'desc' } }),
     ])
-    const vidaUtil = new Map(categorias.map((c) => [c.nombre, c.vidaUtilAnios]))
+    const vidaUtil = new Map(categorias.map((c) => [c.nombre, c]))
     const fechaBaja = new Map()
     for (const m of bajas) if (!fechaBaja.has(m.activoId)) fechaBaja.set(m.activoId, m.fecha)
 
+    const formatearFecha = (fecha) => new Date(fecha).toLocaleDateString('es-CL')
+    const hayAcelerada = activos.some((a) => vidaUtil.get(a.categoria)?.vidaUtilAcelerada)
+
     const filas = activos.map((a) => {
-      const anios = vidaUtil.get(a.categoria) ?? null
+      const cat = vidaUtil.get(a.categoria)
       const base = {
         folio: a.folio,
         nombre: a.nombre,
         categoria: a.categoria,
+        fechaAlta: formatearFecha(a.fechaAlta),
         valorAdquisicion: formatearMoneda(Number(a.valor)),
       }
-      if (!anios) {
-        return { ...base, vidaUtil: 'Sin configurar', depreciacionAnual: '—', depreciacionAcumulada: '—', valorLibro: '—' }
+      if (!cat?.vidaUtilAnios) {
+        return {
+          ...base,
+          vidaUtil: 'Sin configurar',
+          meses: '—',
+          depreciacionAcumulada: '—',
+          valorLibro: '—',
+          valorLibroAcelerado: '—',
+        }
       }
       // Misma regla que la ficha: si está dado de baja, el cálculo se
       // detiene en la fecha del movimiento de baja.
@@ -96,15 +111,17 @@ rutasReportes.get('/depreciacion', autorizar(...PANEL), async (req, res, next) =
       const r = calcularDepreciacion({
         valor: Number(a.valor),
         fechaAlta: a.fechaAlta,
-        vidaUtilAnios: anios,
+        vidaUtilAnios: cat.vidaUtilAnios,
+        vidaUtilAcelerada: cat.vidaUtilAcelerada ?? null,
         ...(fechaCorte ? { fechaCorte } : {}),
       })
       return {
         ...base,
-        vidaUtil: `${anios} años`,
-        depreciacionAnual: formatearMoneda(r.depreciacionAnual),
+        vidaUtil: `${cat.vidaUtilAnios} años`,
+        meses: `${r.mesesTranscurridos} de ${cat.vidaUtilAnios * 12}`,
         depreciacionAcumulada: formatearMoneda(r.depreciacionAcumulada),
         valorLibro: formatearMoneda(r.valorLibro),
+        valorLibroAcelerado: r.acelerada ? formatearMoneda(r.acelerada.valorLibro) : '—',
       }
     })
 
@@ -113,11 +130,15 @@ rutasReportes.get('/depreciacion', autorizar(...PANEL), async (req, res, next) =
         { clave: 'folio', etiqueta: 'Folio' },
         { clave: 'nombre', etiqueta: 'Nombre' },
         { clave: 'categoria', etiqueta: 'Categoría' },
+        { clave: 'fechaAlta', etiqueta: 'Fecha de alta' },
         { clave: 'valorAdquisicion', etiqueta: 'Valor de adquisición' },
         { clave: 'vidaUtil', etiqueta: 'Vida útil' },
-        { clave: 'depreciacionAnual', etiqueta: 'Depreciación anual' },
+        { clave: 'meses', etiqueta: 'Meses' },
         { clave: 'depreciacionAcumulada', etiqueta: 'Depreciación acumulada' },
         { clave: 'valorLibro', etiqueta: 'Valor libro' },
+        ...(hayAcelerada
+          ? [{ clave: 'valorLibroAcelerado', etiqueta: 'Valor libro (acelerada)' }]
+          : []),
       ],
       filas,
     })

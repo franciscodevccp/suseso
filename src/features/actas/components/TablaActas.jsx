@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { BadgeEstado } from '../../../components/common/BadgeEstado'
-import { obtenerInfoEstadoFirma } from '../utils/estadoActa'
+import { obtenerInfoEstadoActa } from '../utils/estadoActa'
 import estilos from './TablaActas.module.css'
 
 const ETIQUETA_TIPO = { recepcion: 'Recepción', entrega: 'Entrega' }
@@ -38,7 +38,7 @@ export function TablaActas({ actas, cargando }) {
 
   function manejarClicFila(evento, id) {
     if (evento.target.closest('a')) return
-    navigate(`/actas-y-firma/${id}`)
+    navigate(`/actas/${id}`)
   }
 
   return (
@@ -57,7 +57,7 @@ export function TablaActas({ actas, cargando }) {
           {actas.map((acta) => (
             <tr key={acta.id} className={estilos.fila} onClick={(e) => manejarClicFila(e, acta.id)}>
               <td data-etiqueta="Folio">
-                <Link to={`/actas-y-firma/${acta.id}`} className={estilos.enlaceFolio}>
+                <Link to={`/actas/${acta.id}`} className={estilos.enlaceFolio}>
                   {acta.folio}
                 </Link>
               </td>
@@ -67,7 +67,7 @@ export function TablaActas({ actas, cargando }) {
               </td>
               <td data-etiqueta="Responsable">{acta.responsable}</td>
               <td data-etiqueta="Estado">
-                <BadgeEstado {...obtenerInfoEstadoFirma(acta.estadoFirma)} />
+                <BadgeEstado {...obtenerInfoEstadoActa(acta.estado)} />
               </td>
             </tr>
           ))}

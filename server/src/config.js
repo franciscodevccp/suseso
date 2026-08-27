@@ -22,6 +22,8 @@ const esquema = z.object({
   PUERTO: z.coerce.number().int().positive(),
   ORIGEN_PERMITIDO: z.string().min(1),
   STORAGE_DIR: z.string().min(1),
+  // Tarjetas de cuentas demo en el login (docs/13); apagar tras la adjudicación.
+  MOSTRAR_CUENTAS_DEMO: z.enum(['true', 'false']),
 })
 
 const resultado = esquema.safeParse(process.env)

@@ -91,6 +91,24 @@ rutasActas.post('/', autorizar(...GESTION), async (req, res, next) => {
   }
 })
 
+// Verificación de integridad (docs/13): recalcula el sello con los datos
+// guardados y lo compara con el emitido al cierre.
+rutasActas.get('/:id/verificar', autorizar(...PANEL), async (req, res, next) => {
+  try {
+    const acta = await db.acta.findUnique({ where: { id: req.params.id } })
+    if (!acta) throw new ErrorHttp('ACTA_NO_ENCONTRADA', 404)
+    if (acta.estado !== 'cerrada' || !acta.selloIntegridad) {
+      throw new ErrorHttp('ACTA_NO_CERRADA', 409)
+    }
+    const recalculado = createHash('sha256')
+      .update(`${acta.folio}|${acta.contenido}|${acta.cerradaPor}|${acta.fechaCierre.toISOString()}`)
+      .digest('hex')
+    res.json({ valido: recalculado === acta.selloIntegridad })
+  } catch (err) {
+    next(err)
+  }
+})
+
 rutasActas.post('/:id/cerrar', autorizar(...GESTION), async (req, res, next) => {
   try {
     const acta = await db.acta.findUnique({ where: { id: req.params.id } })

@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Button } from '../../../components/common/Button'
 import { BadgeEstado } from '../../../components/common/BadgeEstado'
-import { ModalConfirmarFirma } from '../components/ModalConfirmarFirma'
+import { Alert } from '../../../components/common/Alert'
+import { ModalCerrarActa } from '../components/ModalCerrarActa'
 import { useActa } from '../hooks/useActa'
 import { useAuth } from '../../auth/hooks/useAuth'
 import { puedeGestionarActas } from '../utils/permisosActas'
-import { obtenerInfoEstadoFirma } from '../utils/estadoActa'
+import { obtenerInfoEstadoActa } from '../utils/estadoActa'
 import { obtenerMensajeErrorActa } from '../constants/mensajesActas'
 import * as actasService from '../services/actasService'
 import estilos from './FichaActaPage.module.css'
@@ -19,16 +20,18 @@ const formatearFechaHora = (fecha) =>
 /** Agrupa el hash en bloques de 8 caracteres, para que se lea como un sello. */
 const formatearSello = (sello) => sello.match(/.{1,8}/g).join(' ')
 
-/** Ficha de un acta: sus datos, y la acción/estado de firma electrónica. */
+/** Ficha de un acta: sus datos, el cierre y el sello de integridad. */
 export function FichaActaPage() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { usuario } = useAuth()
   const { acta, cargando, recargar } = useActa(id)
 
-  const [modalFirmaAbierto, setModalFirmaAbierto] = useState(false)
-  const [enviandoFirma, setEnviandoFirma] = useState(false)
-  const [errorFirma, setErrorFirma] = useState(null)
+  const [modalCierreAbierto, setModalCierreAbierto] = useState(false)
+  const [enviandoCierre, setEnviandoCierre] = useState(false)
+  const [errorCierre, setErrorCierre] = useState(null)
+  const [verificacion, setVerificacion] = useState(null) // { valido: boolean }
+  const [verificando, setVerificando] = useState(false)
 
   if (cargando) {
     return <p className={estilos.cargando}>Cargando acta…</p>
@@ -39,24 +42,36 @@ export function FichaActaPage() {
       <div className={estilos.noEncontrada}>
         <h1>Acta no encontrada</h1>
         <p>El acta que buscas no existe.</p>
-        <Link to="/actas-y-firma">Volver al listado</Link>
+        <Link to="/actas">Volver al listado</Link>
       </div>
     )
   }
 
-  const puedeFirmar = puedeGestionarActas(usuario) && acta.estadoFirma === 'pendiente'
+  const puedeCerrar = puedeGestionarActas(usuario) && acta.estado === 'pendiente'
 
-  async function confirmarFirma() {
-    setErrorFirma(null)
-    setEnviandoFirma(true)
+  async function confirmarCierre() {
+    setErrorCierre(null)
+    setEnviandoCierre(true)
     try {
-      await actasService.firmarActa(id, usuario.nombre)
-      setModalFirmaAbierto(false)
+      await actasService.cerrarActa(id)
+      setModalCierreAbierto(false)
       recargar()
     } catch (err) {
-      setErrorFirma(obtenerMensajeErrorActa(err.code))
+      setErrorCierre(obtenerMensajeErrorActa(err.code))
     } finally {
-      setEnviandoFirma(false)
+      setEnviandoCierre(false)
+    }
+  }
+
+  async function verificarIntegridad() {
+    setVerificando(true)
+    setVerificacion(null)
+    try {
+      setVerificacion(await actasService.verificarIntegridad(id))
+    } catch {
+      setVerificacion({ valido: false })
+    } finally {
+      setVerificando(false)
     }
   }
 
@@ -66,7 +81,7 @@ export function FichaActaPage() {
         variante="secundario"
         anchoCompleto={false}
         className={estilos.botonVolver}
-        onClick={() => navigate('/actas-y-firma')}
+        onClick={() => navigate('/actas')}
       >
         ← Volver al listado
       </Button>
@@ -76,7 +91,7 @@ export function FichaActaPage() {
           <p className={estilos.folio}>{acta.folio}</p>
           <h1 className={estilos.nombre}>{ETIQUETA_TIPO[acta.tipo] ?? acta.tipo}</h1>
         </div>
-        <BadgeEstado {...obtenerInfoEstadoFirma(acta.estadoFirma)} />
+        <BadgeEstado {...obtenerInfoEstadoActa(acta.estado)} />
       </header>
 
       <section className={estilos.tarjeta}>
@@ -107,50 +122,71 @@ export function FichaActaPage() {
         <p className={estilos.contenido}>{acta.contenido}</p>
       </section>
 
-      {acta.estadoFirma === 'firmada' ? (
+      {acta.estado === 'cerrada' ? (
         <section className={estilos.tarjetaFirma}>
-          <h2 className={estilos.tituloSeccion}>Firma electrónica</h2>
+          <h2 className={estilos.tituloSeccion}>Sello de integridad</h2>
           <dl className={estilos.listaDatos}>
             <div>
-              <dt>Firmante</dt>
-              <dd>{acta.firmante}</dd>
+              <dt>Cerrada por</dt>
+              <dd>{acta.cerradaPor}</dd>
             </div>
             <div>
-              <dt>Fecha de firma</dt>
-              <dd>{formatearFechaHora(acta.fechaFirma)}</dd>
+              <dt>Fecha de cierre</dt>
+              <dd>{formatearFechaHora(acta.fechaCierre)}</dd>
             </div>
           </dl>
-          <p className={estilos.etiquetaSello}>Sello de verificación</p>
-          <p className={estilos.sello}>{formatearSello(acta.selloVerificacion)}</p>
+          <p className={estilos.etiquetaSello}>Sello de integridad (SHA-256)</p>
+          <p className={estilos.sello}>{formatearSello(acta.selloIntegridad)}</p>
+
+          {verificacion &&
+            (verificacion.valido ? (
+              <Alert tipo="exito">
+                Integridad verificada: el contenido no fue modificado desde el cierre.
+              </Alert>
+            ) : (
+              <Alert tipo="error">
+                El sello no coincide: el contenido pudo ser modificado después del cierre.
+              </Alert>
+            ))}
+
+          <Button
+            variante="secundario"
+            anchoCompleto={false}
+            onClick={verificarIntegridad}
+            disabled={verificando}
+          >
+            {verificando ? 'Verificando…' : 'Verificar integridad'}
+          </Button>
+
           <p className={estilos.notaLey}>
-            Firma electrónica representativa con fines de demostración. En
-            producción se integra con un proveedor de firma electrónica
-            avanzada acreditado, conforme a la Ley 19.799.
+            El sello permite comprobar que el contenido del acta no cambió desde su cierre.
           </p>
         </section>
       ) : (
-        puedeFirmar && (
+        puedeCerrar && (
           <section className={estilos.tarjetaFirma}>
-            <h2 className={estilos.tituloSeccion}>Firma electrónica</h2>
-            <p className={estilos.vacioChico}>Esta acta todavía no ha sido firmada.</p>
-            <Button anchoCompleto={false} onClick={() => setModalFirmaAbierto(true)}>
-              Firmar electrónicamente
+            <h2 className={estilos.tituloSeccion}>Cierre del acta</h2>
+            <p className={estilos.vacioChico}>
+              Esta acta está pendiente. Al cerrarla se genera su sello de integridad.
+            </p>
+            <Button anchoCompleto={false} onClick={() => setModalCierreAbierto(true)}>
+              Cerrar acta
             </Button>
           </section>
         )
       )}
 
-      {modalFirmaAbierto && (
-        <ModalConfirmarFirma
+      {modalCierreAbierto && (
+        <ModalCerrarActa
           acta={acta}
           usuario={usuario}
           onCerrar={() => {
-            setModalFirmaAbierto(false)
-            setErrorFirma(null)
+            setModalCierreAbierto(false)
+            setErrorCierre(null)
           }}
-          onConfirmar={confirmarFirma}
-          enviando={enviandoFirma}
-          error={errorFirma}
+          onConfirmar={confirmarCierre}
+          enviando={enviandoCierre}
+          error={errorCierre}
         />
       )}
     </div>

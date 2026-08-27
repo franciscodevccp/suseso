@@ -1,3 +1,5 @@
+import { DESCRIPCION_PRODUCTO, NOMBRE_PRODUCTO } from '../../config/producto'
+import { BannerDemostracion } from './BannerDemostracion'
 import { EncabezadoInstitucional } from './EncabezadoInstitucional'
 import estilos from './AuthLayout.module.css'
 
@@ -5,6 +7,7 @@ import estilos from './AuthLayout.module.css'
 export function AuthLayout({ titulo, subtitulo, children }) {
   return (
     <div className={estilos.pagina}>
+      <BannerDemostracion />
       <EncabezadoInstitucional />
       <main className={estilos.contenido}>
         <div className={estilos.tarjeta}>
@@ -14,7 +17,7 @@ export function AuthLayout({ titulo, subtitulo, children }) {
         </div>
       </main>
       <footer className={estilos.pie}>
-        Sistema Integral de Gestión de Activos Fijos y Almacén — SUSESO
+        {NOMBRE_PRODUCTO} · {DESCRIPCION_PRODUCTO} — SUSESO
       </footer>
     </div>
   )

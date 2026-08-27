@@ -10,7 +10,7 @@ import { AccountLockedPage } from './features/auth/pages/AccountLockedPage'
 import { SessionExpiredPage } from './features/auth/pages/SessionExpiredPage'
 import { ChangePasswordPage } from './features/auth/pages/ChangePasswordPage'
 import { AppLayout } from './components/layout/AppLayout'
-import { ModuloEnConstruccion } from './components/layout/ModuloEnConstruccion'
+import { AlertasPage } from './features/alertas/pages/AlertasPage'
 import { InicioPage } from './features/dashboard/pages/InicioPage'
 import { ListadoActivosPage } from './features/activos/pages/ListadoActivosPage'
 import { FichaActivoPage } from './features/activos/pages/FichaActivoPage'
@@ -32,6 +32,7 @@ import { ReportesPage } from './features/reportes/pages/ReportesPage'
 import { UsuariosPage } from './features/usuarios/pages/UsuariosPage'
 import { AuditoriaPage } from './features/auditoria/pages/AuditoriaPage'
 import { PerfilesPermisosPage } from './features/configuracion/pages/PerfilesPermisosPage'
+import { ReiniciarDemoPage } from './features/configuracion/pages/ReiniciarDemoPage'
 
 function App() {
   return (
@@ -68,15 +69,16 @@ function App() {
             <Route path="/almacen" element={<ListadoAlmacenPage />} />
             <Route path="/almacen/nuevo" element={<AltaItemPage />} />
             <Route path="/almacen/:id" element={<FichaItemPage />} />
-            <Route path="/alertas" element={<ModuloEnConstruccion titulo="Alertas" />} />
-            <Route path="/actas-y-firma" element={<ListadoActasPage />} />
-            <Route path="/actas-y-firma/nueva" element={<CrearActaPage />} />
-            <Route path="/actas-y-firma/:id" element={<FichaActaPage />} />
+            <Route path="/alertas" element={<AlertasPage />} />
+            <Route path="/actas" element={<ListadoActasPage />} />
+            <Route path="/actas/nueva" element={<CrearActaPage />} />
+            <Route path="/actas/:id" element={<FichaActaPage />} />
             <Route path="/integraciones" element={<DocumentacionApiPage />} />
             <Route path="/integraciones/sigfe" element={<IntegracionSigfePage />} />
             <Route path="/integraciones/mercadopublico" element={<IntegracionMercadoPublicoPage />} />
             <Route path="/configuracion/vida-util" element={<VidaUtilPage />} />
             <Route path="/configuracion/perfiles" element={<PerfilesPermisosPage />} />
+            <Route path="/configuracion/reiniciar-demo" element={<ReiniciarDemoPage />} />
             <Route path="/reportes" element={<ReportesPage />} />
             <Route path="/auditoria" element={<AuditoriaPage />} />
             <Route path="/usuarios" element={<UsuariosPage />} />

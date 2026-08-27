@@ -32,7 +32,12 @@ const esquemaDatos = z.object({
   valor: z.coerce.number().optional().default(0),
   codigoBarras: z.string().optional().default(''),
   rfid: z.string().optional().default(''),
+  // Mantención y garantía (RQ-17): fechas AAAA-MM-DD u omitidas.
+  proximaMantencion: z.string().optional().default(''),
+  finGarantia: z.string().optional().default(''),
 })
+
+const comoFecha = (valor) => (valor ? new Date(valor) : null)
 
 function validarNombre(datos) {
   if (!datos.nombre?.trim()) throw new ErrorHttp('NOMBRE_REQUERIDO', 400)
@@ -155,6 +160,8 @@ rutasActivos.post('/', autorizar(...GESTION), async (req, res, next) => {
           estado: 'activo',
           valor: datos.valor,
           fechaAlta: new Date(),
+          proximaMantencion: comoFecha(datos.proximaMantencion),
+          finGarantia: comoFecha(datos.finGarantia),
         },
       })
       await tx.movimientoActivo.create({
@@ -205,6 +212,8 @@ rutasActivos.put('/:id', autorizar(...GESTION), async (req, res, next) => {
           valor: datos.valor,
           codigoBarras: normalizarCodigo(datos.codigoBarras),
           rfid: normalizarCodigo(datos.rfid),
+          proximaMantencion: comoFecha(datos.proximaMantencion),
+          finGarantia: comoFecha(datos.finGarantia),
         },
       })
       await tx.movimientoActivo.create({
