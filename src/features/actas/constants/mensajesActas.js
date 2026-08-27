@@ -1,4 +1,4 @@
-/** Mensajes en español para los códigos de error de actasService.mock.js. */
+/** Mensajes en español para los códigos de error del servicio de actas. */
 const MENSAJES = {
   RESPONSABLE_REQUERIDO: 'El responsable es obligatorio.',
   CONTENIDO_REQUERIDO: 'Describa el contenido del acta.',

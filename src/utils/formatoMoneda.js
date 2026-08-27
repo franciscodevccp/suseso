@@ -1,4 +1,2 @@
-/** Formato de moneda CLP compartido por todo el sistema (sin decimales). */
-export function formatearMoneda(valor) {
-  return (valor ?? 0).toLocaleString('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 })
-}
+/** Reexporta el formato CLP compartido con el servidor (reportes, docs/03). */
+export { formatearMoneda } from '../../shared/formatoMoneda.js'

@@ -1,4 +1,4 @@
-/** Mensajes en español para los códigos de error de activosService.mock.js. */
+/** Mensajes en español para los códigos de error del servicio de activos. */
 const MENSAJES = {
   NOMBRE_REQUERIDO: 'El nombre del activo es obligatorio.',
   ACTIVO_NO_ENCONTRADO: 'No fue posible encontrar el activo. Intente nuevamente.',

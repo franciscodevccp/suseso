@@ -29,6 +29,11 @@ export function obtenerUbicaciones() {
   return llamada(() => http('GET', '/api/catalogos/ubicaciones'))
 }
 
+/** Responsables para el filtro del listado (RQ-13); nueva respecto del mock. */
+export function obtenerFuncionarios() {
+  return llamada(() => http('GET', '/api/catalogos/funcionarios'))
+}
+
 export function buscarActivos({ texto = '', categoria = '', ubicacion = '', estado = '', responsable = '' } = {}) {
   const filtros = new URLSearchParams()
   if (texto.trim()) filtros.set('texto', texto.trim())

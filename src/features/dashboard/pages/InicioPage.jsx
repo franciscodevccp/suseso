@@ -2,6 +2,7 @@ import { useAuth } from '../../auth/hooks/useAuth'
 import { useDashboardResumen } from '../hooks/useDashboardResumen'
 import { KpiCard } from '../components/KpiCard'
 import { EmptyChartCard } from '../components/EmptyChartCard'
+import { GraficoBarras } from '../components/GraficoBarras'
 import { RecentActivity } from '../components/RecentActivity'
 import { formatearMoneda } from '../../../utils/formatoMoneda'
 import estilos from './InicioPage.module.css'
@@ -35,6 +36,13 @@ export function InicioPage() {
               tono="neutro"
             />
             <KpiCard
+              titulo="Valor libro total"
+              valor={datos.indicadores.valorLibroTotal ?? 0}
+              formatear={formatearMoneda}
+              mensaje="Según la tabla de vida útil vigente"
+              tono="neutro"
+            />
+            <KpiCard
               titulo="Alertas vigentes"
               valor={datos.indicadores.alertasVigentes}
               mensaje="Sin alertas activas por ahora"
@@ -46,11 +54,38 @@ export function InicioPage() {
               mensaje="Sin ítems bajo el mínimo"
               tono="positivo"
             />
+            <KpiCard
+              titulo="Solicitudes pendientes"
+              valor={datos.indicadores.solicitudesPendientes ?? 0}
+              mensaje="Sin solicitudes por resolver"
+              tono="positivo"
+            />
           </div>
 
           <div className={estilos.gridGraficos}>
-            <EmptyChartCard titulo="Distribución por estado" />
-            <EmptyChartCard titulo="Activos por categoría" />
+            {datos.distribucionEstado.length > 0 ? (
+              <GraficoBarras
+                titulo="Distribución por estado"
+                series={datos.distribucionEstado.map((fila) => ({
+                  etiqueta: fila.etiqueta,
+                  cantidad: fila.cantidad,
+                }))}
+              />
+            ) : (
+              <EmptyChartCard titulo="Distribución por estado" />
+            )}
+            {datos.activosPorCategoria.length > 0 ? (
+              <GraficoBarras
+                titulo="Activos por categoría"
+                series={datos.activosPorCategoria.map((fila) => ({
+                  etiqueta: fila.categoria,
+                  cantidad: fila.cantidad,
+                  secundario: formatearMoneda(fila.valor),
+                }))}
+              />
+            ) : (
+              <EmptyChartCard titulo="Activos por categoría" />
+            )}
           </div>
 
           <RecentActivity items={datos.actividadReciente} />

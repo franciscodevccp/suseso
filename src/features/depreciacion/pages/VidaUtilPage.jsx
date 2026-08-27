@@ -3,7 +3,7 @@ import { TablaVidaUtil } from '../components/TablaVidaUtil'
 import { useTablaVidaUtil } from '../hooks/useTablaVidaUtil'
 import { useAuth } from '../../auth/hooks/useAuth'
 import { puedeEditarVidaUtil } from '../utils/permisosVidaUtil'
-import * as vidaUtilService from '../mock/vidaUtilService.mock'
+import * as vidaUtilService from '../services/vidaUtilService'
 import estilos from './VidaUtilPage.module.css'
 
 /** Configuración de vida útil por categoría, base del cálculo de depreciación. */

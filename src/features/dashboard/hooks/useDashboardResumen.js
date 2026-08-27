@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import * as dashboardService from '../mock/dashboardService.mock'
+import * as dashboardService from '../services/dashboardService'
 
 /** Orquesta las llamadas mock del panel de control en paralelo. */
 export function useDashboardResumen() {

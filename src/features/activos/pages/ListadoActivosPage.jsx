@@ -14,7 +14,7 @@ export function ListadoActivosPage() {
   const navigate = useNavigate()
   const { activos, cargando, filtros, setFiltros, hayFiltrosActivos, limpiarFiltros } =
     useActivos()
-  const { categorias, ubicaciones } = useCatalogosActivos()
+  const { categorias, ubicaciones, funcionarios } = useCatalogosActivos()
 
   return (
     <div>
@@ -37,6 +37,7 @@ export function ListadoActivosPage() {
         setFiltros={setFiltros}
         categorias={categorias}
         ubicaciones={ubicaciones}
+        responsables={funcionarios}
         hayFiltrosActivos={hayFiltrosActivos}
         onLimpiarFiltros={limpiarFiltros}
       />

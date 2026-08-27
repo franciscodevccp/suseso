@@ -19,11 +19,15 @@ import { pino } from 'pino'
 import { config, esProduccion } from './src/config.js'
 import { manejadorErrores } from './src/http/errores.js'
 import { cargarUsuario } from './src/middleware/sesion.js'
+import { rutasActas } from './src/rutas/actas.js'
 import { rutasActivos } from './src/rutas/activos.js'
+import { rutasAlertas } from './src/rutas/alertas.js'
 import { rutasAlmacen } from './src/rutas/almacen.js'
 import { rutasAuth } from './src/rutas/auth.js'
 import { rutasCatalogos } from './src/rutas/catalogos.js'
 import { rutasConfiguracion } from './src/rutas/configuracion.js'
+import { rutasDashboard } from './src/rutas/dashboard.js'
+import { rutasReportes } from './src/rutas/reportes.js'
 
 const logger = pino({ level: esProduccion ? 'info' : 'debug' })
 const app = express()
@@ -83,6 +87,10 @@ api.use('/auth', rutasAuth)
 api.use('/catalogos', rutasCatalogos)
 api.use('/activos', rutasActivos)
 api.use('/almacen', rutasAlmacen)
+api.use('/actas', rutasActas)
+api.use('/alertas', rutasAlertas)
+api.use('/dashboard', rutasDashboard)
+api.use('/reportes', rutasReportes)
 api.use('/configuracion', rutasConfiguracion)
 app.use('/api', api)
 

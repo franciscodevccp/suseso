@@ -2,12 +2,13 @@ import { ESTADOS_ACTIVO } from '../utils/estadoActivo'
 import { Desplegable } from '../../../components/common/Desplegable'
 import estilos from './FiltrosActivos.module.css'
 
-/** Búsqueda avanzada del listado: texto libre + filtros por categoría/ubicación/estado. */
+/** Búsqueda avanzada del listado: texto libre + filtros por categoría/ubicación/responsable/estado (RQ-13). */
 export function FiltrosActivos({
   filtros,
   setFiltros,
   categorias,
   ubicaciones,
+  responsables = [],
   hayFiltrosActivos,
   onLimpiarFiltros,
 }) {
@@ -51,6 +52,20 @@ export function FiltrosActivos({
           {ubicaciones.map((ubicacion) => (
             <option key={ubicacion.id} value={ubicacion.nombre}>
               {ubicacion.nombre}
+            </option>
+          ))}
+        </Desplegable>
+
+        <Desplegable
+          aria-label="Filtrar por responsable"
+          value={filtros.responsable}
+          onChange={(evento) => actualizarCampo('responsable', evento.target.value)}
+          className={estilos.select}
+        >
+          <option value="">Todos los responsables</option>
+          {responsables.map((responsable) => (
+            <option key={responsable.id} value={responsable.nombre}>
+              {responsable.nombre}
             </option>
           ))}
         </Desplegable>

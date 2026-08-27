@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import * as vidaUtilService from '../mock/vidaUtilService.mock'
+import * as vidaUtilService from '../services/vidaUtilService'
 
 /** Vida útil (años) configurada para una categoría puntual, o null si no existe. */
 export function useVidaUtilCategoria(categoria) {

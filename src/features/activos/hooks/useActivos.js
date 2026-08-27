@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import * as activosService from '../services/activosService'
 
-const FILTROS_INICIALES = { texto: '', categoria: '', ubicacion: '', estado: '' }
+const FILTROS_INICIALES = { texto: '', categoria: '', ubicacion: '', estado: '', responsable: '' }
 
 /**
  * Búsqueda avanzada del listado de activos. `filtros` refleja lo que el

@@ -1,0 +1,51 @@
+.tarjeta {
+  background: var(--gob-blanco);
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radio-lg);
+  padding: var(--espacio-5);
+}
+
+.titulo {
+  font-size: 1rem;
+  margin-bottom: var(--espacio-4);
+}
+
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+.encabezadoFila {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  font-size: 0.875rem;
+  margin-bottom: var(--espacio-1);
+}
+
+.etiqueta {
+  color: var(--gris-900);
+}
+
+.cantidad {
+  color: var(--gris-500);
+  white-space: nowrap;
+}
+
+.pista {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--gris-100);
+  overflow: hidden;
+}
+
+.barra {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--gob-degradado-azul);
+  transition: width 0.4s ease;
+}

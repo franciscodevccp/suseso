@@ -5,7 +5,7 @@ import { useActivosDisponibles } from '../hooks/useActivosDisponibles'
 import { FormularioActa } from '../components/FormularioActa'
 import { puedeGestionarActas } from '../utils/permisosActas'
 import { obtenerMensajeErrorActa } from '../constants/mensajesActas'
-import * as actasService from '../mock/actasService.mock'
+import * as actasService from '../services/actasService'
 import estilos from './CrearActaPage.module.css'
 
 /** Creación de una nueva acta (recepción/entrega). Nace en estado "pendiente". */

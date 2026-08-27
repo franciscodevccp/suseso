@@ -8,7 +8,7 @@ import { useAuth } from '../../auth/hooks/useAuth'
 import { puedeGestionarActas } from '../utils/permisosActas'
 import { obtenerInfoEstadoFirma } from '../utils/estadoActa'
 import { obtenerMensajeErrorActa } from '../constants/mensajesActas'
-import * as actasService from '../mock/actasService.mock'
+import * as actasService from '../services/actasService'
 import estilos from './FichaActaPage.module.css'
 
 const ETIQUETA_TIPO = { recepcion: 'Recepción', entrega: 'Entrega' }

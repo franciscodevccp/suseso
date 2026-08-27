@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import * as vidaUtilService from '../mock/vidaUtilService.mock'
+import * as vidaUtilService from '../services/vidaUtilService'
 
 /** Tabla completa de vida útil por categoría, para la página de configuración. */
 export function useTablaVidaUtil() {

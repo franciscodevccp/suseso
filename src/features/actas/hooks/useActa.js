@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import * as actasService from '../mock/actasService.mock'
+import * as actasService from '../services/actasService'
 
 /** Trae un acta por id, para la ficha. Expone recargar() (usado tras firmar). */
 export function useActa(id) {

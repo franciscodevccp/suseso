@@ -30,17 +30,18 @@
 - [x] Cliente `src/services/http.js` + evento `sesion-invalida` en `AuthContext` (`docs/03`)
 - [x] `authService`, `activosService` y `almacenService` reales con el contrato exacto de los mocks + las 22 importaciones cambiadas (vistas y hooks intactos); los 3 mocks reemplazados fueron eliminados (D-08). Verificado de punta a punta en el navegador: login real, activo creado desde la UI con folio atómico `AF-2026-0004` + movimiento + auditoría, y egreso de almacén con `STOCK_INSUFICIENTE` protegiendo stock (operado por la cuenta Gestor: D-11 en acción)
 - [ ] Un solo proceso: proxy `/api` en dev, `dist/` servido con fallback SPA en producción (`docs/02`, D-05)
-- [ ] `scripts/respaldo.sh` (`pg_dump` + tar de adjuntos, rotación 14 días) (`docs/02`, RQ-11)
+- [x] `scripts/respaldo.sh` (`pg_dump -Fc` + tar de adjuntos, rotación 14 días; usa pg_dump nativo en el VPS o Docker en desarrollo) — probado y dump verificado restaurable con `pg_restore --list` (`docs/02`, RQ-11)
 
-## Bloque A2 — Resto de mocks conectados (no recortable)
+## Bloque A2 — Resto de mocks conectados (no recortable) ✅
 
-- [ ] `actasService` real (incluye sello SHA-256 en servidor) (`docs/03`)
-- [ ] `vidaUtilService` real (`GET/PUT /api/configuracion/vida-util`, editar solo Administrador)
-- [ ] `reportesService` real (inventario, depreciación, movimientos; exportación sigue en el navegador) + nuevos kardex y bajas (`docs/03`)
-- [ ] `dashboardService` real: resumen, por estado, por categoría, actividad reciente — el Inicio deja de verse en cero (`docs/07`, RQ-16)
-- [ ] `integracionesService` real (SIGFE desde `/api/v1/contabilidad/activos`) (`docs/10`)
-- [ ] Cero `localStorage` de negocio; mocks eliminados a medida que cada servicio queda conectado y probado (D-07, D-08)
-- [ ] Filtro **responsable** agregado a `FiltrosActivos` (RQ-13, el backend ya lo soportará)
+- [x] `actasService` real: sello SHA-256 calculado en el servidor (formato `folio|contenido|usuario|fecha`), doble cierre rechazado (`ACTA_YA_CERRADA`); el servicio traduce al vocabulario viejo de la UI hasta el renombre de B2 (`docs/03`)
+- [x] `vidaUtilService` real (`GET/PUT /api/configuracion/vida-util`, editar solo Administrador, `VALOR_INVALIDO`, auditado)
+- [x] `reportesService` real: inventario, depreciación y movimientos con `{columnas, filas}` formateadas idénticas al mock; nuevos `kardex` y `bajas` listos en el servidor (`docs/03`)
+- [x] `dashboardService` real (`docs/07`, RQ-16): 6 KPI (incluye **Valor libro total** con `shared/depreciacion.js` y **Solicitudes pendientes**), gráficos de barras reales por estado y categoría (nuevo `GraficoBarras`, sin librerías), actividad reciente unificada — el Inicio se ve vivo
+- [x] `dominio/alertas.js` + `GET /api/alertas` y `/resumen` según las 7 reglas de `docs/07` (adelantado de B2; falta solo la pantalla y el badge)
+- [x] Cero `localStorage` de negocio (D-07): eliminados los mocks de actas, vida útil, dashboard y reportes (D-08); solo queda `integracionesService.mock` hasta C1, que no persiste nada
+- [x] Filtro **responsable** en `FiltrosActivos` + catálogo `GET /api/catalogos/funcionarios` (RQ-13)
+- [ ] `integracionesService` real (SIGFE desde `/api/v1/contabilidad/activos`) — se conecta en C1 junto con la API pública (`docs/10`); mientras tanto su mock compone sobre datos reales
 
 ## Bloque B1 — Usuarios, auditoría y roles (no recortable)
 

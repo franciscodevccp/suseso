@@ -1,4 +1,4 @@
-/** Mensajes en español para los códigos de error de almacenService.mock.js. */
+/** Mensajes en español para los códigos de error del servicio de almacén. */
 const MENSAJES = {
   NOMBRE_REQUERIDO: 'El nombre del ítem es obligatorio.',
   ITEM_NO_ENCONTRADO: 'No fue posible encontrar el ítem. Intente nuevamente.',

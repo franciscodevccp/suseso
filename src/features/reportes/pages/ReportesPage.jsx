@@ -6,7 +6,7 @@ import { TablaVistaPrevia } from '../components/TablaVistaPrevia'
 import { BotonesExportacion } from '../components/BotonesExportacion'
 import { TIPOS_REPORTE } from '../constants/tiposReporte'
 import { useCatalogosActivos } from '../../activos/hooks/useCatalogosActivos'
-import * as reportesService from '../mock/reportesService.mock'
+import * as reportesService from '../services/reportesService'
 import estilos from './ReportesPage.module.css'
 
 const FILTROS_INVENTARIO_INICIALES = { categoria: '', ubicacion: '', estado: '' }

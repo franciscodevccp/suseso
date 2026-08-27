@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import * as actasService from '../mock/actasService.mock'
+import * as actasService from '../services/actasService'
 
 /** Listado completo de actas (sin filtros/búsqueda en esta vuelta). */
 export function useActas() {
