@@ -33,3 +33,5 @@ tests/e2e/capturas/
 *.njsproj
 *.sln
 *.sw?
+.estado-api.json
+entregables/capturas-manual/

@@ -70,10 +70,11 @@ app.use(cookieParser())
 // junto con la autenticación (bloque A1, paso de auth).
 const PgSession = connectPgSimple(session)
 const pool = new pg.Pool({ connectionString: config.DATABASE_URL })
+const almacenSesiones = new PgSession({ pool, createTableIfMissing: false })
 app.use(
   session({
     // La tabla "session" la crea la migración de Prisma, no el middleware.
-    store: new PgSession({ pool, createTableIfMissing: false }),
+    store: almacenSesiones,
     name: 'sisga.sid',
     secret: config.SESSION_SECRET,
     resave: false,

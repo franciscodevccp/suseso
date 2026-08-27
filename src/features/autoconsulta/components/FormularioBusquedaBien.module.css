@@ -25,4 +25,10 @@
   .formulario {
     flex-direction: column;
   }
+
+  /* En columna, la base de 260px pasaría a ser ALTURA: se anula. */
+  .input {
+    flex: 0 0 auto;
+    width: 100%;
+  }
 }

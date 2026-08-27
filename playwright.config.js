@@ -23,6 +23,9 @@ export default defineConfig({
   timeout: 45_000,
   fullyParallel: true,
   workers: 4,
+  // Un reintento absorbe los picos de contención de la corrida completa
+  // (4 navegadores + flujos seriales simultáneos); un fallo real persiste.
+  retries: 1,
   reporter: [['list']],
   use: {
     baseURL: 'http://localhost:5173',

@@ -54,3 +54,20 @@ export async function esperarContenido(pagina) {
   await pagina.waitForLoadState('networkidle')
   await expect(pagina.locator('main, form').first()).toBeVisible()
 }
+
+/**
+ * Contexto con sesión PROPIA creada por API (no la del storageState
+ * compartido): los flujos que mutan datos la usan para que un
+ * regenerate/destroy accidental jamás tumbe la sesión del resto de la
+ * suite. Cerrar el contexto al terminar.
+ */
+export async function contextoConSesion(browser, email) {
+  const contexto = await browser.newContext({ baseURL: 'http://localhost:5173' })
+  const respuesta = await contexto.request.post('/api/auth/login', {
+    data: { email, password: process.env.CLAVE_DEMO },
+  })
+  if (!respuesta.ok()) {
+    throw new Error(`login de ${email} falló (${respuesta.status()}): ¿rate limit?`)
+  }
+  return contexto
+}

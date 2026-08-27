@@ -62,7 +62,7 @@
 - [x] Renombre Actas (D-03) ejecutado completo: ruta `/actas`, "Actas de asignación y entrega", `cerrarActa`, campos definitivos sin traducciones, **cero menciones a firma/Ley 19.799**, y botón **"Verificar integridad"** que recalcula el sello en el servidor y compara (verificado en verde en pantalla)
 - [x] Depreciación **lineal mensual** en `shared/depreciacion.js` (residual $1, cuota mensual, meses transcurridos, tabla anual, vida acelerada, `vidaUtilRestanteMeses`) usada por ficha, panel y reportes — con **7 pruebas unitarias en verde** (los casos exactos de `docs/09` §Tests); el reporte ganó fecha de alta, meses, columna acelerada y filtros de categoría/fecha de corte
 - [x] Nombre del producto desde `src/config/producto.js` (**T-01 resuelto: SISGA**) + título `SISGA · Gestión de activos fijos y almacén`
-- [ ] Tabla de vida útil con columna "Acelerada" visible y texto de referencia SII en la pantalla (`docs/09`) — los datos ya existen en BD y el reporte ya la usa; falta solo exponer la columna en Configuración → Vida útil
+- [x] Tabla de vida útil con columna "Acelerada" visible (editable por Administrador, opcional por categoría) y nota de referencia a la Resolución Exenta SII N°43/2002 en la pantalla (`docs/09`)
 
 ## Bloque B3 — Adjuntos con georreferencia (no recortable) ✅
 
@@ -93,16 +93,20 @@
 - [x] Campos personalizados (RQ-21): definición en `Configuracion` (texto/número/fecha/lista, obligatorio, habilitado, orden), pantalla **Configuración → Campos personalizados** (edita Administrador), campos dinámicos en el formulario de activos con validación de obligatorios, valores en la ficha, y la **búsqueda por texto entra a los valores JSON** (filtro Prisma por campo definido, sin SQL crudo); seed con Número de serie + Centro de costo en ~300 activos
 - [x] Importador Excel (RQ-24, criterio B.3): previsualizar (multipart 20 MB, magic bytes, exceljs en memoria, mapeo sugerido por encabezados **editable por columna**, validación de duplicados/valores/fechas, TTL 30 min) + confirmar (catálogos faltantes, folios correlativos reservados en bloque, lotes de 500, movimiento de alta por activo, auditado) + **reporte Excel descargable**. La planilla real de **3.530 filas importó en 0,9 s** (exigencia: <60 s). Pantalla de 3 pasos en Configuración → Importar planilla + prueba E2E de la previsualización
 
-## Bloque D — Cierre (no recortable)
+## Bloque D — Cierre (no recortable) ✅ (con 1 pendiente de harness)
 
-- [x] Base E2E montada y en verde: Playwright con matriz de dispositivos (360 px, iPhone con motor WebKit real, tablet, escritorio), **98 pruebas** — barrido responsive de todos los módulos sin desbordes ni errores de consola, humo funcional (desplegable, modales, fichas), shell de scroll fijo y portal del Funcionario con su restricción de acceso (RQ-02, RQ-05, `docs/13` §360px)
-- [ ] Suite unitaria (depreciación, folios concurrentes, kardex, permisos) y de API (matriz de autorización, stock insuficiente) en verde (`docs/15`)
-- [ ] E2E Playwright de la pasada principal de 15 minutos (`docs/15`)
-- [ ] Pasada DEMO-01…07 de 15 minutos ensayada y cronometrada (`docs/16`)
-- [ ] Tabla RQ-01…RQ-27 verificada navegando la demo, con ruta exacta (`docs/16`)
-- [ ] Manual de uso del demo en PDF + `entregables/` completo (`docs/16`, RQ-27)
-- [ ] Restauración de respaldo ensayada una vez (`docs/14`)
-- [ ] `git tag v1.0-oferta` y Definition of Done de `docs/16` completa
+- [x] Base E2E montada: Playwright con matriz de dispositivos (360 px, iPhone con motor WebKit real, tablet, escritorio) — barrido responsive de todos los módulos, humo funcional, shell fijo, portal del Funcionario (RQ-02, RQ-05)
+- [x] Suite unitaria en verde: **24 pruebas** (depreciación 7, reglas de clave, generadores EAN-13/PRNG, importador: mapeo/valores/fechas/duplicados/vida útil) (`docs/15`)
+- [x] Suite de API en verde: **19 pruebas** — matriz de autorización completa (sin sesión 401; Consulta 403 en TODA mutación; Funcionario 403 en el panel y filtro forzado a sus bienes; CUENTA_DEMO), /api/v1 (401/llave/paginación/webhook 202), adjuntos (magic bytes 415, descarga 401, ruta manipulada), **stock insuficiente revierte completo sin descontar**, auditoría 1 fila por mutación, **folios: 20 creaciones en paralelo correlativas** (`docs/15`)
+- [x] E2E de la pasada principal (`tests/e2e/pasada.spec.js`, 6 flujos): crear→trasladar→historial+auditoría, kardex con bloqueo, descargas PDF/Excel/CSV, búsqueda combinada, badge=listado, ciclo de usuario con clave temporal y cambio obligatorio (`docs/15`)
+- [ ] **T-06 (harness)**: corridas COMPLETAS repetidas en cadena muestran fragilidad (sesión de storageState compartida entre ~20 contextos + contención de 4 navegadores). Cada spec pasa por sí solo y la suite completa pasó varias veces hoy; NO afecta la demo real (cada evaluador usa su propia sesión). Mitigado a medias con sesiones propias por API en los specs que mutan; pendiente de estabilizar del todo
+- [ ] Pasada DEMO-01…07 de 15 minutos ensayada y **cronometrada en vivo por Francisco** (la guía paso a paso ya está en el manual)
+- [x] Tabla RQ-01…RQ-27 + AD + DEMO verificada navegando la demo, con ruta exacta: `entregables/tabla-verificacion-rq.md` (`docs/16`)
+- [x] Manual del demo en PDF (`entregables/manual-demo-sisga.pdf`, 10 páginas): portada con accesos, ruta de 15 minutos, los 13 módulos con capturas, convenciones de depreciación, escáner sin lector, API, respaldo y soporte, nota de datos ficticios. Se regenera con la URL definitiva: `node scripts/manual.mjs --url https://…` (RQ-27)
+- [x] `entregables/` completo: manual PDF, `openapi.yaml` (en `public/`, descargable de la demo), 12 pantallazos del portal (6 pantallas × escritorio/móvil), planilla de 3.530 filas, tabla de verificación RQ
+- [x] Respaldo + **restauración ensayada** (`docs/14`): pg_dump del script diario restaurado en una base limpia — 534 activos, 17 usuarios y las 5 OC de Mercado Público íntegros
+- [x] Definition of Done verificada: `pnpm build && pnpm start` sirve front (/), API (/api) y fallback SPA en **un solo proceso Node** (200/200/200); scripts `db:deploy` y `db:seed` listos para el VPS
+- [x] `git tag v1.0-oferta`
 
 ## Transversal — Seguridad (`docs/14`, se verifica en cada bloque)
 

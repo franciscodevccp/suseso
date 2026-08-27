@@ -211,6 +211,10 @@
     padding: var(--espacio-2) 0;
     border-bottom: 1px solid var(--gris-100);
     text-align: right;
+    /* Acciones largas con guion bajo (campos_personalizados_actualizados)
+       no tienen puntos de quiebre naturales: se fuerza el corte. */
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
 
   .fila td:last-child {
