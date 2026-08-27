@@ -110,7 +110,8 @@
 ## Decisiones pendientes de Francisco (`docs/17` — bloquean lo marcado arriba)
 
 - [ ] **T-01** Nombre definitivo del producto (SISGA vs ActivosCloud) → bloquea textos de B2
-- [ ] **T-02** `MP_API_TICKET` + 3–5 códigos de OC públicas → bloquea Mercado Público (C1)
+- [x] **T-02a** `MP_API_TICKET` entregado y **validado contra la API real** (2026-08-26): listado por fecha y detalle por código responden bien; el ticket vive solo en `.env`
+- [ ] **T-02b** Elegir 3–5 códigos de OC públicas (mobiliario/computación) para el seed — se pueden obtener del listado por fecha al construir C1
 - [ ] **T-03** `CLAVE_DEMO` y `API_DEMO_KEY` → bloquea `.env` (A1) y `/api/v1` (C1)
 - [ ] **T-04** Confirmar compromiso de disponibilidad 99,5 % (Anexo 2B) → afecta manual y `/api/salud`
 - [ ] **T-05** Cuentas contables por categoría para SIGFE (o usar genérico referencial) → C1

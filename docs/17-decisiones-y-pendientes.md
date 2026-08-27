@@ -16,7 +16,7 @@
 
 ## Pendientes de Francisco
 - **T-01** Nombre definitivo del producto: `SISGA` (código y título actuales) o `ActivosCloud` (documentación previa). Afecta `src/config/producto.js`, `index.html`, manual, `openapi.yaml` y la propuesta.
-- **T-02** Entregar `MP_API_TICKET` (ticket de la API pública de Mercado Público) y 3–5 códigos de OC públicas para el seed.
+- **T-02** ~~Entregar `MP_API_TICKET`~~ **Ticket entregado y validado contra la API el 2026-08-26** (listado por fecha y detalle por código funcionan; el valor vive solo en `.env`, nunca en el repo). Pendiente: elegir 3–5 códigos de OC públicas de mobiliario/computación para el seed — se pueden obtener del propio listado por fecha al construir C1.
 - **T-03** Definir `CLAVE_DEMO` y `API_DEMO_KEY` (van al manual y a la oferta; se rotan tras la adjudicación).
 - **T-04** Confirmar el compromiso de disponibilidad del Anexo 2B (99,5 %) para que el manual y `/api/salud` hablen el mismo idioma.
 - **T-05** Cuentas contables por categoría para la exportación SIGFE (`docs/10`): si no hay plan de cuentas de referencia, usar el genérico propuesto y rotularlo como referencial.
