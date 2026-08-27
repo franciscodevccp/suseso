@@ -129,7 +129,7 @@ export function LoginPage() {
             ))}
           </div>
           <p className={estilos.claveCuentas}>
-            Clave única: <strong>{cuentasDemo.claveDemo}</strong> — al elegir una tarjeta, el
+            Contraseña (todas las cuentas): <strong>{cuentasDemo.claveDemo}</strong> — al elegir una tarjeta, el
             formulario se completa solo.
           </p>
         </div>

@@ -5,6 +5,7 @@
   "type": "module",
   "packageManager": "pnpm@11.18.0",
   "scripts": {
+    "postinstall": "prisma generate --schema server/prisma/schema.prisma",
     "dev": "concurrently -n vite,api -c auto \"vite\" \"node --watch server/index.js\"",
     "build": "vite build",
     "start": "node server/index.js",

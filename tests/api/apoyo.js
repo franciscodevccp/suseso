@@ -7,6 +7,21 @@ import { readFileSync } from 'node:fs'
 
 export const BASE = 'http://127.0.0.1:3001'
 
+// GUARDARRAÍL: esta suite ESCRIBE en la base que apunte el .env (crea
+// ítems, activos y solicitudes de prueba). Jamás debe correr contra la
+// demo publicada: si el .env huele a producción, se aborta.
+{
+  const env = readFileSync(new URL('../../.env', import.meta.url), 'utf8')
+  const esProduccion =
+    /^NODE_ENV=production/m.test(env) || /^ORIGEN_PERMITIDO=(?!.*localhost)/m.test(env)
+  if (esProduccion) {
+    throw new Error(
+      'El .env apunta a PRODUCCIÓN: la suite de API escribe datos de prueba y no debe correr aquí. ' +
+        'Ejecútela solo en desarrollo y recuerde `pnpm db:seed` después.',
+    )
+  }
+}
+
 function claveDemo() {
   const env = readFileSync(new URL('../../.env', import.meta.url), 'utf8')
   const linea = env.split(/\r?\n/).find((l) => l.startsWith('CLAVE_DEMO='))

@@ -163,7 +163,7 @@ async function generarHtml() {
     <table>
       <tr><td><strong>URL</strong></td><td><code>${URL_DEMO}</code></td></tr>
       <tr><td><strong>Cuentas</strong></td><td>admin@demo.cl · gestor@demo.cl · consulta@demo.cl · funcionario@demo.cl</td></tr>
-      <tr><td><strong>Clave (todas)</strong></td><td><code>${CLAVE}</code></td></tr>
+      <tr><td><strong>Contraseña (todas las cuentas)</strong></td><td><code>${CLAVE}</code></td></tr>
       <tr><td><strong>Llave de la API</strong></td><td><code>${API_KEY}</code> (cabecera <code>X-API-Key</code>)</td></tr>
     </table>
     <p style="margin-top:8px">En la pantalla de inicio de sesión, las cuatro tarjetas completan el formulario con un clic. Cada cuenta muestra el sistema según su rol.</p>
@@ -202,7 +202,10 @@ ${modulos.join('\n')}
 <h1>4 · El escáner, sin lector físico</h1>
 <p>Los lectores USB de código de barras y RFID escriben como un teclado y terminan con Enter. Por eso el campo "Escanear" (en Activos fijos y Almacén) se demuestra <strong>tipeando</strong>: escriba un folio (<code>AF-2026-0001</code>), un código de barras (<code>7801112223334</code>) o un RFID (<code>RFID-A001</code>) y presione Enter — el sistema abre la ficha, igual que lo haría con el lector conectado. Un código no registrado ofrece dar de alta el bien con ese código ya precargado. La propuesta incluye el equipamiento PDA cotizado.</p>
 
-<h1>5 · La API para integraciones</h1>
+<h1>5 · Fotografías georreferenciadas (probar desde el PC)</h1>
+<p>Al subir una fotografía tomada con un teléfono, el sistema extrae automáticamente las coordenadas GPS de la imagen y ofrece <strong>"Ver en mapa"</strong> en la pestaña Adjuntos. Para probarlo sin teléfono, esta oferta adjunta <code>foto-muestra-gps.jpg</code>, una imagen con coordenadas reales de Huérfanos 1376 en sus metadatos: súbala como fotografía en la ficha de cualquier activo y el sistema mostrará su ubicación. Varias fichas del inventario de demostración ya traen fotografías georreferenciadas de fábrica.</p>
+
+<h1>6 · La API para integraciones</h1>
 <ul>
   <li>La documentación viva está en <strong>Integraciones</strong> dentro de la demo: cada endpoint tiene un botón "Probar" que ejecuta la llamada real.</li>
   <li>La especificación <strong>OpenAPI 3.1</strong> (<code>openapi.yaml</code>) se descarga desde esa pantalla y acompaña esta oferta.</li>
@@ -210,7 +213,7 @@ ${modulos.join('\n')}
   <li>Cubre: activos con filtros, depreciación por activo, exportación contable para SIGFE, asientos mensuales, almacén con kardex, movimientos y un webhook de confirmación.</li>
 </ul>
 
-<h1>6 · Respaldo y soporte</h1>
+<h1>7 · Respaldo y soporte</h1>
 <ul>
   <li><strong>Respaldo automático diario:</strong> copia de la base de datos (pg_dump) y de los archivos adjuntos, con rotación de 14 días. La restauración fue ensayada como parte de la preparación de esta demo.</li>
   <li><strong>Reinicio de la demostración:</strong> el Administrador puede restaurar los datos de ejemplo desde Configuración → Reiniciar demo; la demostración vuelve exactamente al estado inicial.</li>

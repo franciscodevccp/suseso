@@ -11,7 +11,10 @@
  *
  * Prohibido (docs/12): RUT válidos, personas reales, dominios reales.
  */
-import { createHash } from 'node:crypto'
+import { createHash, randomUUID } from 'node:crypto'
+import { copyFileSync, mkdirSync, readFileSync, readdirSync, statSync, unlinkSync } from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import argon2 from 'argon2'
 import { config } from '../src/config.js'
 import {
@@ -188,6 +191,18 @@ async function limpiar(db) {
   await db.solicitudItem.deleteMany()
   await db.solicitud.deleteMany()
   await db.adjunto.deleteMany()
+  // Los archivos físicos también: el reinicio restaura el estado inicial
+  // completo y no acumula huérfanos de subidas anteriores.
+  const directorioAdjuntos = path.resolve(config.STORAGE_DIR, 'adjuntos')
+  try {
+    for (const archivo of readdirSync(directorioAdjuntos)) {
+      if (statSync(path.join(directorioAdjuntos, archivo)).isFile()) {
+        unlinkSync(path.join(directorioAdjuntos, archivo))
+      }
+    }
+  } catch {
+    // primer arranque: el directorio aún no existe
+  }
   await db.movimientoActivo.deleteMany()
   await db.acta.deleteMany()
   await db.itemAlmacen.deleteMany()
@@ -396,7 +411,17 @@ async function sembrar(db) {
   await db.activo.createMany({ data: todos })
   const activos = await db.activo.findMany({ orderBy: { folio: 'asc' } })
 
-  // OC real de Mercado Público vinculada (T-02b), si el caché la tiene.
+  // Caché de OC REALES de Mercado Público (docs/10): las 6 exportadas en
+  // oc-cache.json (incluida 1607-101-AG26, de la propia SUSESO) se
+  // siembran si faltan — así una base recién creada también las tiene sin
+  // esperar los 16-20 s por consulta. Un caché ya existente no se pisa
+  // (skipDuplicates): puede estar más fresco.
+  const ocGuardadas = JSON.parse(
+    readFileSync(new URL('./oc-cache.json', import.meta.url), 'utf8'),
+  )
+  await db.ordenCompraMP.createMany({ data: ocGuardadas, skipDuplicates: true })
+
+  // OC real vinculada al notebook institucional (T-02b).
   const ocCacheada = await db.ordenCompraMP.findUnique({ where: { codigo: OC_VINCULADA.codigo } })
   if (ocCacheada) {
     await db.activo.update({
@@ -443,6 +468,66 @@ async function sembrar(db) {
     })
   }
   await db.movimientoActivo.createMany({ data: movimientosActivos })
+
+  // --- Adjuntos sembrados (RQ-12, RQ-22 — docs/06, docs/12) -------------
+  // 14 fotos referenciales con coordenadas de Huérfanos 1376 (la sede)
+  // + 2 documentos PDF, repartidos en fichas; cada foto queda como
+  // fotografía principal de su activo.
+  const carpetaFotos = path.join(path.dirname(fileURLToPath(import.meta.url)), 'adjuntos-seed')
+  const directorioAdjuntos = path.resolve(config.STORAGE_DIR, 'adjuntos')
+  mkdirSync(directorioAdjuntos, { recursive: true })
+
+  const fotosDisponibles = readdirSync(carpetaFotos).filter((a) => a.endsWith('.jpg')).sort()
+  const objetivos = [
+    ...activos.slice(0, 3), // los 3 históricos siempre con fotografía
+    ...Array.from({ length: 11 }, () => rng.de(vigentes)),
+  ]
+  const SEDE = { lat: -33.44012, lng: -70.65243 } // Huérfanos 1376
+
+  let indiceFoto = 0
+  for (const activo of objetivos) {
+    const origen = fotosDisponibles[indiceFoto % fotosDisponibles.length]
+    indiceFoto++
+    const nombreEnDisco = `${randomUUID()}.jpg`
+    copyFileSync(path.join(carpetaFotos, origen), path.join(directorioAdjuntos, nombreEnDisco))
+    const adjunto = await db.adjunto.create({
+      data: {
+        activoId: activo.id,
+        tipo: 'foto',
+        nombreOriginal: `fotografia-${activo.folio.toLowerCase()}.jpg`,
+        ruta: nombreEnDisco,
+        mime: 'image/jpeg',
+        tamano: statSync(path.join(directorioAdjuntos, nombreEnDisco)).size,
+        latitud: SEDE.lat + (rng.azar() - 0.5) * 0.002,
+        longitud: SEDE.lng + (rng.azar() - 0.5) * 0.002,
+        subidoPor: rng.de(gestores),
+        fecha: haceDias(rng.entero(3, 90)),
+      },
+    })
+    await db.activo.update({ where: { id: activo.id }, data: { fotoPrincipalId: adjunto.id } })
+  }
+
+  for (const [archivo, tipo, etiqueta] of [
+    ['garantia.pdf', 'garantia', 'certificado-garantia.pdf'],
+    ['manual.pdf', 'pdf', 'manual-del-equipo.pdf'],
+  ]) {
+    const activo = rng.de(vigentes)
+    const nombreEnDisco = `${randomUUID()}.pdf`
+    copyFileSync(path.join(carpetaFotos, archivo), path.join(directorioAdjuntos, nombreEnDisco))
+    await db.adjunto.create({
+      data: {
+        activoId: activo.id,
+        tipo,
+        nombreOriginal: etiqueta,
+        ruta: nombreEnDisco,
+        mime: 'application/pdf',
+        tamano: statSync(path.join(directorioAdjuntos, nombreEnDisco)).size,
+        subidoPor: rng.de(gestores),
+        fecha: haceDias(rng.entero(3, 90)),
+      },
+    })
+  }
+
 
   // --- Almacén ----------------------------------------------------------
   const bodegas = ['Bodega Central', 'Bodega Anexo']
@@ -655,6 +740,7 @@ export async function sembrarDemo(db) {
     movimientosAlmacen: await db.movimientoAlmacen.count(),
     actas: await db.acta.count(),
     solicitudes: await db.solicitud.count(),
+    adjuntos: await db.adjunto.count(),
     auditoria: await db.auditoria.count(),
   }
 }
