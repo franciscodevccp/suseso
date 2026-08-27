@@ -9,7 +9,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sisga_dev}
       POSTGRES_DB: sisga
     ports:
-      - '5432:5432'
+      # 55432 en el host: esta máquina ya tiene PostgreSQL nativo en 5432-5434.
+      - '55432:5432'
     volumes:
       - sisga_pgdata:/var/lib/postgresql/data
     healthcheck:

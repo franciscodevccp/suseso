@@ -1,0 +1,278 @@
+// Schema de SISGA (docs/02). Los nombres de campo son los MISMOS que usa
+// el front (regla 3 del CLAUDE.md: los mocks definen el contrato).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Rol {
+  ADMINISTRADOR
+  GESTOR
+  CONSULTA
+  FUNCIONARIO
+}
+
+enum EstadoUsuario {
+  activo
+  inactivo
+  bloqueado
+}
+
+enum EstadoActivo {
+  activo
+  en_reparacion
+  dado_de_baja
+  extraviado
+}
+
+enum TipoMovActivo {
+  alta
+  edicion
+  traslado
+  baja
+  reparacion
+}
+
+enum TipoMovAlmacen {
+  ingreso
+  egreso
+}
+
+enum EstadoActa {
+  pendiente
+  cerrada
+}
+
+enum TipoAdjunto {
+  foto
+  pdf
+  orden_compra
+  garantia
+  otro
+}
+
+enum EstadoSolicitud {
+  pendiente
+  aprobada
+  rechazada
+  entregada
+}
+
+model Usuario {
+  id                     String        @id @default(cuid())
+  nombre                 String
+  email                  String        @unique
+  claveHash              String
+  rol                    Rol
+  estado                 EstadoUsuario @default(activo)
+  claveTemporal          Boolean       @default(false)
+  fechaUltimoCambioClave DateTime      @default(now())
+  intentosFallidos       Int           @default(0)
+  // No puede cambiar clave/correo ni ser eliminada (docs/14).
+  esCuentaDemo           Boolean       @default(false)
+  creadoEn               DateTime      @default(now())
+}
+
+model TokenRecuperacion {
+  token     String   @id
+  usuarioId String
+  expiraEn  DateTime
+}
+
+model Categoria {
+  id                String @id @default(cuid())
+  nombre            String @unique
+  vidaUtilAnios     Int
+  vidaUtilAcelerada Int?
+}
+
+model Ubicacion {
+  id     String @id @default(cuid())
+  nombre String @unique
+  tipo   String @default("oficina") // oficina | bodega
+}
+
+model Funcionario {
+  id     String  @id @default(cuid())
+  nombre String  @unique
+  cargo  String?
+  correo String?
+}
+
+model Activo {
+  id                   String             @id @default(cuid())
+  folio                String             @unique // AF-AAAA-NNNN (docs/02 §folios)
+  codigoBarras         String             @unique
+  rfid                 String?            @unique
+  nombre               String
+  descripcion          String             @default("")
+  // Nombre exacto de Categoria/Ubicacion: la UI trabaja con nombres.
+  categoria            String
+  ubicacion            String
+  responsable          String             @default("")
+  estado               EstadoActivo       @default(activo)
+  valor                Decimal            @db.Decimal(14, 2)
+  fechaAlta            DateTime
+  fechaBaja            DateTime?
+  motivoBaja           String?
+  proximaMantencion    DateTime? // RQ-17
+  finGarantia          DateTime? // RQ-17
+  camposPersonalizados Json? // RQ-21
+  ordenCompraMPCodigo  String? // AD-02
+  fotoPrincipalId      String? // RQ-12 (id de Adjunto tipo foto)
+  movimientos          MovimientoActivo[]
+  adjuntos             Adjunto[]
+
+  @@index([categoria])
+  @@index([ubicacion])
+  @@index([estado])
+  @@index([responsable])
+}
+
+model MovimientoActivo {
+  id                  String        @id @default(cuid())
+  activoId            String
+  activo              Activo        @relation(fields: [activoId], references: [id])
+  tipo                TipoMovActivo
+  detalle             String
+  // Nombre visible: la UI lo muestra tal cual.
+  usuario             String
+  usuarioId           String?
+  ubicacionAnterior   String?
+  ubicacionNueva      String?
+  responsableAnterior String?
+  responsableNuevo    String?
+  fecha               DateTime      @default(now())
+
+  @@index([activoId, fecha])
+}
+
+model Adjunto {
+  id             String      @id @default(cuid())
+  activoId       String
+  activo         Activo      @relation(fields: [activoId], references: [id])
+  tipo           TipoAdjunto
+  nombreOriginal String
+  ruta           String // nombre aleatorio en storage/adjuntos (docs/14)
+  mime           String
+  tamano         Int
+  latitud        Float? // RQ-22
+  longitud       Float? // RQ-22
+  subidoPor      String
+  fecha          DateTime    @default(now())
+}
+
+model ItemAlmacen {
+  id          String              @id @default(cuid())
+  folio       String              @unique // BOD-AAAA-NNNN
+  nombre      String
+  categoria   String
+  unidad      String
+  stock       Int                 @default(0)
+  stockMinimo Int                 @default(0)
+  ubicacion   String
+  movimientos MovimientoAlmacen[]
+}
+
+model MovimientoAlmacen {
+  id              String         @id @default(cuid())
+  itemId          String
+  item            ItemAlmacen    @relation(fields: [itemId], references: [id])
+  tipo            TipoMovAlmacen
+  cantidad        Int
+  stockResultante Int
+  motivo          String         @default("")
+  usuario         String
+  solicitudId     String?
+  fecha           DateTime       @default(now())
+
+  @@index([itemId, fecha])
+}
+
+model Acta {
+  id              String     @id @default(cuid())
+  folio           String     @unique // ACT-AAAA-NNNN
+  tipo            String
+  activoId        String?
+  activoFolio     String?
+  activoNombre    String?
+  responsable     String
+  contenido       String
+  estado          EstadoActa @default(pendiente)
+  cerradaPor      String?
+  fechaCierre     DateTime?
+  selloIntegridad String?
+  creadaPor       String
+  fecha           DateTime   @default(now())
+}
+
+// AD-03 (docs/11)
+model Solicitud {
+  id                String          @id @default(cuid())
+  folio             String          @unique // SOL-AAAA-NNNN
+  solicitanteId     String
+  solicitanteNombre String
+  estado            EstadoSolicitud @default(pendiente)
+  observacion       String          @default("")
+  resueltaPor       String?
+  fechaResolucion   DateTime?
+  items             SolicitudItem[]
+  fecha             DateTime        @default(now())
+}
+
+model SolicitudItem {
+  id          String    @id @default(cuid())
+  solicitudId String
+  solicitud   Solicitud @relation(fields: [solicitudId], references: [id])
+  itemId      String
+  itemNombre  String
+  cantidad    Int
+}
+
+// AD-02 (docs/10)
+model OrdenCompraMP {
+  codigo         String    @id
+  nombre         String
+  proveedor      String?
+  monto          Decimal?  @db.Decimal(14, 2)
+  fecha          DateTime?
+  estado         String?
+  jsonCrudo      Json
+  sincronizadaEn DateTime  @default(now())
+}
+
+// RQ-08 (docs/05)
+model Auditoria {
+  id            String   @id @default(cuid())
+  fecha         DateTime @default(now())
+  usuarioId     String?
+  usuarioNombre String
+  modulo        String
+  accion        String
+  entidad       String?
+  entidadId     String?
+  entidadFolio  String?
+  detalle       String
+  ip            String?
+
+  @@index([fecha])
+  @@index([usuarioNombre])
+  @@index([modulo])
+}
+
+// Campos personalizados (docs/08), catálogos de almacén y parámetros.
+model Configuracion {
+  clave String @id
+  valor Json
+}
+
+// Contadores de folios: AF-2026, BOD-2026, ACT-2026, SOL-2026 (docs/02).
+model Secuencia {
+  nombre String @id
+  valor  Int
+}

@@ -20,13 +20,13 @@
 - [x] `.env` + `config.js` con zod que aborta si falta una variable, más `.env.ejemplo` versionado — con valores provisionales de desarrollo; los reales son **T-03**
 - [x] Arranque `server/index.js`: helmet/CSP, sesión en PostgreSQL (cookie `sisga.sid` httpOnly, rolling 30 min), 404 de API en formato `{codigo, mensaje}`, estáticos de `dist/` con fallback SPA — verificado en 3001 directo y vía proxy de Vite
 - [x] Scripts de `package.json` (`dev` con concurrently, `start`, `db:migrate`, `db:seed`, `test`, `test:e2e`) + proxy `/api` en `vite.config.js` + ESLint con globals de Node para `server/`
-- [ ] Estructura `server/` completa: falta `src/db.js` (PrismaClient), que llega con el schema
-- [ ] `schema.prisma` completo: 8 enums y modelos Usuario, TokenRecuperacion, Categoria, Ubicacion, Funcionario, Activo, MovimientoActivo, Adjunto, ItemAlmacen, MovimientoAlmacen, Acta, Solicitud, SolicitudItem, OrdenCompraMP, Auditoria, Configuracion, Secuencia (`docs/02`) + migración inicial (`pnpm db:migrate`)
-- [ ] Folios correlativos atómicos `dominio/folios.js` (`INSERT … ON CONFLICT … RETURNING` en transacción) para AF/BOD/ACT/SOL (`docs/02`, RQ-14)
+- [x] Estructura `server/` completa (`index.js`, `config`, `db`, `http/errores`, `dominio/folios`)
+- [x] `schema.prisma` completo: 8 enums y los 17 modelos de `docs/02` (Prisma 6, alineado al doc) + migración inicial aplicada; BD de dev en puerto **55432** (5432–5434 los ocupa un PostgreSQL nativo de la máquina)
+- [x] Folios correlativos atómicos `dominio/folios.js` — verificado con transacciones en paralelo sin colisión (`docs/02`, RQ-14)
 - ~~`GET /api/salud`~~ — descartado el 2026-08-26: front y API viven en el mismo proceso, el monitoreo es directo sobre el sitio (registro en `docs/17`)
 - [ ] Sesión por cookie `httpOnly` (`express-session` + `connect-pg-simple`, TTL 8 h, inactividad 30 min), argon2, bloqueo a los 5 intentos, rate limit de login (`docs/14`)
 - [ ] Auth completa: los 8 endpoints de `authService` con mismos errores (`docs/03`) y `shared/passwordRules.js`
-- [ ] Seed mínimo: 4 cuentas demo `@demo.cl` endurecidas (`esCuentaDemo`), catálogos, los 3 activos y 4 ítems actuales (`docs/04`, `docs/12`)
+- [x] Seed mínimo reproducible (`pnpm db:seed` borra y recrea): 4 cuentas demo `@demo.cl` con `esCuentaDemo` y clave argon2id (`CLAVE_DEMO`), 8 categorías con vida útil SII, 8 ubicaciones, catálogos de almacén en `Configuracion`, los 3 activos y 4 ítems de los mocks, contadores de `Secuencia` alineados (`docs/04`, `docs/09`, `docs/12`)
 - [ ] Cliente `src/services/http.js` + evento `sesion-invalida` en `AuthContext` (`docs/03`)
 - [ ] `authService`, `activosService` y `almacenService` reales + cambio de importaciones listadas en `docs/00` (vistas y hooks intactos)
 - [ ] Un solo proceso: proxy `/api` en dev, `dist/` servido con fallback SPA en producción (`docs/02`, D-05)
