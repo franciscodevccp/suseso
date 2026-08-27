@@ -93,6 +93,16 @@
 - [x] Campos personalizados (RQ-21): definición en `Configuracion` (texto/número/fecha/lista, obligatorio, habilitado, orden), pantalla **Configuración → Campos personalizados** (edita Administrador), campos dinámicos en el formulario de activos con validación de obligatorios, valores en la ficha, y la **búsqueda por texto entra a los valores JSON** (filtro Prisma por campo definido, sin SQL crudo); seed con Número de serie + Centro de costo en ~300 activos
 - [x] Importador Excel (RQ-24, criterio B.3): previsualizar (multipart 20 MB, magic bytes, exceljs en memoria, mapeo sugerido por encabezados **editable por columna**, validación de duplicados/valores/fechas, TTL 30 min) + confirmar (catálogos faltantes, folios correlativos reservados en bloque, lotes de 500, movimiento de alta por activo, auditado) + **reporte Excel descargable**. La planilla real de **3.530 filas importó en 0,9 s** (exigencia: <60 s). Pantalla de 3 pasos en Configuración → Importar planilla + prueba E2E de la previsualización
 
+## Despliegue — https://inventario.aeroconce.cl ✅
+
+- [x] VPS Aeroconce: BD PostgreSQL 16 nativa + usuario `sisga` + `/home/sisga/app` (clon del repo, `pnpm install --frozen-lockfile`, `db:deploy`, seed con OC reales migradas, `build`)
+- [x] Servicio systemd `sisga` en puerto 3040 (Restart=always, endurecido) — arranque automático con el VPS
+- [x] nginx + TLS Let's Encrypt con redirección https; cuerpo hasta 25 MB (adjuntos e importador)
+- [x] Respaldo diario 03:00 (crontab sisga) — script ensayado en el VPS
+- [x] Verificación externa completa: login, dashboard (495 vigentes), /api/v1 con la llave de producción (401 sin ella), 5 OC reales de Mercado Público, openapi.yaml descargable
+- [x] Manual y pantallazos regenerados CON capturas del sitio publicado
+- [ ] **T-03**: rotar CLAVE_DEMO a la definitiva antes de adjuntar la oferta (regenerar manual + reiniciar servicio)
+
 ## Bloque D — Cierre (no recortable) ✅ (con 1 pendiente de harness)
 
 - [x] Base E2E montada: Playwright con matriz de dispositivos (360 px, iPhone con motor WebKit real, tablet, escritorio) — barrido responsive de todos los módulos, humo funcional, shell fijo, portal del Funcionario (RQ-02, RQ-05)
