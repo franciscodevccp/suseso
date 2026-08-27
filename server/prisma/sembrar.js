@@ -117,7 +117,9 @@ async function limpiar(db) {
   await db.acta.deleteMany()
   await db.itemAlmacen.deleteMany()
   await db.activo.deleteMany()
-  await db.ordenCompraMP.deleteMany()
+  // OrdenCompraMP NO se limpia: es caché de datos EXTERNOS reales
+  // (docs/10) y reconstruirlo cuesta 16-20 s por consulta; el reinicio de
+  // la demo restaura los datos del sistema, no el caché de Mercado Público.
   await db.auditoria.deleteMany()
   await db.tokenRecuperacion.deleteMany()
   await db.usuario.deleteMany()
@@ -157,6 +159,24 @@ async function sembrar(db) {
 
   await db.configuracion.create({
     data: { clave: 'almacen_catalogos', valor: CATALOGOS_ALMACEN },
+  })
+
+  // Cuentas contables por categoría para la exportación SIGFE (T-05):
+  // plan de cuentas GENÉRICO y referencial, editable desde la pantalla.
+  await db.configuracion.create({
+    data: {
+      clave: 'cuentas_contables',
+      valor: {
+        Mobiliario: '141.01',
+        'Equipos computacionales': '141.02',
+        Vehículos: '141.03',
+        Maquinaria: '141.04',
+        'Equipos audiovisuales': '141.05',
+        Herramientas: '141.06',
+        Instalaciones: '141.07',
+        'Equipos de aire y refrigeración': '141.08',
+      },
+    },
   })
 
   // Contadores de folios alineados con lo sembrado (docs/02 §folios).

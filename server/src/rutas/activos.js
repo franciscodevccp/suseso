@@ -286,6 +286,39 @@ rutasActivos.post('/:id/baja', autorizar(...GESTION), async (req, res, next) => 
   }
 })
 
+// Vincula una orden de compra de Mercado Público ya cacheada (AD-02).
+rutasActivos.post('/:id/vincular-oc', autorizar(...GESTION), async (req, res, next) => {
+  try {
+    const { codigo } = z.object({ codigo: z.string().min(1) }).parse(req.body)
+    const activo = await activoVigente(req.params.id)
+    const orden = await db.ordenCompraMP.findUnique({ where: { codigo: codigo.toUpperCase() } })
+    if (!orden) throw new ErrorHttp('OC_NO_ENCONTRADA', 404)
+
+    const actualizado = await db.$transaction(async (tx) => {
+      const fila = await tx.activo.update({
+        where: { id: activo.id },
+        data: { ordenCompraMPCodigo: orden.codigo },
+      })
+      await auditar(
+        req,
+        {
+          modulo: 'activos',
+          accion: 'oc_vinculada',
+          entidad: 'activo',
+          entidadId: activo.id,
+          entidadFolio: activo.folio,
+          detalle: `Orden de compra ${orden.codigo} vinculada a ${activo.folio}.`,
+        },
+        tx,
+      )
+      return fila
+    })
+    res.json(serializarActivo(actualizado))
+  } catch (err) {
+    next(err)
+  }
+})
+
 rutasActivos.post('/:id/traslado', autorizar(...GESTION), async (req, res, next) => {
   try {
     const { ubicacion, responsable, motivo } = z

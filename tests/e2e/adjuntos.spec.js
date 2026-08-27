@@ -17,7 +17,7 @@ test('sube una foto, aparece en la galería y se elimina', async ({ page }, test
   await esperarContenido(page)
   // La SEGUNDA ficha: la primera la usan los tests de responsive en paralelo.
   await page.locator('a[href^="/activos-fijos/"]').nth(1).click()
-  await expect(page.getByText('Adjuntos')).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Adjuntos' })).toBeVisible()
 
   await page
     .locator('input[type="file"]')

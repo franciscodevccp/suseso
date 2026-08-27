@@ -174,6 +174,10 @@ export function FichaActivoPage() {
               <dt>RFID</dt>
               <dd>{activo.rfid || '—'}</dd>
             </div>
+            <div>
+              <dt>Orden de compra (Mercado Público)</dt>
+              <dd>{activo.ordenCompraMPCodigo || '—'}</dd>
+            </div>
           </dl>
 
         </section>

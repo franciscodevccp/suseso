@@ -1,4 +1,7 @@
 .campo {
+  /* Contiene a la entrada oculta (absolute): sin esto se ancla al
+     documento y puede estirar el alto de la página. */
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: var(--espacio-3);

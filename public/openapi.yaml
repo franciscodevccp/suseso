@@ -1,0 +1,351 @@
+openapi: 3.1.0
+info:
+  title: SISGA — API pública
+  version: 1.0.0
+  description: >
+    API pública de solo lectura de SISGA (Sistema Integral de Gestión de
+    Activos Fijos y Almacén) para la integración con sistemas contables
+    (SIGFE) y otros sistemas institucionales. Todas las respuestas son JSON
+    con la forma { datos, paginacion? }. Los listados paginados aceptan
+    ?pagina= y ?porPagina= (máximo 100). Límite de 60 consultas por minuto.
+servers:
+  - url: /api/v1
+tags:
+  - name: Activos
+    description: Activos fijos institucionales y su trazabilidad.
+  - name: Contabilidad
+    description: Exportación contable y asientos de depreciación (SIGFE).
+  - name: Almacén
+    description: Ítems de bodega y su kardex.
+  - name: Webhooks
+    description: Recepción de confirmaciones (demostración de ida y vuelta).
+security:
+  - ApiKeyAuth: []
+paths:
+  /activos:
+    get:
+      tags: [Activos]
+      summary: Listado de activos fijos
+      description: >
+        Listado completo con filtros exactos por estado, categoría y
+        ubicación, y por rango de fecha de alta (desde/hasta, AAAA-MM-DD).
+      parameters:
+        - { name: estado, in: query, schema: { type: string, enum: [activo, en_reparacion, dado_de_baja, extraviado] } }
+        - { name: categoria, in: query, schema: { type: string } }
+        - { name: ubicacion, in: query, schema: { type: string } }
+        - { name: desde, in: query, schema: { type: string, format: date } }
+        - { name: hasta, in: query, schema: { type: string, format: date } }
+        - { name: pagina, in: query, schema: { type: integer, minimum: 1, default: 1 } }
+        - { name: porPagina, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 100 } }
+      responses:
+        '200':
+          description: Activos con sus adjuntos como metadatos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  datos: { type: array, items: { $ref: '#/components/schemas/Activo' } }
+                  paginacion: { $ref: '#/components/schemas/Paginacion' }
+  /activos/{folio}:
+    get:
+      tags: [Activos]
+      summary: Ficha completa de un activo
+      parameters:
+        - { name: folio, in: path, required: true, schema: { type: string }, example: AF-2026-0001 }
+      responses:
+        '200':
+          description: El activo, con sus adjuntos como metadatos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  datos: { $ref: '#/components/schemas/Activo' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+  /activos/{folio}/depreciacion:
+    get:
+      tags: [Activos, Contabilidad]
+      summary: Depreciación lineal mensual del activo
+      description: >
+        Método lineal mensual con valor residual de $1 (la misma función
+        de cálculo que usan la ficha y los reportes). Con fechaCorte se
+        calcula a esa fecha; sin ella, a hoy (o a la fecha de baja).
+      parameters:
+        - { name: folio, in: path, required: true, schema: { type: string }, example: AF-2026-0001 }
+        - { name: fechaCorte, in: query, schema: { type: string, format: date } }
+      responses:
+        '200':
+          description: Cuota mensual, meses transcurridos, acumulada, valor libro y tabla anual.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  datos: { $ref: '#/components/schemas/Depreciacion' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+  /activos/{folio}/movimientos:
+    get:
+      tags: [Activos]
+      summary: Trazabilidad del activo
+      parameters:
+        - { name: folio, in: path, required: true, schema: { type: string }, example: AF-2026-0001 }
+      responses:
+        '200':
+          description: Movimientos (alta, edición, traslado, baja), más reciente primero.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  datos: { type: array, items: { $ref: '#/components/schemas/MovimientoActivo' } }
+  /contabilidad/activos:
+    get:
+      tags: [Contabilidad]
+      summary: Exportación contable (SIGFE)
+      description: >
+        Los activos valorizados al corte, con cuenta contable por
+        categoría, depreciación acumulada y valor libro — la misma
+        exportación que muestra la pantalla de Integraciones.
+      parameters:
+        - { name: fechaCorte, in: query, schema: { type: string, format: date } }
+      responses:
+        '200':
+          description: '{ encabezado, activos[] }'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  datos: { $ref: '#/components/schemas/ExportacionContable' }
+  /contabilidad/asientos:
+    get:
+      tags: [Contabilidad]
+      summary: Asientos de depreciación mensual por categoría
+      parameters:
+        - { name: desde, in: query, required: true, schema: { type: string, format: date }, example: '2026-01-01' }
+        - { name: hasta, in: query, required: true, schema: { type: string, format: date }, example: '2026-12-31' }
+      responses:
+        '200':
+          description: Un asiento por período y categoría con su cuenta contable.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  datos: { type: array, items: { $ref: '#/components/schemas/Asiento' } }
+  /almacen/items:
+    get:
+      tags: [Almacén]
+      summary: Ítems de bodega con su stock
+      parameters:
+        - { name: pagina, in: query, schema: { type: integer, minimum: 1, default: 1 } }
+        - { name: porPagina, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 100 } }
+      responses:
+        '200':
+          description: Ítems con stock y stock mínimo.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  datos: { type: array, items: { $ref: '#/components/schemas/ItemAlmacen' } }
+                  paginacion: { $ref: '#/components/schemas/Paginacion' }
+  /almacen/items/{folio}/kardex:
+    get:
+      tags: [Almacén]
+      summary: Kardex de un ítem
+      parameters:
+        - { name: folio, in: path, required: true, schema: { type: string }, example: BOD-2026-0001 }
+      responses:
+        '200':
+          description: El ítem y sus movimientos en orden cronológico con stock resultante.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  datos:
+                    type: object
+                    properties:
+                      item: { $ref: '#/components/schemas/ItemAlmacen' }
+                      movimientos: { type: array, items: { $ref: '#/components/schemas/MovimientoAlmacen' } }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+  /movimientos:
+    get:
+      tags: [Activos, Almacén]
+      summary: Movimientos de activos y almacén unificados
+      parameters:
+        - { name: desde, in: query, schema: { type: string, format: date } }
+        - { name: hasta, in: query, schema: { type: string, format: date } }
+      responses:
+        '200':
+          description: Movimientos con su origen ("activos" o "almacen"), más reciente primero.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  datos: { type: array, items: { type: object } }
+  /webhooks/contabilidad:
+    post:
+      tags: [Webhooks]
+      summary: Recepción de confirmación contable (demostración)
+      description: >
+        Único endpoint de escritura: recibe una confirmación de asientos y
+        la conserva como último acuse. No modifica activos ni inventario.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [referencia, fecha, asientos]
+              properties:
+                referencia: { type: string, example: SIGFE-2026-000123 }
+                fecha: { type: string, format: date, example: '2026-08-31' }
+                asientos: { type: array, items: { type: object } }
+            example:
+              referencia: SIGFE-2026-000123
+              fecha: '2026-08-31'
+              asientos:
+                - { cuentaContable: '141.02', monto: 11180, glosa: Depreciación mensual agosto }
+      responses:
+        '202':
+          description: Acuse de recibo.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  recibido: { type: boolean, example: true }
+                  referencia: { type: string, example: SIGFE-2026-000123 }
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Llave de demostración; se entrega en el manual adjunto a la oferta.
+  responses:
+    NoEncontrado:
+      description: El recurso no existe.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              codigo: { type: string, example: ACTIVO_NO_ENCONTRADO }
+              mensaje: { type: string }
+  schemas:
+    Paginacion:
+      type: object
+      properties:
+        pagina: { type: integer, example: 1 }
+        porPagina: { type: integer, example: 100 }
+        total: { type: integer, example: 4 }
+    Activo:
+      type: object
+      properties:
+        folio: { type: string, example: AF-2026-0001 }
+        codigoBarras: { type: string, example: '7801112223334' }
+        rfid: { type: string, example: RFID-A001 }
+        nombre: { type: string, example: Notebook Lenovo ThinkPad E14 }
+        descripcion: { type: string }
+        categoria: { type: string, example: Equipos computacionales }
+        ubicacion: { type: string, example: Edificio Central - Piso 2 }
+        responsable: { type: string, example: Funcionario Demo }
+        estado: { type: string, enum: [activo, en_reparacion, dado_de_baja, extraviado] }
+        valor: { type: number, example: 620000 }
+        fechaAlta: { type: string, format: date-time }
+        proximaMantencion: { type: [string, 'null'], format: date-time }
+        finGarantia: { type: [string, 'null'], format: date-time }
+        ordenCompraMPCodigo: { type: [string, 'null'], example: 1002-355-SE26 }
+        adjuntos:
+          type: array
+          description: Metadatos de fotos y documentos (los archivos no viajan por esta API).
+          items:
+            type: object
+            properties:
+              tipo: { type: string, enum: [foto, pdf, orden_compra, garantia, otro] }
+              nombreOriginal: { type: string }
+              mime: { type: string }
+              tamano: { type: integer }
+              latitud: { type: [number, 'null'] }
+              longitud: { type: [number, 'null'] }
+    Depreciacion:
+      type: object
+      properties:
+        folio: { type: string, example: AF-2026-0001 }
+        vidaUtilAnios: { type: integer, example: 6 }
+        cuotaMensual: { type: number, example: 8611.1 }
+        mesesTranscurridos: { type: integer, example: 7 }
+        depreciacionAcumulada: { type: number, example: 60277.7 }
+        valorLibro: { type: number, example: 559722.3 }
+        vidaUtilRestanteMeses: { type: integer, example: 65 }
+        tablaEvolucion:
+          type: array
+          items:
+            type: object
+            properties:
+              anio: { type: integer }
+              depreciacionDelAnio: { type: number }
+              depreciacionAcumulada: { type: number }
+              valorLibro: { type: number }
+    MovimientoActivo:
+      type: object
+      properties:
+        tipo: { type: string, enum: [alta, edicion, traslado, baja, reparacion] }
+        detalle: { type: string }
+        usuario: { type: string }
+        fecha: { type: string, format: date-time }
+    ItemAlmacen:
+      type: object
+      properties:
+        folio: { type: string, example: BOD-2026-0001 }
+        nombre: { type: string, example: Resma de papel carta }
+        categoria: { type: string, example: Papelería }
+        unidad: { type: string, example: resma }
+        stock: { type: integer, example: 3 }
+        stockMinimo: { type: integer, example: 15 }
+        ubicacion: { type: string, example: Bodega Central }
+    MovimientoAlmacen:
+      type: object
+      properties:
+        tipo: { type: string, enum: [ingreso, egreso] }
+        cantidad: { type: integer }
+        stockResultante: { type: integer }
+        motivo: { type: string }
+        usuario: { type: string }
+        fecha: { type: string, format: date-time }
+    ExportacionContable:
+      type: object
+      properties:
+        encabezado:
+          type: object
+          properties:
+            institucion: { type: string, example: Superintendencia de Seguridad Social }
+            fechaGeneracion: { type: string, format: date-time }
+            totalRegistros: { type: integer, example: 4 }
+        activos:
+          type: array
+          items:
+            type: object
+            properties:
+              folio: { type: string, example: AF-2026-0001 }
+              nombre: { type: string }
+              categoria: { type: string }
+              cuentaContable: { type: [string, 'null'], example: '141.02' }
+              valorAdquisicion: { type: number, example: 620000 }
+              depreciacionAcumulada: { type: number, example: 60278 }
+              valorLibro: { type: number, example: 559722 }
+              estado: { type: string, example: Activo }
+              fechaAlta: { type: string, format: date-time }
+    Asiento:
+      type: object
+      properties:
+        periodo: { type: string, example: 2026-08 }
+        categoria: { type: string, example: Equipos computacionales }
+        cuentaContable: { type: [string, 'null'], example: '141.02' }
+        monto: { type: number, example: 11180 }
+        glosa: { type: string, example: Depreciación mensual 2026-08 — Equipos computacionales }

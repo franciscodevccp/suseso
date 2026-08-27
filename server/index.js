@@ -29,8 +29,11 @@ import { rutasAuth } from './src/rutas/auth.js'
 import { rutasCatalogos } from './src/rutas/catalogos.js'
 import { rutasConfiguracion } from './src/rutas/configuracion.js'
 import { rutasDashboard } from './src/rutas/dashboard.js'
+import { rutasIntegraciones } from './src/rutas/integraciones.js'
+import { rutasMercadoPublico } from './src/rutas/mercadoPublico.js'
 import { rutasReportes } from './src/rutas/reportes.js'
 import { rutasUsuarios } from './src/rutas/usuarios.js'
+import { rutasV1 } from './src/rutas/v1.js'
 
 const logger = pino({ level: esProduccion ? 'info' : 'debug' })
 const app = express()
@@ -99,6 +102,10 @@ api.use('/dashboard', rutasDashboard)
 api.use('/reportes', rutasReportes)
 api.use('/usuarios', rutasUsuarios)
 api.use('/configuracion', rutasConfiguracion)
+api.use('/integraciones', rutasIntegraciones)
+api.use('/mercadopublico', rutasMercadoPublico)
+// API pública (AD-01): autenticación propia por X-API-Key, no por sesión.
+api.use('/v1', rutasV1)
 app.use('/api', api)
 
 // Cualquier ruta /api no registrada responde en el formato { codigo, mensaje }.

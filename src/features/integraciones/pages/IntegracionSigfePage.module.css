@@ -48,6 +48,41 @@
   margin-top: var(--espacio-4);
 }
 
+.cuentas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--espacio-3);
+  margin-bottom: var(--espacio-4);
+}
+
+.cuenta {
+  display: grid;
+  gap: var(--espacio-1);
+  font-size: 0.875rem;
+  color: var(--gris-700);
+}
+
+.cuenta input {
+  padding: var(--espacio-2) var(--espacio-3);
+  border: 1px solid var(--gris-300);
+  border-radius: var(--radio-md);
+  font-size: 0.9375rem;
+  font-family: inherit;
+  color: var(--gris-950);
+  background: var(--gob-blanco);
+}
+
+.cuenta input:disabled {
+  background: var(--gris-50);
+  color: var(--gris-500);
+}
+
+.cuenta input:focus-visible {
+  outline: 2px solid var(--borde-foco);
+  outline-offset: 1px;
+  border-color: var(--gob-azul-claro);
+}
+
 .notaHonestidad {
   margin: 0;
   color: var(--gris-500);

@@ -55,3 +55,28 @@
   color: var(--gris-900);
   text-align: right;
 }
+
+.formato dt code {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  color: var(--gris-900);
+}
+
+.probar {
+  margin: var(--espacio-4) 0;
+}
+
+.probar button {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 560px) {
+  .formato > div {
+    flex-direction: column;
+    gap: var(--espacio-1);
+  }
+
+  .formato dd {
+    text-align: left;
+  }
+}

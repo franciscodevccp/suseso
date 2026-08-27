@@ -32,11 +32,14 @@ export function Desplegable({
   const idLista = `${idBoton}-lista`
 
   const opciones = useMemo(() => {
+    // children de un <option> puede ser un arreglo de nodos de texto
+    // ({folio} — {nombre}): se concatena sin separadores, como el DOM.
+    const comoTexto = (hijos) => Children.toArray(hijos ?? []).join('')
     return Children.toArray(children)
       .filter((nodo) => nodo?.type === 'option')
       .map((nodo) => ({
-        valor: nodo.props.value ?? String(nodo.props.children ?? ''),
-        etiqueta: String(nodo.props.children ?? ''),
+        valor: nodo.props.value ?? comoTexto(nodo.props.children),
+        etiqueta: comoTexto(nodo.props.children),
         deshabilitada: Boolean(nodo.props.disabled),
       }))
   }, [children])

@@ -26,21 +26,187 @@
   font-size: 0.9375rem;
 }
 
-.rutaInline {
-  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+.formularioConsulta {
+  display: flex;
+  gap: var(--espacio-3);
+  flex-wrap: wrap;
+}
+
+.entradaCodigo {
+  flex: 1;
+  min-width: 220px;
+  padding: var(--espacio-2) var(--espacio-3);
+  border: 1px solid var(--gris-300);
+  border-radius: var(--radio-md);
+  font-size: 0.9375rem;
+  font-family: inherit;
+  color: var(--gris-950);
+  background: var(--gob-blanco);
+}
+
+.entradaCodigo:focus-visible {
+  outline: 2px solid var(--borde-foco);
+  outline-offset: 1px;
+  border-color: var(--gob-azul-claro);
+}
+
+.notaEspera {
+  margin: var(--espacio-3) 0 0;
+  color: var(--gris-500);
+  font-size: 0.8125rem;
+}
+
+.encabezadoOrden {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--espacio-3);
+}
+
+.encabezadoOrden h2 {
+  margin: 0;
+}
+
+.datosOrden {
+  margin: 0 0 var(--espacio-4);
+  display: grid;
+  gap: var(--espacio-2);
+}
+
+.datosOrden > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  padding-bottom: var(--espacio-2);
+  border-bottom: 1px solid var(--gris-100);
   font-size: 0.875rem;
-  background: var(--gris-50);
-  padding: 2px 6px;
-  border-radius: var(--radio-sm);
+}
+
+.datosOrden dt {
+  margin: 0;
+  color: var(--gris-500);
+  flex-shrink: 0;
+}
+
+.datosOrden dd {
+  margin: 0;
+  color: var(--gris-900);
+  font-weight: 500;
+  text-align: right;
   overflow-wrap: anywhere;
 }
 
-.resultado {
-  margin-top: var(--espacio-4);
+.tablaContenedor {
+  overflow-x: auto;
+  margin-bottom: var(--espacio-4);
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.tituloTabla {
+  text-align: left;
+  font-weight: 600;
+  color: var(--gris-700);
+  padding-bottom: var(--espacio-2);
+  caption-side: top;
+}
+
+.tabla th {
+  text-align: left;
+  color: var(--gris-500);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  padding: var(--espacio-2) var(--espacio-3);
+  border-bottom: 1px solid var(--gris-200);
+  white-space: nowrap;
+}
+
+.tabla td {
+  padding: var(--espacio-2) var(--espacio-3);
+  border-bottom: 1px solid var(--gris-100);
+  color: var(--gris-900);
+}
+
+.botonVer {
+  background: none;
+  border: 1px solid var(--gris-300);
+  border-radius: var(--radio-md);
+  padding: 4px 12px;
+  font-size: 0.8125rem;
+  color: var(--gob-azul-claro);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.botonVer:hover {
+  border-color: var(--gob-azul-claro);
+  background: var(--gris-50);
+}
+
+.acciones {
+  display: grid;
+  gap: var(--espacio-4);
+}
+
+.grupoAccion {
+  border-top: 1px solid var(--gris-100);
+  padding-top: var(--espacio-4);
+  display: grid;
+  gap: var(--espacio-2);
+  justify-items: start;
+}
+
+.etiquetaAccion {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gris-500);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.filaVincular {
+  display: flex;
+  gap: var(--espacio-3);
+  align-items: center;
+  width: 100%;
+  max-width: 640px;
+}
+
+.selectorActivo {
+  flex: 1;
+  min-width: 0;
 }
 
 .notaHonestidad {
   margin: 0;
   color: var(--gris-500);
   font-size: 0.8125rem;
+}
+
+@media (max-width: 560px) {
+  .datosOrden > div {
+    flex-direction: column;
+    gap: var(--espacio-1);
+  }
+
+  .datosOrden dd {
+    text-align: left;
+  }
+
+  .filaVincular {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filaVincular button {
+    width: 100%;
+  }
 }

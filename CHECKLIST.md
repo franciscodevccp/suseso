@@ -41,7 +41,7 @@
 - [x] `dominio/alertas.js` + `GET /api/alertas` y `/resumen` según las 7 reglas de `docs/07` (adelantado de B2; falta solo la pantalla y el badge)
 - [x] Cero `localStorage` de negocio (D-07): eliminados los mocks de actas, vida útil, dashboard y reportes (D-08); solo queda `integracionesService.mock` hasta C1, que no persiste nada
 - [x] Filtro **responsable** en `FiltrosActivos` + catálogo `GET /api/catalogos/funcionarios` (RQ-13)
-- [ ] `integracionesService` real (SIGFE desde `/api/v1/contabilidad/activos`) — se conecta en C1 junto con la API pública (`docs/10`); mientras tanto su mock compone sobre datos reales
+- [x] `integracionesService` real (C1): mock y constantes eliminados; la página de documentación se alimenta de `/openapi.yaml` y "Probar" pasa por el servidor
 
 ## Bloque B1 — Usuarios, auditoría y roles (no recortable) ✅
 
@@ -72,12 +72,13 @@
 - [x] Descarga autenticada `GET /api/adjuntos/:id` (sin sesión → 401, verificado; Content-Type del registro, inline imágenes / attachment PDF)
 - [x] Selector de archivo con diseño propio (`components/common/CampoArchivo`) + test E2E del ciclo subir→galería→principal→eliminar
 
-## Bloque C1 — Los 3 elementos adicionales verificables (no recortable)
+## Bloque C1 — Los 3 elementos adicionales verificables (no recortable) ✅
 
-- [ ] API pública `/api/v1` completa: activos, depreciación, movimientos, contabilidad (SIGFE + asientos), almacén/kardex, webhook demo — `X-API-Key` en tiempo constante, paginación, rate limit, auditada (`docs/10`, AD-01) — **necesita T-03 y T-05**
-- [ ] `public/openapi.yaml` (OpenAPI 3.1) descargable; página Integraciones alimentada desde el yaml + botón "Probar" (`docs/10`)
-- [ ] Mercado Público real: cliente `dominio/mp.js` (pausas 16–20 s, reintentos, errores traducidos), caché `OrdenCompraMP`, consultar/sincronizar/vincular OC, pantalla real (`docs/10`, AD-02) — **necesita T-02**
-- [ ] Seed de 3–5 OC reales cacheadas y una vinculada a un activo (`docs/10`)
+- [x] API pública `/api/v1` completa: activos (filtros + paginación), depreciación, movimientos, contabilidad (exportación SIGFE con cuentas por categoría + asientos mensuales), almacén/kardex, movimientos unificados y webhook demo — `X-API-Key` comparada en tiempo constante, rate limit 60/min, auditada como `api/consulta_v1` (`docs/10`, AD-01). Verificado con curl: 401 sin llave, 200 con llave
+- [x] `public/openapi.yaml` (OpenAPI 3.1) descargable desde la página; documentación generada DESDE el yaml (nunca divergen), botón "Probar" por endpoint que ejecuta la llamada real vía `POST /api/integraciones/probar` (la llave nunca llega al navegador); sección de protocolo corregida (X-API-Key; fuera OAuth2/SOAP falsos)
+- [x] Mercado Público real: cliente `dominio/mp.js` (pausas 16–20 s, 4 reintentos, 30 s por intento, `OC_NO_ENCONTRADA`/`MP_NO_DISPONIBLE`/`CODIGO_OC_INVALIDO`), caché `OrdenCompraMP` (sobrevive al reinicio de la demo), pantalla real: consultar (caché-primero con aviso honesto de ~20 s), sincronizar, vincular a activo, historial (`docs/10`, AD-02)
+- [x] SIGFE real en pantalla: exportación generada desde la BD + tabla de **cuentas contables por categoría editable por Administrador** (T-05: plan genérico referencial 141.01–141.08)
+- [x] 5 OC reales cacheadas (obras/computación/notebooks/mobiliario/impresoras) y `1057062-336-AG26` ("07 Notebook 15,6″") **vinculada a AF-2026-0001**, visible en la ficha (T-02b)
 
 ## Bloque C2 — Seed completo y solicitudes (seed no recortable; solicitudes P1)
 
@@ -115,7 +116,7 @@
 
 - [ ] **T-01** Nombre definitivo del producto (SISGA vs ActivosCloud) → bloquea textos de B2
 - [x] **T-02a** `MP_API_TICKET` entregado y **validado contra la API real** (2026-08-26): listado por fecha y detalle por código responden bien; el ticket vive solo en `.env`
-- [ ] **T-02b** Elegir 3–5 códigos de OC públicas (mobiliario/computación) para el seed — se pueden obtener del listado por fecha al construir C1
-- [ ] **T-03** `CLAVE_DEMO` y `API_DEMO_KEY` → bloquea `.env` (A1) y `/api/v1` (C1)
+- [x] **T-02b** 5 OC reales cacheadas (2026-08-27): `1002-355-SE26` (obras), `1087105-17-CM26` (equipos computacionales), `1057062-336-AG26` (notebooks — vinculada a AF-2026-0001), `2460-702-SE26` (mobiliario), `2292-6832-AG26` (impresoras)
+- [ ] **T-03** `CLAVE_DEMO` y `API_DEMO_KEY` **definitivas** antes de la oferta (los valores de desarrollo ya operan en `.env`)
 - [ ] **T-04** Confirmar compromiso de disponibilidad 99,5 % (Anexo 2B) → afecta manual y `/api/salud`
-- [ ] **T-05** Cuentas contables por categoría para SIGFE (o usar genérico referencial) → C1
+- [x] **T-05** Resuelto con el plan genérico referencial 141.01–141.08 (editable en pantalla por el Administrador); si SUSESO entrega su plan real, se reemplaza desde Integraciones → SIGFE sin tocar código

@@ -9,7 +9,9 @@
   cursor: pointer;
 }
 
-.desplegable:focus-within {
+/* Anillo de foco solo para teclado: al abrir con el mouse no queda un
+   marco encendido sobre el control (la lista abierta ya es la señal). */
+.desplegable:has(.boton:focus-visible) {
   outline: 2px solid var(--borde-foco);
   outline-offset: 1px;
 }
