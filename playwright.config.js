@@ -19,7 +19,8 @@ const ESTADO_FUNCIONARIO = 'tests/e2e/.estado/funcionario.json'
 
 export default defineConfig({
   testDir: 'tests/e2e',
-  timeout: 30_000,
+  // Margen para picos de contención: 4 navegadores + Vite recompilando.
+  timeout: 45_000,
   fullyParallel: true,
   workers: 4,
   reporter: [['list']],

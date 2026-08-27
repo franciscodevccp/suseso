@@ -64,12 +64,13 @@
 - [x] Nombre del producto desde `src/config/producto.js` (**T-01 resuelto: SISGA**) + título `SISGA · Gestión de activos fijos y almacén`
 - [ ] Tabla de vida útil con columna "Acelerada" visible y texto de referencia SII en la pantalla (`docs/09`) — los datos ya existen en BD y el reporte ya la usa; falta solo exponer la columna en Configuración → Vida útil
 
-## Bloque B3 — Adjuntos con georreferencia (no recortable)
+## Bloque B3 — Adjuntos con georreferencia (no recortable) ✅
 
-- [ ] Subida multipart (10 MB, whitelist por magic bytes, nombre aleatorio, anti path-traversal) (`docs/06`, `docs/14`, RQ-12)
-- [ ] EXIF → latitud/longitud con exifr; indicador de georreferencia en la ficha (RQ-22)
-- [ ] Galería/lista de adjuntos + foto principal en la ficha del activo
-- [ ] Descarga autenticada `GET /api/adjuntos/:id` (verifica sesión y rol)
+- [x] Subida multipart en memoria: 10 MB máx., **whitelist por magic bytes** (JPG/PNG/WebP/PDF — un .txt disfrazado de .png rechazado con `TIPO_NO_PERMITIDO`, verificado), nombre aleatorio en `storage/adjuntos/`, anti path-traversal, auditado (`docs/06`, `docs/14`, RQ-12)
+- [x] EXIF → latitud/longitud con exifr automático en fotos; "Ver en mapa" (OpenStreetMap, sin claves de API) cuando hay coordenadas (RQ-22). El botón "Usar mi ubicación" se descartó por decisión (docs/17); el endpoint conserva lat/lng manuales
+- [x] Galería de fotos + lista de documentos descargables en la ficha, **foto principal automática** (primera foto) y cambiable, miniatura en el listado de activos, y recuadro "Próximamente" cuando no hay fotografía
+- [x] Descarga autenticada `GET /api/adjuntos/:id` (sin sesión → 401, verificado; Content-Type del registro, inline imágenes / attachment PDF)
+- [x] Selector de archivo con diseño propio (`components/common/CampoArchivo`) + test E2E del ciclo subir→galería→principal→eliminar
 
 ## Bloque C1 — Los 3 elementos adicionales verificables (no recortable)
 

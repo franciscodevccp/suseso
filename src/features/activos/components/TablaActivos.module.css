@@ -150,3 +150,19 @@
     text-align: left;
   }
 }
+
+/* Miniatura de la foto principal en el listado (docs/06). */
+.nombreConFoto {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+}
+
+.miniaturaFoto {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radio-sm);
+  object-fit: cover;
+  background: var(--gris-100);
+  flex-shrink: 0;
+}

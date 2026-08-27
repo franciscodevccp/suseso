@@ -5,6 +5,7 @@ import { BadgeEstado } from '../../../components/common/BadgeEstado'
 import { HistorialMovimientos } from '../components/HistorialMovimientos'
 import { ModalBajaActivo } from '../components/ModalBajaActivo'
 import { ModalTrasladoActivo } from '../components/ModalTrasladoActivo'
+import { SeccionAdjuntos } from '../components/SeccionAdjuntos'
 import { BloqueDepreciacion } from '../../depreciacion/components/BloqueDepreciacion'
 import { useActivo } from '../hooks/useActivo'
 import { useCatalogosActivos } from '../hooks/useCatalogosActivos'
@@ -17,16 +18,6 @@ import * as activosService from '../services/activosService'
 import estilos from './FichaActivoPage.module.css'
 
 const formatearFecha = (fecha) => (fecha ? new Date(fecha).toLocaleDateString('es-CL') : '—')
-
-function IconoFoto() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-      <rect x="3" y="5" width="18" height="14" rx="2" />
-      <circle cx="9" cy="11" r="2" />
-      <path d="M21 16l-5.5-5-4 4-2-2L3 18" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
 
 /** Ficha de detalle de un activo fijo: todos sus datos + historial de movimientos. */
 export function FichaActivoPage() {
@@ -102,7 +93,11 @@ export function FichaActivoPage() {
 
       <header className={estilos.encabezado}>
         <div className={estilos.foto} aria-hidden="true">
-          {activo.foto ? <img src={activo.foto} alt="" /> : <IconoFoto />}
+          {activo.foto ? (
+            <img src={activosService.urlAdjunto(activo.foto)} alt="" className={estilos.fotoImagen} />
+          ) : (
+            <span className={estilos.fotoProximamente}>Próximamente</span>
+          )}
         </div>
         <div className={estilos.infoEncabezado}>
           <p className={estilos.folio}>{activo.folio}</p>
@@ -181,18 +176,10 @@ export function FichaActivoPage() {
             </div>
           </dl>
 
-          <h2 className={estilos.tituloSeccion}>Documentos</h2>
-          {activo.documentos?.length > 0 ? (
-            <ul className={estilos.listaDocumentos}>
-              {activo.documentos.map((documento) => (
-                <li key={documento.id}>{documento.nombre}</li>
-              ))}
-            </ul>
-          ) : (
-            <p className={estilos.vacioChico}>Sin documentos asociados aún.</p>
-          )}
         </section>
       </div>
+
+      <SeccionAdjuntos activo={activo} puedeGestionar={puedeGestionar} onCambio={recargar} />
 
       <BloqueDepreciacion activo={activo} movimientos={movimientos} />
 

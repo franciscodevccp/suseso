@@ -36,7 +36,11 @@ export async function obtenerVidaUtilPorCategoria(categoria) {
 export function actualizarTablaVidaUtil(filas) {
   return llamada(() =>
     http('PUT', '/api/configuracion/vida-util', {
-      cuerpo: filas.map(({ categoria, vidaUtilAnios }) => ({ categoria, vidaUtilAnios })),
+      cuerpo: filas.map(({ categoria, vidaUtilAnios, vidaUtilAcelerada }) => ({
+        categoria,
+        vidaUtilAnios,
+        vidaUtilAcelerada: vidaUtilAcelerada ?? null,
+      })),
     }),
   )
 }

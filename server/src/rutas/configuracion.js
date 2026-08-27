@@ -33,10 +33,22 @@ rutasConfiguracion.get('/vida-util', autorizar(...PANEL), async (_req, res, next
 rutasConfiguracion.put('/vida-util', autorizar('Administrador'), async (req, res, next) => {
   try {
     const filas = z
-      .array(z.object({ categoria: z.string().min(1), vidaUtilAnios: z.number() }))
+      .array(
+        z.object({
+          categoria: z.string().min(1),
+          vidaUtilAnios: z.number(),
+          vidaUtilAcelerada: z.number().nullish(),
+        }),
+      )
       .parse(req.body)
     for (const fila of filas) {
       if (!Number.isInteger(fila.vidaUtilAnios) || fila.vidaUtilAnios <= 0) {
+        throw new ErrorHttp('VALOR_INVALIDO', 400)
+      }
+      if (
+        fila.vidaUtilAcelerada != null &&
+        (!Number.isInteger(fila.vidaUtilAcelerada) || fila.vidaUtilAcelerada <= 0)
+      ) {
         throw new ErrorHttp('VALOR_INVALIDO', 400)
       }
     }
@@ -45,7 +57,10 @@ rutasConfiguracion.put('/vida-util', autorizar('Administrador'), async (req, res
       for (const fila of filas) {
         await tx.categoria.update({
           where: { nombre: fila.categoria },
-          data: { vidaUtilAnios: fila.vidaUtilAnios },
+          data: {
+            vidaUtilAnios: fila.vidaUtilAnios,
+            vidaUtilAcelerada: fila.vidaUtilAcelerada ?? null,
+          },
         })
       }
       await auditar(

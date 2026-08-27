@@ -21,6 +21,7 @@ import { manejadorErrores } from './src/http/errores.js'
 import { cargarUsuario } from './src/middleware/sesion.js'
 import { rutasActas } from './src/rutas/actas.js'
 import { rutasActivos } from './src/rutas/activos.js'
+import { rutasAdjuntos } from './src/rutas/adjuntos.js'
 import { rutasAuditoria } from './src/rutas/auditoria.js'
 import { rutasAlertas } from './src/rutas/alertas.js'
 import { rutasAlmacen } from './src/rutas/almacen.js'
@@ -87,6 +88,8 @@ const api = express.Router()
 api.use(cargarUsuario)
 api.use('/auth', rutasAuth)
 api.use('/catalogos', rutasCatalogos)
+// Antes de /activos: registra /activos/:id/adjuntos y /adjuntos/:id.
+api.use(rutasAdjuntos)
 api.use('/activos', rutasActivos)
 api.use('/almacen', rutasAlmacen)
 api.use('/actas', rutasActas)

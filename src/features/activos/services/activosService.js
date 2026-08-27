@@ -82,3 +82,29 @@ export function trasladarActivo({ id, ubicacion, responsable, motivo }) {
     http('POST', `/api/activos/${id}/traslado`, { cuerpo: { ubicacion, responsable, motivo } }),
   )
 }
+
+// --- Adjuntos y fotos georreferenciadas (RQ-12, RQ-22 — docs/06) --------
+
+/** URL de descarga/visualización de un adjunto (misma origen: la cookie viaja sola). */
+export function urlAdjunto(adjuntoId) {
+  return `/api/adjuntos/${adjuntoId}`
+}
+
+export function subirAdjunto(activoId, { archivo, tipo, latitud, longitud }) {
+  const form = new FormData()
+  form.set('archivo', archivo)
+  form.set('tipo', tipo)
+  if (latitud != null) form.set('latitud', String(latitud))
+  if (longitud != null) form.set('longitud', String(longitud))
+  return llamada(() => http('POST', `/api/activos/${activoId}/adjuntos`, { form }))
+}
+
+export function eliminarAdjunto(adjuntoId) {
+  return llamada(() => http('DELETE', `/api/adjuntos/${adjuntoId}`))
+}
+
+export function definirFotoPrincipal(activoId, adjuntoId) {
+  return llamada(() =>
+    http('POST', `/api/activos/${activoId}/foto-principal`, { cuerpo: { adjuntoId } }),
+  )
+}

@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { BadgeEstado } from '../../../components/common/BadgeEstado'
 import { obtenerInfoEstado } from '../utils/estadoActivo'
+import { urlAdjunto } from '../services/activosService'
 import estilos from './TablaActivos.module.css'
 
 function IconoVacio() {
@@ -74,7 +75,19 @@ export function TablaActivos({ activos, cargando, hayFiltrosActivos }) {
                   {activo.folio}
                 </Link>
               </td>
-              <td data-etiqueta="Nombre">{activo.nombre}</td>
+              <td data-etiqueta="Nombre">
+                <span className={estilos.nombreConFoto}>
+                  {activo.foto && (
+                    <img
+                      src={urlAdjunto(activo.foto)}
+                      alt=""
+                      className={estilos.miniaturaFoto}
+                      loading="lazy"
+                    />
+                  )}
+                  {activo.nombre}
+                </span>
+              </td>
               <td data-etiqueta="Categoría">{activo.categoria}</td>
               <td data-etiqueta="Ubicación">{activo.ubicacion}</td>
               <td data-etiqueta="Responsable">{activo.responsable}</td>

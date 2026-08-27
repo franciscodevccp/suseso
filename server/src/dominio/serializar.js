@@ -5,14 +5,16 @@
  * único parcial), y `foto`/`documentos` presentes (los llena docs/06 en B3).
  */
 export function serializarActivo(activo) {
-  const { camposPersonalizados, ...resto } = activo
+  const { camposPersonalizados, adjuntos, ...resto } = activo
   return {
     ...resto,
     valor: Number(activo.valor),
     codigoBarras: activo.codigoBarras ?? '',
     rfid: activo.rfid ?? '',
-    foto: null,
-    documentos: [],
+    foto: activo.fotoPrincipalId ?? null,
+    // "documentos" conserva el nombre del contrato original; son los
+    // adjuntos (docs/06) cuando la consulta los incluye.
+    documentos: adjuntos ?? [],
     ...(camposPersonalizados ? { camposPersonalizados } : {}),
   }
 }

@@ -35,9 +35,8 @@ export function VidaUtilPage() {
       <SubNavConfiguracion />
 
       <div className={estilos.notaReferencial}>
-        Estos valores son <strong>referenciales</strong>, no cifras oficiales verificadas. Ajústelos
-        según la normativa vigente (decreto o tabla oficial de su organismo) antes de usarlos como
-        base contable definitiva.
+        Valores referenciales según la <strong>Resolución Exenta SII N°43 de 2002</strong> (Tabla
+        de vida útil de bienes físicos del activo inmovilizado). Editables por la institución.
       </div>
 
       {cargando ? (
